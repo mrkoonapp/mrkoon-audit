@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.masafa.mrk.app",
+      "sha256_cert_fingerprints": [
+        "3F:36:AC:30:15:09:54:A9:F6:15:97:D6:A3:83:09:FB:3C:55:7A:7A:C6:B4:09:FD:CA:6C:09:DB:18:36:65:70"
+      ]
+    }
+  }
+]

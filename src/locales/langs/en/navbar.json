@@ -1,0 +1,17 @@
+{
+  "overview": "Overview",
+  "management": "Management",
+  "sales": "Sales",
+  "stats": "Stats",
+  "app": "Home",
+  "user": "User",
+  "product": "Products",
+  "warehouses": "Warehouses",
+  "usersPermissions": "Users & Permissions",
+  "auctions": "Auctions",
+  "transportations": "Transportations",
+  "priceOffers": "Price Offers",
+  "reports": "Reports",
+  "inspections": "Inspections",
+  "invitations": "Invitations"
+}

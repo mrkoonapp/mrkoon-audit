@@ -1,0 +1,317 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "dense": "Dense",
+    "success": "Done Successfully",
+    "error": "Something Went Wrong",
+    "free": "Free",
+    "forbidden": {
+      "title": "Permission denied",
+      "description": "You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.",
+      "goHome": "Go to dashboard",
+      "autoRedirect": "Redirecting to dashboard in {{seconds}}s..."
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    }
+  },
+  "dashboard_overview": {
+    "sections": {
+      "liveAuctions": "Live Auctions"
+    }
+  },
+  "highestBid": "Highest Bid",
+  "startPrice": "Start Price",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Minutes",
+  "seconds": "Seconds",
+  "dashboard": "Dashboard",
+  "user": "User",
+  "currency": {
+    "EG": "LE",
+    "SA": "SAR"
+  },
+  "demo": {
+    "lang": "English",
+    "description": "The starting point for your next project is based on MUI. Easy customization helps you build apps faster and better."
+  },
+  "profile": {
+    "title": "My Profile",
+    "tabs": {
+      "personal": "User Info",
+      "company": "Company Details",
+      "interests": "Interests"
+    },
+    "fields": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "job_position": "Job Position",
+      "country": "Country",
+      "city": "City",
+      "address": "Address",
+      "image": "Profile Photo",
+      "company_name": "Company Name",
+      "company_email": "Company Email",
+      "company_phone": "Company Phone",
+      "company_country": "Company Country",
+      "company_logo": "Company Logo",
+      "specialization": "Specialization"
+    },
+    "upload_image": "Upload Image",
+    "upload_photo": "Upload photo",
+    "update_photo": "Update photo",
+    "upload_formats": "SVG, JPG, PNG",
+    "validation": {
+      "name_required": "Name is required!",
+      "email_required": "Email is required!",
+      "email_invalid": "Email must be a valid email address!",
+      "company_name_required": "Company name is required!",
+      "phoneRequired": "Phone number is required",
+      "countryCodeRequired": "Country code is required",
+      "phoneInvalid": "Invalid phone number",
+      "phoneCountryMismatch": "Phone number must match the selected country"
+    },
+    "actions": {
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "update_success": "Profile updated successfully!",
+      "update_error": "Failed to update profile.",
+      "interests_success": "Interests updated successfully!",
+      "interests_error": "Failed to update interests.",
+      "interests_min_one": "Please select at least one interest.",
+      "avatar_updated": "Profile photo updated successfully!",
+      "avatar_error": "Failed to update profile photo.",
+      "company_logo_updated": "Company logo updated successfully!",
+      "company_logo_error": "Failed to update company logo."
+    },
+    "plus_member": "Mrkoon Plus",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "statusActivated": "Activated",
+      "statusNotActivated": "Not Activated",
+      "statusNew": "New",
+      "statusNoRespond": "No Respond",
+      "statusPaysCondition": "Pays Condition",
+      "statusContacting": "Contacting"
+    },
+    "empty_interests": "No interests selected yet.",
+    "select_interests": "Select your interests",
+    "primary_tag": "Set as primary",
+    "show_more": "Show more",
+    "show_less": "Show less",
+    "unsaved_changes": {
+      "title": "Unsaved Changes",
+      "message": "You have unsaved changes. Are you sure you want to leave? Your changes will be lost.",
+      "leave": "Leave"
+    }
+  },
+  "search_location_or_coordinates": "Search location or enter lat, lng...",
+  "goToWebsite": "Go To Website",
+  "accountDrawer": {
+    "logout": "Logout",
+    "logoutError": "Unable to logout!"
+  },
+  "tour": {
+    "home": {
+      "title": "Home",
+      "description": "Your dashboard overview — stats, live auctions, and products at a glance."
+    },
+    "products": {
+      "title": "Products",
+      "description": "Manage your product listings. Create, edit, and organize your catalog."
+    },
+    "warehouses": {
+      "title": "Warehouses",
+      "description": "Manage your warehouse addresses and locations."
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "View and edit your personal profile and account settings."
+    },
+    "auctions": {
+      "title": "Auctions",
+      "description": "Monitor live and ended auctions for your products."
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "Access detailed seller reports and analytics."
+    },
+    "next": "Next",
+    "prev": "Back",
+    "close": "Got it",
+    "stepOf": "{{current}} of {{total}}",
+    "pages": {
+      "home": {
+        "welcome": {
+          "title": "Welcome Banner",
+          "description": "Your personalized greeting and quick-start action to jump into what matters."
+        },
+        "stats": {
+          "title": "Key Statistics",
+          "description": "At-a-glance numbers for your products, auctions, inspections, and pending items."
+        },
+        "analytics": {
+          "title": "Auctions & Analytics",
+          "description": "Live auction activity and performance charts to track your business trends."
+        },
+        "table": {
+          "title": "Recent Products",
+          "description": "A quick view of your latest product listings and their current status."
+        }
+      },
+      "products": {
+        "create": {
+          "title": "Create Product",
+          "description": "Tap here to add a new product to your catalog with the AI-powered wizard."
+        },
+        "toolbar": {
+          "title": "Filters & Search",
+          "description": "Search by name, filter by tag, status, warehouse, or date range to find products quickly."
+        },
+        "content": {
+          "title": "Product Catalog",
+          "description": "Browse your product listings. Each card shows key details, status, and quick actions."
+        }
+      },
+      "warehouses": {
+        "add": {
+          "title": "Add Warehouse",
+          "description": "Create a new warehouse address with a map-based location picker."
+        },
+        "content": {
+          "title": "Warehouse List",
+          "description": "All your warehouse locations displayed as cards. Edit, delete, or set a main address."
+        }
+      },
+      "profile": {
+        "cover": {
+          "title": "Profile Cover",
+          "description": "Your profile photo, name, and role displayed prominently at the top."
+        },
+        "sidebar": {
+          "title": "Profile Sidebar",
+          "description": "Quick info about your account — contact details, location, and membership status."
+        },
+        "tabs": {
+          "title": "Profile Tabs",
+          "description": "Switch between Company Details, Personal Info, and Interests sections."
+        },
+        "content": {
+          "title": "Profile Content",
+          "description": "View and edit the details for the selected tab. Changes are saved automatically."
+        }
+      },
+      "auctions": {
+        "tabs": {
+          "title": "Live & Ended Tabs",
+          "description": "Toggle between currently running auctions and those that have already concluded."
+        },
+        "toolbar": {
+          "title": "Search & Filters",
+          "description": "Search auctions by name and filter by date range to narrow results."
+        },
+        "grid": {
+          "title": "Auction Products",
+          "description": "Your auction product cards — view bids on live auctions or stats on ended ones."
+        }
+      },
+      "reports": {
+        "tabs": {
+          "title": "Report Types",
+          "description": "Switch between Seller Reports for your transactions and Mrkoon Plus analytics."
+        },
+        "card": {
+          "title": "Reports Content",
+          "description": "View and download detailed reports with charts and data tables."
+        }
+      },
+      "transportations": {
+        "tabs": {
+          "title": "Transportation Tabs",
+          "description": "Switch between your regular product transportations and Mrkoon Plus shipments."
+        },
+        "regularStats": {
+          "title": "Transaction Stats",
+          "description": "Overview of total quantity shipped and total transaction amount at a glance."
+        },
+        "regularToolbar": {
+          "title": "Filters & Search",
+          "description": "Search by text, filter by product or status to find specific transactions."
+        },
+        "regularTable": {
+          "title": "Transactions Table",
+          "description": "Detailed list of all your product transactions with date, quantity, price, and status."
+        },
+        "plusStats": {
+          "title": "Plus Statistics",
+          "description": "Mrkoon Plus overview — total tags, quantities, CO2 impact, and category breakdowns."
+        },
+        "plusToolbar": {
+          "title": "Plus Filters",
+          "description": "Filter Plus transactions by tag and date range."
+        },
+        "plusTable": {
+          "title": "Plus Transactions",
+          "description": "Detailed list of your Mrkoon Plus shipments with tag, quantity, and pricing info."
+        }
+      },
+      "priceOffers": {
+        "toolbar": {
+          "title": "Filters & Search",
+          "description": "Search offers by text, filter by product or status to find specific price offers."
+        },
+        "table": {
+          "title": "Price Offers",
+          "description": "All incoming price offers on your products — review, accept, or reject each one."
+        }
+      }
+    }
+  },
+  "auth": {
+    "country": "Country",
+    "signInTitle": "Sign in to your account",
+    "signInDesc": "Enter your phone number to receive a verification code",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter your phone number",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordRequired": "Password is required!",
+    "sendOtp": "Send OTP",
+    "sendingOtp": "Sending OTP...",
+    "loadingCountries": "Loading countries...",
+    "otpError": "Failed to send OTP. Please try again.",
+    "verifyTitle": "Verify your phone",
+    "verifyDesc": "We've sent a verification code to your phone number. Please enter the code below.",
+    "verifying": "Verifying...",
+    "verify": "Send",
+    "verifyWhatsAppDesc": "Verification code (OTP) has been sent to your WhatsApp number {{phone}}",
+    "verifyError": "Verification failed. Please try again.",
+    "resendError": "Failed to resend OTP. Please try again.",
+    "codeRequired": "Code is required!",
+    "codeMin": "Code must be at least 4 characters!",
+    "phoneRequired": "Phone number is required!",
+    "countryRequired": "Country is required!",
+    "noCode": "Don’t have a code? ",
+    "resend": "Resend",
+    "welcomeTitle": "Hi, Welcome back",
+    "welcomeDesc": "More effectively with optimized workflows",
+    "needHelp": "Need help?"
+  }
+}

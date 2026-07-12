@@ -1,0 +1,149 @@
+name: markoon-portal-production
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  docker:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VITE_APP_ENV: prod
+      VITE_MAPBOX_API_KEY: ${{vars.VITE_MAPBOX_API_KEY}}
+      VITE_HOST_API: ${{ vars.VITE_HOST_API }}
+      VITE_BASE_URL: ${{ vars.VITE_BASE_URL }}
+      VITE_ADMIN_BASE_URL: ${{ vars.VITE_ADMIN_BASE_URL }}
+      VITE_WEBSITE_HOST_API: ${{ vars.VITE_WEBSITE_HOST_API }}
+      VITE_MRKOON_WEBSITE: ${{ vars.VITE_MRKOON_WEBSITE }}
+      VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_DATABASE_URL: ${{ vars.VITE_FIREBASE_DATABASE_URL }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
+      VITE_OPENAI_API_KEY: ${{vars.VITE_OPENAI_API_KEY}}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache Node Modules & Build Output
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.VERSION_TOKEN }}
+          fetch_all_tags: true
+          tag_prefix: ''
+
+      - name: Get New Tag Version
+        run: |
+          echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_ENV
+          echo "app_name=portal" >> $GITHUB_ENV
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            amir548/mrkoon-${{env.app_name}}:latest 
+            amir548/mrkoon-${{env.app_name}}:${{ env.new_tag }}
+
+      - name: Checkout the k8s repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'mrkoonapp/k8s'
+          token: ${{ secrets.K8S }}
+          ref: 'main'
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.11.0
+
+      - name: Update App Chart Version
+        run: |
+          NEW_TAG=${{ env.new_tag }}
+          sed -i "s/^version:.*/version: ${NEW_TAG}/" charts/production/${{env.app_name}}/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: \"${NEW_TAG}\"/" charts/production/${{env.app_name}}/Chart.yaml
+
+      - name: Package and Push App Chart
+        run: |
+          helm package charts/production/${{env.app_name}} -d ./packaged-charts
+          curl --user ${{ secrets.CHARTS_USERNAME }}:${{ secrets.CHARTS_PASSWORD }} --data-binary "@./packaged-charts/${{env.app_name}}-${{ env.new_tag }}.tgz" ${{ secrets.CHARTS_URI }}/api/charts
+
+      - name: Add Private Helm Repository
+        run: |
+          helm repo add myrepo https://charts.mrkoonapp.com \
+            --username "${{ secrets.CHARTS_USERNAME }}" \
+            --password "${{ secrets.CHARTS_PASSWORD }}"
+          helm repo update
+
+      - name: Update MrKoon Chart Version and Dependencies
+        run: |
+          MRKOON_CHART="charts/production/mrkoon/Chart.yaml"
+          CURRENT_VERSION=$(grep '^version:' $MRKOON_CHART | awk '{print $2}')
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' OFS=.)
+          sed -i "s/^version:.*/version: ${NEW_VERSION}/" $MRKOON_CHART
+          sed -i "s/^appVersion:.*/appVersion: \"${NEW_VERSION}\"/" $MRKOON_CHART
+          sed -i "/- alias: ${{env.app_name}}/,/version:/s/version: v[0-9]\+\.[0-9]\+\.[0-9]\+/version: v${{ env.new_tag }}/" $MRKOON_CHART
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+
+      - name: Update Helm Dependencies
+        run: |
+          helm dependency update charts/production/mrkoon
+
+      - name: Package and Push MrKoon Chart
+        run: |
+          helm package charts/production/mrkoon -d ./packaged-charts
+          curl --user ${{ secrets.CHARTS_USERNAME }}:${{ secrets.CHARTS_PASSWORD }} --data-binary "@./packaged-charts/mrkoon-${{ env.NEW_VERSION }}.tgz" ${{ secrets.CHARTS_URI }}/api/charts
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(${{env.app_name}}): update Helm charts with new version ${{ env.new_tag }}"
+            git push origin main
+          fi

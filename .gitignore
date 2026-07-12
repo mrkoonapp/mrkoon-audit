@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# production
+.next
+.swc
+_static
+out
+dist
+build
+
+# environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# generated service worker
+public/firebase-messaging-sw.js
+
+# generated per-env universal-links association files (source: public/.well-known/universal-links/<env>/)
+public/.well-known/apple-app-site-association
+public/.well-known/assetlinks.json
+
+# misc
+.DS_Store
+.vercel
+.netlify
+.vscode
+tsconfig.tsbuildinfo
+.ncurc.js
+
+ref-to-migrate
+
+.claude
+.specify
+/CLAUDE.md

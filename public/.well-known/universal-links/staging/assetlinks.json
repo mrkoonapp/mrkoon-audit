@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.abdelrahmansaleh.mrkoon.stg",
+      "sha256_cert_fingerprints": [
+        "91:44:93:E3:B8:A2:43:2A:3F:58:93:40:4E:D5:50:F5:73:18:30:19:09:8F:BB:B6:A2:EE:29:90:6B:67:53:5D"
+      ]
+    }
+  }
+]
