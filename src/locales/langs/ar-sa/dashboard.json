@@ -1,5 +1,52 @@
 {
   "dashboard": {
+    "overview": {
+      "searchPlaceholder": "بحث",
+      "filter": "تصفية",
+      "trendCaption": "آخر 7 أيام",
+      "joinedAt": "انضم في",
+      "empty": {
+        "title": "لا توجد بيانات",
+        "description": "لا يوجد شيء لعرضه للفلاتر المحددة حتى الآن."
+      },
+      "filters": {
+        "title": "الفلاتر",
+        "date": "التاريخ",
+        "startDate": "تاريخ البداية",
+        "endDate": "تاريخ النهاية",
+        "country": "الدولة",
+        "countryPlaceholder": "اختر الدولة",
+        "apply": "تطبيق",
+        "reset": "إعادة تعيين",
+        "dateError": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"
+      },
+      "stats": {
+        "gmv": "إجمالي قيمة المبيعات",
+        "totalSellers": "إجمالي البائعين",
+        "totalInspections": "إجمالي عمليات الفحص",
+        "totalBidders": "إجمالي المزايدين"
+      },
+      "successRate": {
+        "title": "معدل النجاح",
+        "centerLabel": "معدل النجاح",
+        "successful": "مزادات ناجحة",
+        "failed": "مزادات فاشلة"
+      },
+      "newClients": {
+        "title": "عملاء جدد"
+      },
+      "transactions": {
+        "title": "جميع المعاملات"
+      },
+      "totalTransaction": "إجمالي المعاملات ({{currency}})",
+      "transactionsCount": "عدد المعاملات",
+      "topSellers": {
+        "title": "أفضل 5 بائعين"
+      },
+      "topCategories": {
+        "title": "أفضل 5 فئات"
+      }
+    },
     "exportPdf": "تصدير PDF",
     "ceoDashboard": {
       "uploaderTitle": "لوحة معلومات الرئيس التنفيذي",

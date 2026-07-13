@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import { BlankView } from 'src/sections/blank/view';
+import { OverviewView } from 'src/sections/overview/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function HomePage() {
     <>
       <title>{metadata.title}</title>
 
-      <BlankView title="Dashboard" />
+      <OverviewView />
     </>
   );
 }

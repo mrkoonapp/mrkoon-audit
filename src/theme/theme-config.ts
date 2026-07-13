@@ -115,3 +115,18 @@ export const themeConfig: ThemeConfig = {
     colorSchemeSelector: 'data-color-scheme',
   },
 };
+
+// ----------------------------------------------------------------------
+
+/**
+ * Fixed accent tiles used by `<HighlightStatCard />` (e.g. the dashboard
+ * "Total Transaction" / "No. of Transactions" cards). These are intentionally
+ * dark in both light and dark mode, so they live here — next to the palette —
+ * as flat brand colors rather than mode-dependent palette tints.
+ */
+export const highlightCardColors = {
+  gold: { bg: '#3A3012', border: '#755E1E' },
+  green: { bg: '#0E2A16', border: '#2C663C' },
+} as const;
+
+export type HighlightCardColorKey = keyof typeof highlightCardColors;
