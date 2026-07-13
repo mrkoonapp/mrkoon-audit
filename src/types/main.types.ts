@@ -94,24 +94,6 @@ export interface IProduct {
   related_data?: IAdminApproval;
   target_price?: number;
 }
-// export interface IMainUserInfo {
-//   id: number;
-//   name: string;
-//   image: string;
-//   company_logo: string;
-//   phone: string;
-//   email: string;
-//   company_name: string;
-//   token?: string | null;
-//   active_status: 1 | 2;
-//   country_id: string;
-//   isDemo?: number;
-//   timezone?: string;
-//   apply_new_register?: number;
-//   is_dismiss_new_register?: number;
-//   country: ICountry | null;
-//   country_code_external: string;
-// }
 export interface TimeRemaining {
   differenceInMilliseconds: number;
   remainingTime: string;
@@ -234,34 +216,6 @@ export interface AddressDTO {
   description?: string;
 }
 
-// export interface IUser {
-//   id: number;
-//   name: string;
-//   image: string;
-//   company_logo: string;
-//   phone: string;
-//   email: string;
-//   company_name: string;
-//   user_type: UserType;
-//   status: number;
-//   active_status: number;
-//   active_code: number;
-//   password_code: number;
-//   individual_or_company: number;
-//   rate: number;
-//   fire_base_token?: null;
-//   commercial_register?: null;
-//   tax_card?: null;
-//   added_tax_number?: null;
-//   electronic_invoice?: null;
-//   created_at: string;
-//   admin_login_token?: null;
-//   token?: null;
-//   adds?: AddsEntity[] | null;
-//   cats?: null[] | null;
-//   mainAddress: MainAddressOrAddress;
-//   apply_new_register: number;
-// }
 export interface UserType {
   id: number;
   title: ILanguage;
