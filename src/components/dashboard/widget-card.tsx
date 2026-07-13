@@ -65,12 +65,7 @@ export function WidgetCard({
       ]}
     >
       {(title || headerAction) && (
-        <CardHeader
-          title={title}
-          subheader={subheader}
-          action={headerAction}
-          sx={{ mb: 1 }}
-        />
+        <CardHeader title={title} subheader={subheader} action={headerAction} sx={{ mb: 1 }} />
       )}
 
       <Box

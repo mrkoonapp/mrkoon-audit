@@ -1,10 +1,11 @@
 {
   "dashboard": {
-    "dashboard": {
-      "searchPlaceholder": "Search",
+    "shared": {
+      "search": "Search",
       "filter": "Filter",
-      "trendCaption": "last 7 days",
+      "viewAll": "View all",
       "joinedAt": "Joined at",
+      "trendCaption": "last 7 days",
       "empty": {
         "title": "No data",
         "description": "There is nothing to show for the selected filters yet."
@@ -19,7 +20,9 @@
         "apply": "Apply",
         "reset": "Reset",
         "dateError": "End date must be later than start date"
-      },
+      }
+    },
+    "dashboard": {
       "stats": {
         "gmv": "GMV",
         "totalSellers": "Total Sellers",
@@ -41,11 +44,25 @@
       "totalTransaction": "Total Transaction ({{currency}})",
       "transactionsCount": "No. of Transactions",
       "topSellers": {
-        "title": "Top 5 sellers",
-        "viewAll": "View all"
+        "title": "Top 5 sellers"
       },
       "topCategories": {
         "title": "Top 5 Categories"
+      }
+    },
+    "auctions": {
+      "byCategory": "Auctions by category",
+      "participatedClients": "Participated Clients",
+      "successfulAuctions": "Successful auctions",
+      "totalBidders": "Total Bidders",
+      "averageBidders": "Average Bidders/Auction",
+      "bidderUnit": "Bidder",
+      "auctions": "Auctions",
+      "stats": {
+        "totalAuctionsDone": "Total auctions done",
+        "gmv": "GMV",
+        "ourPercentage": "Our percentage",
+        "totalBids": "Total Bids"
       }
     },
     "table": {

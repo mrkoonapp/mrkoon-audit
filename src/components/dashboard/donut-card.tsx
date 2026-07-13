@@ -48,7 +48,9 @@ export function DonutCard({
     colors: chartColors,
     labels,
     stroke: { width: 0 },
-    tooltip: { y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } } },
+    tooltip: {
+      y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } },
+    },
     plotOptions: {
       pie: {
         donut: {

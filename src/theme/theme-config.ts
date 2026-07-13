@@ -130,3 +130,9 @@ export const highlightCardColors = {
 } as const;
 
 export type HighlightCardColorKey = keyof typeof highlightCardColors;
+
+/** Fixed colors for the pill-shaped category tag (`<TagChip />`). */
+export const tagChipColors = {
+  bg: '#141A21',
+  border: '#212B36',
+} as const;

@@ -25,20 +25,25 @@ Sales, Operations, etc. with different keys and data.
 | --- | --- |
 | `src/components/dashboard/types.ts` | All widget/toolbar/filter prop types. |
 | `src/components/dashboard/widget-card.tsx` | Base card shell (title, action, loading/empty states). |
-| `src/components/dashboard/stat-card.tsx` | KPI card with signed trend. |
-| `src/components/dashboard/highlight-stat-card.tsx` | Accent (colored) KPI tile. |
+| `src/components/dashboard/stat-card.tsx` | KPI card. Trend is **full** (`value` → arrow + % + caption) or **compact** (`direction` → arrow-only badge). |
+| `src/components/dashboard/highlight-stat-card.tsx` | Accent KPI tile (fixed `bgColor`/`borderColor` or palette tint) with corner `pattern` image. |
 | `src/components/dashboard/donut-card.tsx` | Donut chart + center total + legend. |
+| `src/components/dashboard/radial-gauge-card.tsx` | Semicircle gauge (%) + optional `children` body (stat rows, footer). |
 | `src/components/dashboard/area-chart-card.tsx` | Area/line chart card. |
-| `src/components/dashboard/list-widget-card.tsx` | Generic avatar list (clients / sellers). |
+| `src/components/dashboard/bar-chart-card.tsx` | Vertical bar chart (distributed colors, value labels, legend). |
+| `src/components/dashboard/list-widget-card.tsx` | Generic avatar list; item supports `center` (chip) + trailing/badge. |
+| `src/components/dashboard/metric-list-card.tsx` | Avatar list with inline icon+value metrics per row (Top sellers). |
 | `src/components/dashboard/progress-list-card.tsx` | Label + bar + value list (categories). |
 | `src/components/dashboard/dashboard-toolbar.tsx` | Search + Filter button (all pages). |
 | `src/components/dashboard/dashboard-filters-drawer.tsx` | Right drawer: Date range + Country. |
+| `src/components/dashboard/utils.ts` | Shared `defaultDashboardFilters`, `countActiveFilters`, `formatAmount`, `formatJoinedAt`. |
 | `src/components/dashboard/index.ts` | Barrel export. |
-| `src/sections/dashboard/data.ts` | Typed **mock** data + response shapes. |
-| `src/sections/dashboard/utils.ts` | Filter defaults + amount/date/count helpers. |
-| `src/sections/dashboard/view/dashboard-view.tsx` | Page composition (maps data → widgets). |
-| `src/pages/dashboard/index.tsx` | Renders `<DashboardView />`. |
-| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | `dashboard.dashboard.*` translation keys. |
+| `src/sections/dashboard/data.ts` | Dashboard **mock** data + response shapes. |
+| `src/sections/dashboard/view/dashboard-view.tsx` | Dashboard page composition. |
+| `src/sections/auctions/data.ts` | Auctions **mock** data + response shapes. |
+| `src/sections/auctions/view/auctions-view.tsx` | Auctions page composition. |
+| `src/pages/dashboard/index.tsx` / `.../auctions/index.tsx` | Render `<DashboardView />` / `<AuctionsView />`. |
+| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | Keys under `dashboard.shared.*` (generic toolbar/filter/empty), `dashboard.dashboard.*` (dashboard page), `dashboard.auctions.*` (auctions page). |
 
 ## Reused building blocks
 
@@ -125,7 +130,30 @@ are the natural query params for that hook.
 - `bun lint` — 0 errors/warnings.
 - Dev server boots clean; `/dashboard` module transforms via HMR without errors.
 
+## Translation namespaces (`dashboard.json`)
+
+- `dashboard.shared.*` — generic strings reused by every page: `search`, `filter`,
+  `viewAll`, `joinedAt`, `trendCaption`, `empty.*`, `filters.*`.
+- `dashboard.dashboard.*` — dashboard-page-specific labels.
+- `dashboard.auctions.*` — auctions-page-specific labels (incl. `stats.*`).
+
+Both pages pull the toolbar/filter/empty strings from `dashboard.shared.*`; only
+their own section titles/labels live under their page block.
+
+## Auctions page (worked example of reuse)
+
+`/dashboard/auctions` is built entirely from the same library, showing how one
+kit backs multiple pages:
+- KPI row → `StatCard` with **compact** trend (`trend={{ direction }}`, arrow-only).
+- `BarChartCard` — "Auctions by category" (distributed bars + legend + title badge).
+- `ListWidgetCard` — "Participated Clients", using the item `center` slot for the
+  category chip (`<Label startIcon={...}>`).
+- `RadialGaugeCard` — success-rate gauge whose `children` slot holds the bidder
+  stat rows and the "Auctions 727 / 800" footer.
+
 ## Screens / paths impacted
 
-- `/dashboard` (overview) — new page.
-- New reusable library at `src/components/dashboard/` available to every route.
+- `/dashboard` — dashboard page.
+- `/dashboard/auctions` — auctions page.
+- Reusable library at `src/components/dashboard/` (widgets + shared filter/format
+  helpers) available to every route.

@@ -63,11 +63,15 @@ export function ListWidgetCard({
 function ListRow({ item }: { item: ListWidgetItem }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-      <Avatar src={item.avatarUrl} alt={item.avatarAlt ?? item.primary} sx={{ width: 40, height: 40 }}>
+      <Avatar
+        src={item.avatarUrl}
+        alt={item.avatarAlt ?? item.primary}
+        sx={{ width: 40, height: 40 }}
+      >
         {item.primary.charAt(0)}
       </Avatar>
 
-      <Box sx={{ flex: '1 1 auto', minWidth: 0 }}>
+      <Box sx={{ flex: item.center ? '1 1 0' : '1 1 auto', minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>
           {item.primary}
         </Typography>
@@ -79,11 +83,24 @@ function ListRow({ item }: { item: ListWidgetItem }) {
         )}
       </Box>
 
+      {item.center && (
+        <Box
+          sx={{
+            flex: '1 1 0',
+            minWidth: 0,
+            display: { xs: 'none', sm: 'flex' },
+            justifyContent: 'center',
+          }}
+        >
+          {item.center}
+        </Box>
+      )}
+
       {(item.trailingPrimary || item.trailingSecondary || item.badge) && (
         <Box
           sx={{
             gap: 0.5,
-            flexShrink: 0,
+            flex: item.center ? '1 1 0' : '0 0 auto',
             display: 'flex',
             alignItems: 'flex-end',
             flexDirection: 'column',

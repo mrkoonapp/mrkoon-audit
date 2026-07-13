@@ -21,22 +21,20 @@ import { Iconify } from 'src/components/iconify';
 import {
   StatCard,
   DonutCard,
+  formatAmount,
   AreaChartCard,
   MetricListCard,
   ListWidgetCard,
+  formatJoinedAt,
   DashboardToolbar,
   ProgressListCard,
   HighlightStatCard,
+  countActiveFilters,
   DashboardFiltersDrawer,
+  defaultDashboardFilters,
 } from 'src/components/dashboard';
 
 import { dashboardMockData } from '../data';
-import {
-  formatAmount,
-  formatJoinedAt,
-  countActiveFilters,
-  defaultDashboardFilters,
-} from '../utils';
 
 // ----------------------------------------------------------------------
 
@@ -54,16 +52,16 @@ export function DashboardView() {
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
   // Section labels — resolved here so widgets stay translation-free.
-  const trendCaption = t('dashboard.dashboard.trendCaption');
-  const emptyTitle = t('dashboard.dashboard.empty.title');
-  const emptyDescription = t('dashboard.dashboard.empty.description');
+  const trendCaption = t('dashboard.shared.trendCaption');
+  const emptyTitle = t('dashboard.shared.empty.title');
+  const emptyDescription = t('dashboard.shared.empty.description');
 
   const newClientsItems = data.newClients.items.map((client) => ({
     id: client.id,
     avatarUrl: client.avatarUrl,
     primary: client.name,
     secondary: client.category,
-    trailingSecondary: `${t('dashboard.dashboard.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
+    trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
   }));
 
   const topSellersItems = data.topSellers.map((seller) => ({
@@ -89,7 +87,7 @@ export function DashboardView() {
       onClick={() => {}}
       sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25 }}
     >
-      {t('dashboard.dashboard.topSellers.viewAll')}
+      {t('dashboard.shared.viewAll')}
       <Iconify icon="eva:arrow-ios-forward-fill" width={16} />
     </Link>
   );
@@ -108,8 +106,8 @@ export function DashboardView() {
         searchValue={search}
         onSearchChange={setSearch}
         onOpenFilters={() => setFiltersOpen(true)}
-        searchPlaceholder={t('dashboard.dashboard.searchPlaceholder')}
-        filterLabel={t('dashboard.dashboard.filter')}
+        searchPlaceholder={t('dashboard.shared.search')}
+        filterLabel={t('dashboard.shared.filter')}
         activeFilterCount={activeFilterCount}
       />
 
@@ -223,15 +221,15 @@ export function DashboardView() {
         onApply={(next) => setFiltersHandler(next)}
         onReset={clearFilters}
         labels={{
-          title: t('dashboard.dashboard.filters.title'),
-          date: t('dashboard.dashboard.filters.date'),
-          startDate: t('dashboard.dashboard.filters.startDate'),
-          endDate: t('dashboard.dashboard.filters.endDate'),
-          country: t('dashboard.dashboard.filters.country'),
-          countryPlaceholder: t('dashboard.dashboard.filters.countryPlaceholder'),
-          apply: t('dashboard.dashboard.filters.apply'),
-          reset: t('dashboard.dashboard.filters.reset'),
-          dateError: t('dashboard.dashboard.filters.dateError'),
+          title: t('dashboard.shared.filters.title'),
+          date: t('dashboard.shared.filters.date'),
+          startDate: t('dashboard.shared.filters.startDate'),
+          endDate: t('dashboard.shared.filters.endDate'),
+          country: t('dashboard.shared.filters.country'),
+          countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
+          apply: t('dashboard.shared.filters.apply'),
+          reset: t('dashboard.shared.filters.reset'),
+          dateError: t('dashboard.shared.filters.dateError'),
         }}
       />
     </DashboardContent>

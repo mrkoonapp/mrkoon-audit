@@ -1,10 +1,11 @@
 {
   "dashboard": {
-    "dashboard": {
-      "searchPlaceholder": "بحث",
+    "shared": {
+      "search": "بحث",
       "filter": "تصفية",
-      "trendCaption": "آخر 7 أيام",
+      "viewAll": "عرض الكل",
       "joinedAt": "انضم في",
+      "trendCaption": "آخر 7 أيام",
       "empty": {
         "title": "لا توجد بيانات",
         "description": "لا يوجد شيء لعرضه للفلاتر المحددة حتى الآن."
@@ -19,7 +20,9 @@
         "apply": "تطبيق",
         "reset": "إعادة تعيين",
         "dateError": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"
-      },
+      }
+    },
+    "dashboard": {
       "stats": {
         "gmv": "إجمالي قيمة المبيعات",
         "totalSellers": "إجمالي البائعين",
@@ -41,11 +44,25 @@
       "totalTransaction": "إجمالي المعاملات ({{currency}})",
       "transactionsCount": "عدد المعاملات",
       "topSellers": {
-        "title": "أفضل 5 بائعين",
-        "viewAll": "عرض الكل"
+        "title": "أفضل 5 بائعين"
       },
       "topCategories": {
         "title": "أفضل 5 فئات"
+      }
+    },
+    "auctions": {
+      "byCategory": "المزادات حسب الفئة",
+      "participatedClients": "العملاء المشاركون",
+      "successfulAuctions": "مزادات ناجحة",
+      "totalBidders": "إجمالي المزايدين",
+      "averageBidders": "متوسط المزايدين لكل مزاد",
+      "bidderUnit": "مزايد",
+      "auctions": "المزادات",
+      "stats": {
+        "totalAuctionsDone": "إجمالي المزادات المنجزة",
+        "gmv": "إجمالي قيمة المبيعات",
+        "ourPercentage": "نسبتنا",
+        "totalBids": "إجمالي المزايدات"
       }
     },
     "table": {

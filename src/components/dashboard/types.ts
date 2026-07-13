@@ -7,13 +7,17 @@ import type { IDatePickerControl } from 'src/types/common';
 // ----------------------------------------------------------------------
 
 /**
- * A trend indicator (e.g. "+12% last 7 days"). `value` is a signed percentage;
- * its sign drives the up/down arrow and color. `caption` is a free label such as
- * "last 7 days" — always passed from the page so widgets stay translation-free.
+ * A trend indicator. Two modes:
+ * - **Full**: pass `value` (a signed percentage) → renders an arrow + "%"" +
+ *   optional `caption` ("last 7 days") below the stat value.
+ * - **Compact**: pass only `direction` → renders just a colored directional
+ *   arrow badge (no text), e.g. the auctions KPI cards.
+ * `caption` stays translation-free (always passed from the page).
  */
 export type StatTrend = {
-  value: number;
+  value?: number;
   caption?: string;
+  direction?: 'up' | 'down';
 };
 
 // ----------------------------------------------------------------------
@@ -115,6 +119,74 @@ export type AreaChartCardProps = {
 };
 
 // ----------------------------------------------------------------------
+// BarChartCard (Auctions by category …)
+// ----------------------------------------------------------------------
+
+export type BarChartCardProps = {
+  title?: ReactNode;
+  headerAction?: ReactNode;
+  categories: string[];
+  /** Single-series values (paired 1:1 with `categories`). */
+  series: number[];
+  /** Series name (tooltip label). */
+  seriesName?: string;
+  colors?: string[];
+  /** Each bar its own color (default true). */
+  distributed?: boolean;
+  /** Show the value on top of each bar (default true). */
+  showValues?: boolean;
+  /** Render a color-coded legend from the categories below the chart. */
+  showLegend?: boolean;
+  height?: number;
+  loading?: boolean;
+  empty?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// IconStatRow (icon + value + label row)
+// ----------------------------------------------------------------------
+
+export type IconStatRowProps = {
+  /** Leading icon rendered in a soft tinted rounded avatar. */
+  icon?: ReactNode;
+  iconColor?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+  label: string;
+  value: ReactNode;
+  /** Put the label above the value instead of below (e.g. a footer total). */
+  reverse?: boolean;
+  /** Trailing node aligned to the row end (e.g. an arrow button). */
+  action?: ReactNode;
+  /** Dashed divider above the row. */
+  divider?: boolean;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// RadialGaugeCard (semicircle gauge + optional body)
+// ----------------------------------------------------------------------
+
+export type RadialGaugeCardProps = {
+  title?: ReactNode;
+  headerAction?: ReactNode;
+  /** 0–100 gauge fill. */
+  value: number;
+  /** Text shown under the big percentage in the gauge center. */
+  valueLabel?: string;
+  /** Overridden gauge color (defaults to success). */
+  color?: string;
+  /** Extra content rendered below the gauge (stat rows, footer, …). */
+  children?: ReactNode;
+  loading?: boolean;
+  empty?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
 // ListWidgetCard (New Clients / Top sellers …)
 // ----------------------------------------------------------------------
 
@@ -125,6 +197,8 @@ export type ListWidgetItem = {
   avatarAlt?: string;
   primary: string;
   secondary?: string;
+  /** Optional node between the name block and the trailing block (e.g. a chip). */
+  center?: ReactNode;
   /** Right-aligned primary text (e.g. a price or "Joined at"). */
   trailingPrimary?: ReactNode;
   /** Right-aligned secondary text below `trailingPrimary`. */
