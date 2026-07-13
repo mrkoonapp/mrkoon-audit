@@ -14,7 +14,7 @@ import { fIsAfter } from 'src/utils/format-time';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-import { CountrySelect } from 'src/components/country-select';
+import { CountrySelectRemote } from 'src/components/country-select';
 
 import type { DashboardFilters, DashboardFiltersDrawerProps } from './types';
 
@@ -112,15 +112,13 @@ export function DashboardFiltersDrawer({
               {labels?.country}
             </Typography>
 
-            <CountrySelect
+            <CountrySelectRemote
               id="dashboard-filter-country"
-              getValue="code"
               fullWidth
               placeholder={labels?.countryPlaceholder}
-              value={local.country || null}
-              onChange={(_event, newValue) =>
-                setLocal((prev) => ({ ...prev, country: (newValue as string) ?? '' }))
-              }
+              allLabel={labels?.allCountries}
+              value={local.country}
+              onChange={(newValue) => setLocal((prev) => ({ ...prev, country: newValue }))}
             />
           </Box>
         </Stack>

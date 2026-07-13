@@ -106,6 +106,7 @@ export function OperationsView() {
           endDate: t('dashboard.shared.filters.endDate'),
           country: t('dashboard.shared.filters.country'),
           countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
+          allCountries: t('dashboard.shared.filters.allCountries'),
           apply: t('dashboard.shared.filters.apply'),
           reset: t('dashboard.shared.filters.reset'),
           dateError: t('dashboard.shared.filters.dateError'),

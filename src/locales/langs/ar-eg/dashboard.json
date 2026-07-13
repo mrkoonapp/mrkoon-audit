@@ -17,6 +17,7 @@
         "endDate": "تاريخ النهاية",
         "country": "الدولة",
         "countryPlaceholder": "اختر الدولة",
+        "allCountries": "جميع الدول",
         "apply": "تطبيق",
         "reset": "إعادة تعيين",
         "dateError": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"

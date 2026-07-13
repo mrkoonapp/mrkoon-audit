@@ -11,6 +11,7 @@ import type { DashboardFilters } from './types';
 export const defaultDashboardFilters: DashboardFilters = {
   startDate: null,
   endDate: null,
+  // Empty country id = the "All countries" option (unfiltered).
   country: '',
 };
 

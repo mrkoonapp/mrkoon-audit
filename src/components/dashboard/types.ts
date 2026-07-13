@@ -392,7 +392,7 @@ export type TableWidgetCardProps = {
 export type DashboardFilters = {
   startDate: IDatePickerControl;
   endDate: IDatePickerControl;
-  /** ISO country code (matches `CountrySelect getValue="code"`). */
+  /** Backend country id (as string) from `useGetCountries`; `''` means "All". */
   country: string;
 };
 
@@ -426,6 +426,7 @@ export type DashboardFiltersDrawerProps = {
     endDate?: string;
     country?: string;
     countryPlaceholder?: string;
+    allCountries?: string;
     apply?: string;
     reset?: string;
     dateError?: string;

@@ -17,6 +17,7 @@
         "endDate": "End date",
         "country": "Country",
         "countryPlaceholder": "Select a country",
+        "allCountries": "All countries",
         "apply": "Apply",
         "reset": "Reset",
         "dateError": "End date must be later than start date"
