@@ -1,52 +1,5 @@
 {
   "dashboard": {
-    "overview": {
-      "searchPlaceholder": "Search",
-      "filter": "Filter",
-      "trendCaption": "last 7 days",
-      "joinedAt": "Joined at",
-      "empty": {
-        "title": "No data",
-        "description": "There is nothing to show for the selected filters yet."
-      },
-      "filters": {
-        "title": "Filters",
-        "date": "Date",
-        "startDate": "Start date",
-        "endDate": "End date",
-        "country": "Country",
-        "countryPlaceholder": "Select a country",
-        "apply": "Apply",
-        "reset": "Reset",
-        "dateError": "End date must be later than start date"
-      },
-      "stats": {
-        "gmv": "GMV",
-        "totalSellers": "Total Sellers",
-        "totalInspections": "Total Inspections",
-        "totalBidders": "Total Bidders"
-      },
-      "successRate": {
-        "title": "Success rate",
-        "centerLabel": "Success rate",
-        "successful": "Successful auctions",
-        "failed": "Failed auctions"
-      },
-      "newClients": {
-        "title": "New Clients"
-      },
-      "transactions": {
-        "title": "All transactions"
-      },
-      "totalTransaction": "Total Transaction ({{currency}})",
-      "transactionsCount": "No. of Transactions",
-      "topSellers": {
-        "title": "Top 5 sellers"
-      },
-      "topCategories": {
-        "title": "Top 5 Categories"
-      }
-    },
     "exportPdf": "Export PDF",
     "ceoDashboard": {
       "uploaderTitle": "CEO dashboard",
@@ -110,7 +63,53 @@
       "retry": "Try again"
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "searchPlaceholder": "Search",
+      "filter": "Filter",
+      "trendCaption": "last 7 days",
+      "joinedAt": "Joined at",
+      "empty": {
+        "title": "No data",
+        "description": "There is nothing to show for the selected filters yet."
+      },
+      "filters": {
+        "title": "Filters",
+        "date": "Date",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "country": "Country",
+        "countryPlaceholder": "Select a country",
+        "apply": "Apply",
+        "reset": "Reset",
+        "dateError": "End date must be later than start date"
+      },
+      "stats": {
+        "gmv": "GMV",
+        "totalSellers": "Total Sellers",
+        "totalInspections": "Total Inspections",
+        "totalBidders": "Total Bidders"
+      },
+      "successRate": {
+        "title": "Success rate",
+        "centerLabel": "Success rate",
+        "successful": "Successful auctions",
+        "failed": "Failed auctions"
+      },
+      "newClients": {
+        "title": "New Clients"
+      },
+      "transactions": {
+        "title": "All transactions"
+      },
+      "totalTransaction": "Total Transaction ({{currency}})",
+      "transactionsCount": "No. of Transactions",
+      "topSellers": {
+        "title": "Top 5 sellers",
+        "viewAll": "View all"
+      },
+      "topCategories": {
+        "title": "Top 5 Categories"
+      }
     },
     "welcome": {
       "title": "Welcome back",
@@ -499,7 +498,6 @@
         "warehouse": "Warehouse",
         "endDate": "End Date",
         "fixedPrice": "Fixed Price",
-
         "auctionPrice": "Auction",
         "submitProduct": "Create Product",
         "selectImage": "Select image"

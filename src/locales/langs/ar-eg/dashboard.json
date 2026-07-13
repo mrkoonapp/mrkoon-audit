@@ -1,52 +1,5 @@
 {
   "dashboard": {
-    "overview": {
-      "searchPlaceholder": "دور على حاجة",
-      "filter": "فلترة",
-      "trendCaption": "آخر 7 أيام",
-      "joinedAt": "اشترك في",
-      "empty": {
-        "title": "مفيش بيانات",
-        "description": "مفيش حاجة تتعرض للفلاتر اللي اخترتها لحد دلوقتي."
-      },
-      "filters": {
-        "title": "الفلاتر",
-        "date": "التاريخ",
-        "startDate": "تاريخ البداية",
-        "endDate": "تاريخ النهاية",
-        "country": "الدولة",
-        "countryPlaceholder": "اختار الدولة",
-        "apply": "تطبيق",
-        "reset": "إعادة ضبط",
-        "dateError": "تاريخ النهاية لازم يكون بعد تاريخ البداية"
-      },
-      "stats": {
-        "gmv": "إجمالي قيمة المبيعات",
-        "totalSellers": "إجمالي البائعين",
-        "totalInspections": "إجمالي المعاينات",
-        "totalBidders": "إجمالي المزايدين"
-      },
-      "successRate": {
-        "title": "نسبة النجاح",
-        "centerLabel": "نسبة النجاح",
-        "successful": "مزادات ناجحة",
-        "failed": "مزادات فاشلة"
-      },
-      "newClients": {
-        "title": "عملاء جداد"
-      },
-      "transactions": {
-        "title": "كل المعاملات"
-      },
-      "totalTransaction": "إجمالي المعاملات ({{currency}})",
-      "transactionsCount": "عدد المعاملات",
-      "topSellers": {
-        "title": "أعلى 5 بائعين"
-      },
-      "topCategories": {
-        "title": "أعلى 5 فئات"
-      }
-    },
     "exportPdf": "تصدير PDF",
     "ceoDashboard": {
       "uploaderTitle": "لوحة الـ CEO",
@@ -110,7 +63,53 @@
       "retry": "حاول تاني"
     },
     "dashboard": {
-      "title": "لوحة التحكم"
+      "title": "لوحة التحكم",
+      "searchPlaceholder": "بحث",
+      "filter": "فلترة",
+      "trendCaption": "آخر 7 أيام",
+      "joinedAt": "اشترك في",
+      "empty": {
+        "title": "مفيش بيانات",
+        "description": "مفيش حاجة تتعرض للفلاتر اللي اخترتها لحد دلوقتي."
+      },
+      "filters": {
+        "title": "الفلاتر",
+        "date": "التاريخ",
+        "startDate": "تاريخ البداية",
+        "endDate": "تاريخ النهاية",
+        "country": "الدولة",
+        "countryPlaceholder": "اختار الدولة",
+        "apply": "تطبيق",
+        "reset": "إعادة ضبط",
+        "dateError": "تاريخ النهاية لازم يكون بعد تاريخ البداية"
+      },
+      "stats": {
+        "gmv": "إجمالي قيمة المبيعات",
+        "totalSellers": "إجمالي البائعين",
+        "totalInspections": "إجمالي المعاينات",
+        "totalBidders": "إجمالي المزايدين"
+      },
+      "successRate": {
+        "title": "نسبة النجاح",
+        "centerLabel": "نسبة النجاح",
+        "successful": "مزادات ناجحة",
+        "failed": "مزادات فاشلة"
+      },
+      "newClients": {
+        "title": "عملاء جداد"
+      },
+      "transactions": {
+        "title": "كل المعاملات"
+      },
+      "totalTransaction": "إجمالي المعاملات ({{currency}})",
+      "transactionsCount": "عدد المعاملات",
+      "topSellers": {
+        "title": "أعلى 5 بائعين",
+        "viewAll": "عرض الكل"
+      },
+      "topCategories": {
+        "title": "أعلى 5 فئات"
+      }
     },
     "welcome": {
       "title": "أهلاً بعودتك",

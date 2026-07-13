@@ -148,6 +148,39 @@ export type ListWidgetCardProps = {
 };
 
 // ----------------------------------------------------------------------
+// MetricListCard (Top sellers …)
+// ----------------------------------------------------------------------
+
+/** A single inline metric on a row (icon + value), e.g. "$ 1,820,000 EGP". */
+export type MetricListMetric = {
+  icon?: ReactNode;
+  value: ReactNode;
+};
+
+export type MetricListItem = {
+  id: string | number;
+  avatarUrl?: string;
+  avatarAlt?: string;
+  primary: string;
+  secondary?: string;
+  /** Inline metrics rendered on the right, separated by a dot. */
+  metrics: MetricListMetric[];
+};
+
+export type MetricListCardProps = {
+  title?: ReactNode;
+  /** Right-of-header node (e.g. a "View all" link). */
+  action?: ReactNode;
+  items: MetricListItem[];
+  /** Cap the visible height and scroll beyond it. */
+  maxHeight?: number;
+  loading?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
 // ProgressListCard (Top categories …)
 // ----------------------------------------------------------------------
 

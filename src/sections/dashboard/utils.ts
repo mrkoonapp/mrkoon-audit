@@ -5,8 +5,8 @@ import { fCurrency } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
 
-/** Empty filter state used to seed and reset the overview filters drawer. */
-export const defaultOverviewFilters: DashboardFilters = {
+/** Empty filter state used to seed and reset the dashboard filters drawer. */
+export const defaultDashboardFilters: DashboardFilters = {
   startDate: null,
   endDate: null,
   country: '',

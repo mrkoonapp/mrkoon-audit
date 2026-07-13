@@ -9,7 +9,7 @@ import type { HighlightStatCardProps } from './types';
 // ----------------------------------------------------------------------
 
 /**
- * Accent KPI card (the gold / green tiles in the overview). Either paint an
+ * Accent KPI card (the gold / green tiles on the dashboard). Either paint an
  * explicit fixed background + border (`bgColor` / `borderColor`) or fall back to
  * a soft tint derived from the `color` palette key. Decorated with a `pattern`
  * image cropped into the bottom-right corner, or an `icon` watermark up top.

@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import { OverviewView } from 'src/sections/overview/view';
+import { DashboardView } from 'src/sections/dashboard/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function HomePage() {
     <>
       <title>{metadata.title}</title>
 
-      <OverviewView />
+      <DashboardView />
     </>
   );
 }

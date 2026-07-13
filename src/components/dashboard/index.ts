@@ -10,6 +10,8 @@ export * from './area-chart-card';
 
 export * from './list-widget-card';
 
+export * from './metric-list-card';
+
 export * from './dashboard-toolbar';
 
 export * from './progress-list-card';

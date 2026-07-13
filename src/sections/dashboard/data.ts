@@ -1,9 +1,9 @@
 /**
- * Typed mock data for the overview dashboard.
+ * Typed mock data for the dashboard page.
  *
  * Shapes mirror what a future `src/api/` endpoint would return, so a real
  * TanStack Query hook (standalone fn + hook per CLAUDE.md §0) can replace
- * `overviewMockData` 1:1 without touching the widgets or the view. Human-facing
+ * `dashboardMockData` 1:1 without touching the widgets or the view. Human-facing
  * copy that is *data* (client names, categories) stays here; copy that is *UI*
  * (section titles, "last 7 days") is resolved from translations in the view.
  */
@@ -12,16 +12,16 @@
 // Types
 // ----------------------------------------------------------------------
 
-export type OverviewStat = {
+export type DashboardStat = {
   id: string;
-  /** i18n key resolved by the view under the `overview.stats` namespace. */
+  /** i18n key resolved by the view under the `dashboard.dashboard.stats` namespace. */
   labelKey: string;
   value: number;
   /** Signed percentage trend vs. the previous period. */
   trend: number;
 };
 
-export type OverviewClient = {
+export type DashboardClient = {
   id: string;
   name: string;
   category: string;
@@ -30,7 +30,7 @@ export type OverviewClient = {
   joinedAt: string;
 };
 
-export type OverviewSeller = {
+export type DashboardSeller = {
   id: string;
   name: string;
   category: string;
@@ -40,15 +40,15 @@ export type OverviewSeller = {
   quantity: number;
 };
 
-export type OverviewCategory = {
+export type DashboardCategory = {
   id: string;
   name: string;
   value: number;
   percent: number;
 };
 
-export type OverviewData = {
-  stats: OverviewStat[];
+export type DashboardData = {
+  stats: DashboardStat[];
   successRate: {
     successful: number;
     failed: number;
@@ -64,17 +64,17 @@ export type OverviewData = {
   };
   newClients: {
     total: number;
-    items: OverviewClient[];
+    items: DashboardClient[];
   };
-  topSellers: OverviewSeller[];
-  topCategories: OverviewCategory[];
+  topSellers: DashboardSeller[];
+  topCategories: DashboardCategory[];
 };
 
 // ----------------------------------------------------------------------
 // Mock data
 // ----------------------------------------------------------------------
 
-export const overviewMockData: OverviewData = {
+export const dashboardMockData: DashboardData = {
   stats: [
     { id: 'gmv', labelKey: 'gmv', value: 9890776, trend: 12 },
     { id: 'sellers', labelKey: 'totalSellers', value: 2323, trend: 86.6 },
@@ -117,11 +117,46 @@ export const overviewMockData: OverviewData = {
     ],
   },
   topSellers: [
-    { id: 's1', name: 'BMW', category: 'Cars & Trucks', amount: 1630000, currency: 'EGP', quantity: 21 },
-    { id: 's2', name: 'Ezz Steel', category: 'Steel', amount: 1250000, currency: 'SAR', quantity: 12 },
-    { id: 's3', name: 'HP', category: 'Electronics', amount: 19000000, currency: 'EGP', quantity: 2 },
-    { id: 's4', name: 'Daraby', category: 'Electronics', amount: 78000000, currency: 'EGP', quantity: 15 },
-    { id: 's5', name: 'Marlboro', category: 'Vape', amount: 90000000, currency: 'QAR', quantity: 10 },
+    {
+      id: 's1',
+      name: 'BMW',
+      category: 'Cars & Trucks',
+      amount: 1630000,
+      currency: 'EGP',
+      quantity: 21,
+    },
+    {
+      id: 's2',
+      name: 'Ezz Steel',
+      category: 'Steel',
+      amount: 1250000,
+      currency: 'SAR',
+      quantity: 12,
+    },
+    {
+      id: 's3',
+      name: 'HP',
+      category: 'Electronics',
+      amount: 19000000,
+      currency: 'EGP',
+      quantity: 2,
+    },
+    {
+      id: 's4',
+      name: 'Daraby',
+      category: 'Electronics',
+      amount: 78000000,
+      currency: 'EGP',
+      quantity: 15,
+    },
+    {
+      id: 's5',
+      name: 'Marlboro',
+      category: 'Vape',
+      amount: 90000000,
+      currency: 'QAR',
+      quantity: 10,
+    },
   ],
   topCategories: [
     { id: 'cat1', name: 'Wood', value: 78329, percent: 100 },

@@ -34,11 +34,11 @@ Sales, Operations, etc. with different keys and data.
 | `src/components/dashboard/dashboard-toolbar.tsx` | Search + Filter button (all pages). |
 | `src/components/dashboard/dashboard-filters-drawer.tsx` | Right drawer: Date range + Country. |
 | `src/components/dashboard/index.ts` | Barrel export. |
-| `src/sections/overview/data.ts` | Typed **mock** data + response shapes. |
-| `src/sections/overview/utils.ts` | Filter defaults + amount/date/count helpers. |
-| `src/sections/overview/view/overview-view.tsx` | Page composition (maps data → widgets). |
-| `src/pages/dashboard/index.tsx` | Renders `<OverviewView />`. |
-| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | `overview.*` translation keys. |
+| `src/sections/dashboard/data.ts` | Typed **mock** data + response shapes. |
+| `src/sections/dashboard/utils.ts` | Filter defaults + amount/date/count helpers. |
+| `src/sections/dashboard/view/dashboard-view.tsx` | Page composition (maps data → widgets). |
+| `src/pages/dashboard/index.tsx` | Renders `<DashboardView />`. |
+| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | `dashboard.dashboard.*` translation keys. |
 
 ## Reused building blocks
 
@@ -78,7 +78,7 @@ Every card supports `loading` and empty states (`empty` / `emptyTitle` /
 
 ```tsx
 const { filters, setFiltersHandler, clearFilters } =
-  useCustomFilter<DashboardFilters>(defaultOverviewFilters);
+  useCustomFilter<DashboardFilters>(defaultDashboardFilters);
 
 <DashboardToolbar searchValue={q} onSearchChange={setQ} onOpenFilters={open}
   searchPlaceholder={t('...')} filterLabel={t('...')} activeFilterCount={n} />
@@ -102,10 +102,10 @@ Edits are staged locally in the drawer and only committed on **Apply**.
 
 ## Mock data → API migration
 
-`src/sections/overview/data.ts` exports typed shapes (`OverviewData`, etc.) plus
-`overviewMockData`. When endpoints exist, add `src/api/overview.ts` with a
+`src/sections/dashboard/data.ts` exports typed shapes (`DashboardData`, etc.) plus
+`dashboardMockData`. When endpoints exist, add `src/api/dashboard.ts` with a
 standalone fetch fn + a TanStack hook (CLAUDE.md §0), returning the same
-`OverviewData` shape, and swap `overviewMockData` for the hook result in the
+`DashboardData` shape, and swap `dashboardMockData` for the hook result in the
 view. Widgets and layout need no changes. The active `filters` (date + country)
 are the natural query params for that hook.
 
