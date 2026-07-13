@@ -60,8 +60,7 @@ export function LanguagePopover({ sx, ...other }: IconButtonProps) {
 
   const handleChangeLang = useCallback(
     (option: DisplayOption) => {
-      const lang: LanguageValue =
-        option.value === 'ar' ? resolveArabicLocale(countryCode) : 'en';
+      const lang: LanguageValue = option.value === 'ar' ? resolveArabicLocale(countryCode) : 'en';
 
       onChangeLang(lang);
       onClose();

@@ -29,8 +29,7 @@ export function RHFTextField({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => {
-        const hasValue =
-          field.value !== '' && field.value !== null && field.value !== undefined;
+        const hasValue = field.value !== '' && field.value !== null && field.value !== undefined;
         const isFilled = variant === 'filled';
         const hideLabelForCenter = isFilled && (hasValue || !label);
 

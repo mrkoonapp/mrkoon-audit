@@ -72,7 +72,10 @@ export function DashboardSettings() {
 
   return (
     <Card>
-      <CardHeader title="Dashboard Settings (Redux Demo)" subheader="Persisted with Redux Persist" />
+      <CardHeader
+        title="Dashboard Settings (Redux Demo)"
+        subheader="Persisted with Redux Persist"
+      />
 
       <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {/* Dashboard View Selection */}
@@ -80,12 +83,7 @@ export function DashboardSettings() {
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Dashboard View
           </Typography>
-          <TextField
-            select
-            fullWidth
-            value={dashboard.selectedView}
-            onChange={handleViewChange}
-          >
+          <TextField select fullWidth value={dashboard.selectedView} onChange={handleViewChange}>
             {dashboardViews.map((view) => (
               <MenuItem key={view} value={view}>
                 {view.charAt(0).toUpperCase() + view.slice(1)}

@@ -6,6 +6,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
 import { fNumber } from 'src/utils/format-number';
@@ -17,6 +20,7 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import {
   StatCard,
+  ViewAllLink,
   StatListCard,
   formatJoinedAt,
   AvatarGridCard,
@@ -35,7 +39,15 @@ import { salesMockData } from '../data';
 export function SalesView() {
   const { t } = useTranslate('dashboard');
 
+  const router = useRouter();
+
   const data = salesMockData;
+
+  // Maps a KPI card to the listing page it opens (undefined → not clickable).
+  const statHref: Record<string, string | undefined> = {
+    products: paths.dashboard.products,
+    auctions: paths.dashboard.auctionsList,
+  };
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -112,6 +124,7 @@ export function SalesView() {
             <StatCard
               label={t(`dashboard.sales.stats.${stat.labelKey}`)}
               value={renderStatValue(stat.value, stat.unitKey)}
+              onClick={statHref[stat.id] ? () => router.push(statHref[stat.id]!) : undefined}
               icon={
                 stat.action ? (
                   <IconButton
@@ -168,6 +181,9 @@ export function SalesView() {
         <Grid size={{ xs: 12, md: 6 }}>
           <ListWidgetCard
             title={t('dashboard.sales.top5Merchants')}
+            headerAction={
+              <ViewAllLink href={paths.dashboard.clients} label={t('dashboard.shared.viewAll')} />
+            }
             items={topMerchantItems}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}

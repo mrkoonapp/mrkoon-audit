@@ -37,7 +37,7 @@ export function AnimateCountUp({
   const shortNumber = formatter ? undefined : shortenNumber(to);
 
   const startCount = useMotionValue<number>(from);
-  const endCount = formatter ? to : (shortNumber ? shortNumber.value : to);
+  const endCount = formatter ? to : shortNumber ? shortNumber.value : to;
 
   const unit = unitProp ?? shortNumber?.unit;
 

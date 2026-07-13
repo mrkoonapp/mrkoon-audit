@@ -62,8 +62,7 @@ export function useUploadMultiple<T extends FieldValues>(
       );
 
       try {
-        const fileToUpload =
-          withWatermark && !isVideoFile(file) ? await addWatermark(file) : file;
+        const fileToUpload = withWatermark && !isVideoFile(file) ? await addWatermark(file) : file;
 
         const presignedUrl = await uploadImage(fileToUpload, folderName);
 

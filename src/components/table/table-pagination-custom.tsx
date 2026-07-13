@@ -23,7 +23,7 @@ export function TablePaginationCustom({
   rowsPerPageOptions = [5, 10, 25],
   ...other
 }: TablePaginationCustomProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   return (
     <Box sx={[{ position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}>
       <TablePagination
@@ -35,7 +35,7 @@ export function TablePaginationCustom({
 
       {onChangeDense && (
         <FormControlLabel
-          label={t("common.dense")}
+          label={t('common.dense')}
           control={
             <Switch
               checked={dense}

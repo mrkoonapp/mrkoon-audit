@@ -49,6 +49,8 @@ export type StatCardProps = {
   value: ReactNode;
   trend?: StatTrend;
   icon?: ReactNode;
+  /** When set, the whole card becomes clickable (pointer + hover lift). */
+  onClick?: () => void;
   sx?: SxProps<Theme>;
 };
 
@@ -63,6 +65,8 @@ export type IconStatCardProps = {
   icon?: ReactNode;
   /** Palette key tinting the icon badge. */
   iconColor?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+  /** When set, the whole card becomes clickable (pointer + hover lift). */
+  onClick?: () => void;
   sx?: SxProps<Theme>;
 };
 

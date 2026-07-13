@@ -75,8 +75,6 @@ export function DashboardLayout({
   const { t: navT } = useTranslate('navbar');
   const { t: commonT } = useTranslate('common');
 
-
-
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, settings.state.navLayout);
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
@@ -85,12 +83,36 @@ export function DashboardLayout({
 
   const navTourSteps = useMemo(
     () => [
-      { selector: '#tour-home', title: commonT('tour.home.title'), description: commonT('tour.home.description') },
-      { selector: '#tour-products', title: commonT('tour.products.title'), description: commonT('tour.products.description') },
-      { selector: '#tour-warehouses', title: commonT('tour.warehouses.title'), description: commonT('tour.warehouses.description') },
-      { selector: '#tour-profile', title: commonT('tour.profile.title'), description: commonT('tour.profile.description') },
-      { selector: '#tour-auctions', title: commonT('tour.auctions.title'), description: commonT('tour.auctions.description') },
-      { selector: '#tour-reports', title: commonT('tour.reports.title'), description: commonT('tour.reports.description') },
+      {
+        selector: '#tour-home',
+        title: commonT('tour.home.title'),
+        description: commonT('tour.home.description'),
+      },
+      {
+        selector: '#tour-products',
+        title: commonT('tour.products.title'),
+        description: commonT('tour.products.description'),
+      },
+      {
+        selector: '#tour-warehouses',
+        title: commonT('tour.warehouses.title'),
+        description: commonT('tour.warehouses.description'),
+      },
+      {
+        selector: '#tour-profile',
+        title: commonT('tour.profile.title'),
+        description: commonT('tour.profile.description'),
+      },
+      {
+        selector: '#tour-auctions',
+        title: commonT('tour.auctions.title'),
+        description: commonT('tour.auctions.description'),
+      },
+      {
+        selector: '#tour-reports',
+        title: commonT('tour.reports.title'),
+        description: commonT('tour.reports.description'),
+      },
     ],
     [commonT]
   );
@@ -236,7 +258,6 @@ export function DashboardLayout({
           settings.state.navLayout === 'vertical' ? 'mini' : 'vertical'
         )
       }
-
     />
   );
 
@@ -244,9 +265,12 @@ export function DashboardLayout({
 
   const renderMain = () => <MainSection {...slotProps?.main}>{children}</MainSection>;
 
-
   if (isPdfMode) {
-    return <MainSection {...slotProps?.main} sx={{ maxWidth: '100%', width: '100%', p: 4 }}>{children}</MainSection>;
+    return (
+      <MainSection {...slotProps?.main} sx={{ maxWidth: '100%', width: '100%', p: 4 }}>
+        {children}
+      </MainSection>
+    );
   }
 
   return (

@@ -3,8 +3,9 @@ import type { DashboardFilters } from 'src/components/dashboard';
 import { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+
+import { paths } from 'src/routes/paths';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
@@ -21,6 +22,7 @@ import { Iconify } from 'src/components/iconify';
 import {
   StatCard,
   DonutCard,
+  ViewAllLink,
   formatAmount,
   AreaChartCard,
   MetricListCard,
@@ -79,17 +81,10 @@ export function DashboardView() {
   }));
 
   const viewAllAction = (
-    <Link
-      component="button"
-      variant="body2"
-      color="text.secondary"
-      underline="always"
-      onClick={() => {}}
-      sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25 }}
-    >
-      {t('dashboard.shared.viewAll')}
-      <Iconify icon="eva:arrow-ios-forward-fill" width={16} />
-    </Link>
+    <ViewAllLink
+      href={`${paths.dashboard.clients}?tab=company`}
+      label={t('dashboard.shared.viewAll')}
+    />
   );
 
   const topCategoriesItems = data.topCategories.map((category, index) => ({
@@ -147,6 +142,9 @@ export function DashboardView() {
               <Label color="success" variant="soft">
                 {fNumber(data.newClients.total)}
               </Label>
+            }
+            headerAction={
+              <ViewAllLink href={paths.dashboard.clients} label={t('dashboard.shared.viewAll')} />
             }
             items={newClientsItems}
             emptyTitle={emptyTitle}

@@ -24,10 +24,7 @@ export function buildQueryParams(
   const blacklist = ['signal', 'queryKey', 'meta'];
 
   const query = Object.entries(params)
-    .filter(
-      ([k, v]) =>
-        !blacklist.includes(k) && v !== undefined && v !== null && v !== '' && !!v
-    )
+    .filter(([k, v]) => !blacklist.includes(k) && v !== undefined && v !== null && v !== '' && !!v)
     .map(([k, v]) => {
       let value = v;
 

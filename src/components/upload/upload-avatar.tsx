@@ -92,7 +92,9 @@ export function UploadAvatar({
     >
       <Iconify icon="solar:camera-add-bold" width={32} />
 
-      <Typography variant="caption">{hasFile ? t('profile.update_photo') : t('profile.upload_photo')}</Typography>
+      <Typography variant="caption">
+        {hasFile ? t('profile.update_photo') : t('profile.upload_photo')}
+      </Typography>
     </Box>
   );
 

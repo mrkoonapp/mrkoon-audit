@@ -39,14 +39,7 @@ function ProductDurationIllustration({ sx, ...other }: SvgIconProps) {
       <circle cx="100" cy="104" r="44" fill="#FFFFFF" />
 
       {/* Clock rim */}
-      <circle
-        cx="100"
-        cy="104"
-        r="46"
-        fill="none"
-        stroke="var(--primary-main)"
-        strokeWidth="3"
-      />
+      <circle cx="100" cy="104" r="46" fill="none" stroke="var(--primary-main)" strokeWidth="3" />
 
       {/* Hour markers */}
       <rect x="98" y="62" width="4" height="10" rx="2" fill="var(--primary-dark)" />
@@ -91,14 +84,7 @@ function ProductDurationIllustration({ sx, ...other }: SvgIconProps) {
       <circle cx="100" cy="104" r="2" fill="#FFFFFF" />
 
       {/* Top crown */}
-      <rect
-        x="95"
-        y="44"
-        width="10"
-        height="14"
-        rx="5"
-        fill="var(--primary-dark)"
-      />
+      <rect x="95" y="44" width="10" height="14" rx="5" fill="var(--primary-dark)" />
 
       {/* Clock bells */}
       <circle cx="72" cy="58" r="10" fill="var(--primary-main)" />

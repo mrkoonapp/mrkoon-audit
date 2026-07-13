@@ -27,8 +27,7 @@ export function UnauthGuard({ children }: UnauthGuardProps) {
       // Already authenticated — send the user to where they were headed
       // (returnTo, set by AuthGuard) or the default post-login destination.
       const returnTo = searchParams.get('returnTo');
-      const redirectTo =
-        returnTo && returnTo.startsWith('/') ? returnTo : CONFIG.auth.redirectPath;
+      const redirectTo = returnTo && returnTo.startsWith('/') ? returnTo : CONFIG.auth.redirectPath;
 
       router.replace(redirectTo);
       return;

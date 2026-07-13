@@ -54,7 +54,8 @@ export const useCustomFilter = <T>(initialFilters: T) => {
   /**
    * Check if any filters are active
    */
-  const isFiltering = useMemo(() => (
+  const isFiltering = useMemo(
+    () =>
       typeof filters === 'object' &&
       filters !== null &&
       Object.values(filters as Record<string, unknown>).some((value) => {
@@ -62,8 +63,9 @@ export const useCustomFilter = <T>(initialFilters: T) => {
           return value.length > 0;
         }
         return Boolean(value);
-      })
-    ), [filters]);
+      }),
+    [filters]
+  );
 
   return useMemo(
     () => ({

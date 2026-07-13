@@ -21,7 +21,7 @@ export const extractNationalNumber = (phoneNumber: string, countryCode: CountryC
       return parsedPhone.nationalNumber;
     }
     return phoneNumber.replace(/^0/, '');
-  } catch  {
+  } catch {
     return phoneNumber.replace(/^0/, '');
   }
 };
@@ -45,7 +45,7 @@ export const formatPhoneNumber = (phoneNumber: string, countryCode: CountryCode)
     }
 
     return phoneNumber;
-  } catch  {
+  } catch {
     return phoneNumber;
   }
 };

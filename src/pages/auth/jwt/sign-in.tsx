@@ -2,7 +2,6 @@ import { CONFIG } from 'src/global-config';
 
 import { SignInView } from 'src/auth/view/jwt';
 
-
 // ----------------------------------------------------------------------
 
 const metadata = { title: `Sign in | Jwt - ${CONFIG.appName}` };

@@ -37,10 +37,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
 
-  const navItems = useMemo(
-    () => data.flatMap((section) => section.items),
-    [data]
-  );
+  const navItems = useMemo(() => data.flatMap((section) => section.items), [data]);
 
   const renderAvatar = () => (
     <AnimateBorder
@@ -101,13 +98,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
 
   return (
     <>
-      <AccountButton
-        onClick={onOpen}
-        photoURL={image}
-        displayName={name}
-        sx={sx}
-        {...other}
-      />
+      <AccountButton onClick={onOpen} photoURL={image} displayName={name} sx={sx} {...other} />
 
       <Drawer
         open={open}

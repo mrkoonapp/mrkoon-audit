@@ -10,7 +10,6 @@ import { useLangParamSync } from 'src/hooks/use-lang-param-sync';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
-
 // ----------------------------------------------------------------------
 
 type AuthGuardProps = {
@@ -36,10 +35,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   };
 
   const checkPermissions = async (): Promise<void> => {
-
-
     if (!token) {
-
       const signInPath = signInPaths.jwt;
       const redirectPath = createRedirectPath(signInPath);
 

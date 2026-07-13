@@ -80,7 +80,12 @@ export function AppTour({ isOpen, onClose, steps }: AppTourProps) {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           {!isFirst && (
-            <Button size="small" variant="outlined" color="inherit" onClick={() => handleNav('prev')}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="inherit"
+              onClick={() => handleNav('prev')}
+            >
               {t('tour.prev')}
             </Button>
           )}

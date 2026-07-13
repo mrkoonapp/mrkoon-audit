@@ -21,7 +21,8 @@
         "apply": "تطبيق",
         "reset": "إعادة تعيين",
         "dateError": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"
-      }
+      },
+      "view": "عرض"
     },
     "dashboard": {
       "stats": {
@@ -146,6 +147,62 @@
         "inspectionNotRequested": "غير مطلوبة",
         "inspectionRequested": "مطلوبة",
         "inspectionDone": "مكتملة"
+      }
+    },
+    "productsList": {
+      "title": "المنتجات",
+      "columns": {
+        "product": "المنتج",
+        "category": "الفئة",
+        "seller": "البائع",
+        "startPrice": "السعر الابتدائي",
+        "quantity": "الكمية",
+        "status": "الحالة",
+        "date": "التاريخ"
+      },
+      "status": {
+        "active": "نشط",
+        "preview": "معاينة",
+        "sold": "مُباع",
+        "rejected": "مرفوض",
+        "expired": "منتهٍ"
+      }
+    },
+    "auctionsList": {
+      "title": "المزادات",
+      "columns": {
+        "auction": "المزاد",
+        "startPrice": "السعر الابتدائي",
+        "highestPrice": "أعلى سعر",
+        "status": "الحالة",
+        "bidders": "المزايدون",
+        "date": "التاريخ"
+      },
+      "status": {
+        "completed": "مكتمل",
+        "running": "جارٍ",
+        "declined": "مرفوض",
+        "pending": "قيد الانتظار"
+      }
+    },
+    "clientsList": {
+      "title": "العملاء",
+      "tabs": {
+        "all": "الكل",
+        "client": "عملاء",
+        "company": "الشركات"
+      },
+      "columns": {
+        "client": "العميل",
+        "phone": "الهاتف",
+        "country": "الدولة",
+        "rate": "التقييم",
+        "wallet": "المحفظة",
+        "status": "الحالة"
+      },
+      "status": {
+        "active": "نشط",
+        "inactive": "غير نشط"
       }
     }
   }

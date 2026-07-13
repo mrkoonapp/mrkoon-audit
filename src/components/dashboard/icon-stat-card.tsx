@@ -25,6 +25,7 @@ export function IconStatCard({
   subtitle,
   icon,
   iconColor = 'primary',
+  onClick,
   sx,
 }: IconStatCardProps) {
   const hasTrend = trend !== undefined;
@@ -33,8 +34,17 @@ export function IconStatCard({
 
   return (
     <Card
+      onClick={onClick}
       sx={[
         { p: 3, height: 1, display: 'flex', alignItems: 'flex-start', gap: 2 },
+        !!onClick && {
+          cursor: 'pointer',
+          transition: (theme) => theme.transitions.create(['box-shadow', 'transform']),
+          '&:hover': {
+            boxShadow: (theme) => theme.vars.customShadows.z16,
+            transform: 'translateY(-2px)',
+          },
+        },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >

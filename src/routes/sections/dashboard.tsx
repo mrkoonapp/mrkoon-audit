@@ -17,6 +17,9 @@ import { lazyWithRetry } from '../components';
 
 const IndexPage = lazyWithRetry(() => import('src/pages/dashboard'));
 const AuctionsPage = lazyWithRetry(() => import('src/pages/dashboard/auctions'));
+const AuctionsListPage = lazyWithRetry(() => import('src/pages/dashboard/auctions-list'));
+const ProductsListPage = lazyWithRetry(() => import('src/pages/dashboard/products-list'));
+const ClientsListPage = lazyWithRetry(() => import('src/pages/dashboard/clients-list'));
 const InspectionsPage = lazyWithRetry(() => import('src/pages/dashboard/inspections'));
 const SalesPage = lazyWithRetry(() => import('src/pages/dashboard/sales'));
 const OperationsPage = lazyWithRetry(() => import('src/pages/dashboard/operations'));
@@ -46,6 +49,9 @@ export const dashboardRoutes: RouteObject[] = [
     children: [
       { index: true, element: <IndexPage /> },
       { path: 'auctions', element: <AuctionsPage /> },
+      { path: 'auctions/list', element: <AuctionsListPage /> },
+      { path: 'products', element: <ProductsListPage /> },
+      { path: 'clients', element: <ClientsListPage /> },
       { path: 'inspections', element: <InspectionsPage /> },
       { path: 'sales', element: <SalesPage /> },
       { path: 'operations', element: <OperationsPage /> },

@@ -20,7 +20,7 @@ import type { StatCardProps } from './types';
  *   the header row, no text.
  * All copy is passed in — the widget renders no translated strings itself.
  */
-export function StatCard({ label, value, trend, icon, sx }: StatCardProps) {
+export function StatCard({ label, value, trend, icon, onClick, sx }: StatCardProps) {
   const hasValue = trend?.value !== undefined;
   const isPositive = hasValue ? (trend?.value ?? 0) >= 0 : trend?.direction !== 'down';
   const trendColor = isPositive ? 'success.main' : 'error.main';
@@ -63,8 +63,17 @@ export function StatCard({ label, value, trend, icon, sx }: StatCardProps) {
 
   return (
     <Card
+      onClick={onClick}
       sx={[
         { p: 3, height: 1, display: 'flex', flexDirection: 'column', gap: 1.5 },
+        !!onClick && {
+          cursor: 'pointer',
+          transition: (theme) => theme.transitions.create(['box-shadow', 'transform']),
+          '&:hover': {
+            boxShadow: (theme) => theme.vars.customShadows.z16,
+            transform: 'translateY(-2px)',
+          },
+        },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >

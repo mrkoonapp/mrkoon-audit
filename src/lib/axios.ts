@@ -10,9 +10,7 @@ import { store } from 'src/store';
 // dev and prod (mirrors mrkoon-admin, which calls the backend directly rather
 // than proxying through the dev server).
 const BASE_URL =
-  import.meta.env.VITE_HOST_API ||
-  import.meta.env.VITE_BASE_URL ||
-  import.meta.env.VITE_SERVER_URL;
+  import.meta.env.VITE_HOST_API || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_SERVER_URL;
 
 // Website API (for public endpoints like countries in login/register screens)
 // Mirrors mrkoon-admin: replace /apiAdmin with /apiWebsite

@@ -52,7 +52,9 @@ export type { UserInfo } from 'src/sections/profile/types';
  */
 export async function fetchUserProfile(token: string): Promise<UserInfo> {
   const BASE_URL =
-    import.meta.env.VITE_HOST_API || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_SERVER_URL;
+    import.meta.env.VITE_HOST_API ||
+    import.meta.env.VITE_BASE_URL ||
+    import.meta.env.VITE_SERVER_URL;
   const newAxiosInstance = axios.create({
     baseURL: BASE_URL,
     timeout: 30000,

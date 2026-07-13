@@ -102,9 +102,33 @@ function ProductBidsIllustration({ sx, ...other }: SvgIconProps) {
       />
 
       {/* Impact lines */}
-      <rect x="108" y="126" width="18" height="3" rx="1.5" fill="var(--primary-main)" opacity="0.6" />
-      <rect x="114" y="120" width="14" height="3" rx="1.5" fill="var(--primary-main)" opacity="0.4" />
-      <rect x="118" y="114" width="10" height="3" rx="1.5" fill="var(--primary-main)" opacity="0.3" />
+      <rect
+        x="108"
+        y="126"
+        width="18"
+        height="3"
+        rx="1.5"
+        fill="var(--primary-main)"
+        opacity="0.6"
+      />
+      <rect
+        x="114"
+        y="120"
+        width="14"
+        height="3"
+        rx="1.5"
+        fill="var(--primary-main)"
+        opacity="0.4"
+      />
+      <rect
+        x="118"
+        y="114"
+        width="10"
+        height="3"
+        rx="1.5"
+        fill="var(--primary-main)"
+        opacity="0.3"
+      />
 
       {/* Dollar signs decoration */}
       <text

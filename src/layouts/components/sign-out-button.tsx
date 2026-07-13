@@ -12,9 +12,7 @@ import { userActions } from 'src/store/slices/user-slice';
 
 import { toast } from 'src/components/snackbar';
 
-
 // ----------------------------------------------------------------------
-
 
 type Props = ButtonProps & {
   onClose?: () => void;

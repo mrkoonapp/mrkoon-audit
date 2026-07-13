@@ -21,7 +21,8 @@
         "apply": "Apply",
         "reset": "Reset",
         "dateError": "End date must be later than start date"
-      }
+      },
+      "view": "View"
     },
     "dashboard": {
       "stats": {
@@ -146,6 +147,62 @@
         "inspectionNotRequested": "Not Requested",
         "inspectionRequested": "Requested",
         "inspectionDone": "Done"
+      }
+    },
+    "productsList": {
+      "title": "Products",
+      "columns": {
+        "product": "Product",
+        "category": "Category",
+        "seller": "Seller",
+        "startPrice": "Start price",
+        "quantity": "Quantity",
+        "status": "Status",
+        "date": "Date"
+      },
+      "status": {
+        "active": "Active",
+        "preview": "Preview",
+        "sold": "Sold",
+        "rejected": "Rejected",
+        "expired": "Expired"
+      }
+    },
+    "auctionsList": {
+      "title": "Auctions",
+      "columns": {
+        "auction": "Auction",
+        "startPrice": "Start price",
+        "highestPrice": "Highest price",
+        "status": "Status",
+        "bidders": "Bidders",
+        "date": "Date"
+      },
+      "status": {
+        "completed": "Completed",
+        "running": "Running",
+        "declined": "Declined",
+        "pending": "Pending"
+      }
+    },
+    "clientsList": {
+      "title": "Clients",
+      "tabs": {
+        "all": "All",
+        "client": "Clients",
+        "company": "Companies"
+      },
+      "columns": {
+        "client": "Client",
+        "phone": "Phone",
+        "country": "Country",
+        "rate": "Rate",
+        "wallet": "Wallet",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
       }
     }
   }
