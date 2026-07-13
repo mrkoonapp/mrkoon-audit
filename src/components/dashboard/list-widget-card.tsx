@@ -63,13 +63,15 @@ export function ListWidgetCard({
 function ListRow({ item }: { item: ListWidgetItem }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-      <Avatar
-        src={item.avatarUrl}
-        alt={item.avatarAlt ?? item.primary}
-        sx={{ width: 40, height: 40 }}
-      >
-        {item.primary.charAt(0)}
-      </Avatar>
+      {item.avatar ?? (
+        <Avatar
+          src={item.avatarUrl}
+          alt={item.avatarAlt ?? item.primary}
+          sx={{ width: 40, height: 40 }}
+        >
+          {item.primary.charAt(0)}
+        </Avatar>
+      )}
 
       <Box sx={{ flex: item.center ? '1 1 0' : '1 1 auto', minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>

@@ -65,6 +65,23 @@
         "totalBids": "Total Bids"
       }
     },
+    "inspections": {
+      "byCategory": "Inspections by category",
+      "paymentMethod": "Payment Method",
+      "latestInspections": "Latest inspections",
+      "stats": {
+        "totalInspections": "Total Inspections",
+        "categoriesCovered": "Categories Covered",
+        "clientServed": "Client served"
+      },
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "successful": "Successful",
+        "totalEarning": "Total earning",
+        "inspections": "Inspections"
+      }
+    },
     "table": {
       "viewAll": "View all"
     },

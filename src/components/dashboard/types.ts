@@ -192,6 +192,8 @@ export type RadialGaugeCardProps = {
 
 export type ListWidgetItem = {
   id: string | number;
+  /** Custom leading node — overrides the avatar entirely (e.g. an icon tile). */
+  avatar?: ReactNode;
   /** Avatar image url; falls back to the first letter of `primary`. */
   avatarUrl?: string;
   avatarAlt?: string;
@@ -272,6 +274,41 @@ export type ProgressListCardProps = {
   title?: ReactNode;
   headerAction?: ReactNode;
   items: ProgressListItem[];
+  loading?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// TableWidgetCard (Latest inspections …)
+// ----------------------------------------------------------------------
+
+export type TableColumn = {
+  id: string;
+  label: ReactNode;
+  align?: 'left' | 'center' | 'right';
+  /** Fixed/relative column width (e.g. `240` or `'40%'`). */
+  width?: number | string;
+  /** Hide this column below the `md` breakpoint to keep mobile clean. */
+  hideOnMobile?: boolean;
+};
+
+export type TableWidgetRow = {
+  id: string | number;
+  /** Cell content keyed by column `id`. */
+  cells: Record<string, ReactNode>;
+};
+
+export type TableWidgetCardProps = {
+  title?: ReactNode;
+  headerAction?: ReactNode;
+  columns: TableColumn[];
+  rows: TableWidgetRow[];
+  /** Cap the visible height and scroll beyond it. */
+  maxHeight?: number;
+  /** Minimum table width before the body scrolls horizontally (default 640). */
+  minWidth?: number;
   loading?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;

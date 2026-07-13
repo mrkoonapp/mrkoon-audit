@@ -65,6 +65,23 @@
         "totalBids": "إجمالي المزايدات"
       }
     },
+    "inspections": {
+      "byCategory": "المعاينات حسب الفئة",
+      "paymentMethod": "طريقة الدفع",
+      "latestInspections": "أحدث المعاينات",
+      "stats": {
+        "totalInspections": "إجمالي المعاينات",
+        "categoriesCovered": "الفئات اللي اتغطت",
+        "clientServed": "العملاء اللي اتخدموا"
+      },
+      "table": {
+        "product": "المنتج",
+        "category": "الفئة",
+        "successful": "الناجحة",
+        "totalEarning": "إجمالي الأرباح",
+        "inspections": "المعاينات"
+      }
+    },
     "table": {
       "viewAll": "عرض الكل"
     },

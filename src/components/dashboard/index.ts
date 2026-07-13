@@ -20,6 +20,8 @@ export * from './list-widget-card';
 
 export * from './metric-list-card';
 
+export * from './table-widget-card';
+
 export * from './dashboard-toolbar';
 
 export * from './radial-gauge-card';
