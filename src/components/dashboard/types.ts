@@ -224,6 +224,56 @@ export type ListWidgetCardProps = {
 };
 
 // ----------------------------------------------------------------------
+// AvatarGridCard (New Merchants …)
+// ----------------------------------------------------------------------
+
+export type AvatarGridItem = {
+  id: string | number;
+  avatarUrl?: string;
+  avatarAlt?: string;
+  primary: string;
+  secondary?: string;
+};
+
+export type AvatarGridCardProps = {
+  title?: ReactNode;
+  headerAction?: ReactNode;
+  /** Count badge shown next to the title (e.g. total merchants). */
+  countBadge?: ReactNode;
+  items: AvatarGridItem[];
+  /** Columns per breakpoint (defaults to `{ xs: 1, sm: 2, md: 3 }`). */
+  columns?: { xs?: number; sm?: number; md?: number };
+  /** Cap the visible height and scroll beyond it. */
+  maxHeight?: number;
+  loading?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// StatListCard (Merchants Updates …)
+// ----------------------------------------------------------------------
+
+export type StatListItem = {
+  id: string | number;
+  label: string;
+  value: ReactNode;
+  /** Leading dot color (theme palette key). */
+  color?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+};
+
+export type StatListCardProps = {
+  title?: ReactNode;
+  headerAction?: ReactNode;
+  items: StatListItem[];
+  loading?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
 // MetricListCard (Top sellers …)
 // ----------------------------------------------------------------------
 
@@ -331,8 +381,13 @@ export type DashboardFilters = {
 };
 
 export type DashboardToolbarProps = {
-  searchValue: string;
-  onSearchChange: (value: string) => void;
+  /** Page title shown on the left instead of the search field. */
+  title?: ReactNode;
+  /** Muted subtitle rendered under `title`. */
+  subtitle?: ReactNode;
+  /** Search value — when omitted (no `onSearchChange`), the search field is hidden. */
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
   onOpenFilters: () => void;
   searchPlaceholder?: string;
   filterLabel?: string;

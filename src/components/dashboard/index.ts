@@ -12,9 +12,13 @@ export * from './widget-card';
 
 export * from './icon-stat-row';
 
+export * from './stat-list-card';
+
 export * from './bar-chart-card';
 
 export * from './area-chart-card';
+
+export * from './avatar-grid-card';
 
 export * from './list-widget-card';
 

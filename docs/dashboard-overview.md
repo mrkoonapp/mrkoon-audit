@@ -34,8 +34,10 @@ Sales, Operations, etc. with different keys and data.
 | `src/components/dashboard/list-widget-card.tsx` | Generic avatar list; item supports `avatar` (custom leading node, e.g. icon tile), `center` (chip) + trailing/badge. |
 | `src/components/dashboard/metric-list-card.tsx` | Avatar list with inline icon+value metrics per row (Top sellers). |
 | `src/components/dashboard/table-widget-card.tsx` | Generic column-driven data table (Latest inspections); horizontal scroll below `minWidth`. |
+| `src/components/dashboard/avatar-grid-card.tsx` | Responsive multi-column avatar grid (New Merchants); columns configurable per breakpoint. |
+| `src/components/dashboard/stat-list-card.tsx` | Vertical labeled-value list with color dots (Merchants Updates). |
 | `src/components/dashboard/progress-list-card.tsx` | Label + bar + value list (categories). |
-| `src/components/dashboard/dashboard-toolbar.tsx` | Search + Filter button (all pages). |
+| `src/components/dashboard/dashboard-toolbar.tsx` | Filter button + left slot: search field (`onSearchChange`) **or** page title/subtitle (`title`). |
 | `src/components/dashboard/dashboard-filters-drawer.tsx` | Right drawer: Date range + Country. |
 | `src/components/dashboard/utils.ts` | Shared `defaultDashboardFilters`, `countActiveFilters`, `formatAmount`, `formatJoinedAt`. |
 | `src/components/dashboard/index.ts` | Barrel export. |
@@ -45,8 +47,10 @@ Sales, Operations, etc. with different keys and data.
 | `src/sections/auctions/view/auctions-view.tsx` | Auctions page composition. |
 | `src/sections/inspections/data.ts` | Inspections **mock** data + response shapes. |
 | `src/sections/inspections/view/inspections-view.tsx` | Inspections page composition. |
-| `src/pages/dashboard/index.tsx` / `.../auctions/index.tsx` / `.../inspections/index.tsx` | Render `<DashboardView />` / `<AuctionsView />` / `<InspectionsView />`. |
-| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | Keys under `dashboard.shared.*` (generic toolbar/filter/empty), `dashboard.dashboard.*` (dashboard page), `dashboard.auctions.*` (auctions page), `dashboard.inspections.*` (inspections page). |
+| `src/sections/sales/data.ts` | Sales **mock** data + response shapes. |
+| `src/sections/sales/view/sales-view.tsx` | Sales page composition. |
+| `src/pages/dashboard/*` | Render `<DashboardView />` / `<AuctionsView />` / `<InspectionsView />` / `<SalesView />`. |
+| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | Keys under `dashboard.shared.*` (generic toolbar/filter/empty), `dashboard.dashboard.*`, `dashboard.auctions.*`, `dashboard.inspections.*`, `dashboard.sales.*` (one block per page). |
 
 ## Reused building blocks
 

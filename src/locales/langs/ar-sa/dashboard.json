@@ -82,6 +82,29 @@
         "inspections": "عمليات الفحص"
       }
     },
+    "sales": {
+      "title": "المبيعات",
+      "overview": "نظرة عامة",
+      "newMerchants": "التجار الجدد",
+      "merchantsUpdates": "تحديثات التجار",
+      "top5Success": "أفضل 5 من حيث النجاح",
+      "top5Merchants": "أفضل 5 تجار",
+      "stats": {
+        "noOfCalls": "عدد المكالمات",
+        "noOfProducts": "عدد المنتجات",
+        "noOfAuctions": "عدد المزادات"
+      },
+      "units": {
+        "call": "مكالمة",
+        "product": "منتج",
+        "auction": "مزاد"
+      },
+      "updates": {
+        "reactivated": "أعيد تفعيلهم",
+        "paidInsurance": "دفعوا التأمين",
+        "avgMerchantsPerAuction": "متوسط التجار لكل مزاد"
+      }
+    },
     "table": {
       "viewAll": "عرض الكل"
     },

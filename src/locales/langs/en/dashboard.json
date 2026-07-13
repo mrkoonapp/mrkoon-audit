@@ -82,6 +82,29 @@
         "inspections": "Inspections"
       }
     },
+    "sales": {
+      "title": "Sales",
+      "overview": "Overview",
+      "newMerchants": "New Merchants",
+      "merchantsUpdates": "Merchants Updates",
+      "top5Success": "Top 5 success",
+      "top5Merchants": "Top 5 merchants",
+      "stats": {
+        "noOfCalls": "No. of calls",
+        "noOfProducts": "No. of products",
+        "noOfAuctions": "No. of Auctions"
+      },
+      "units": {
+        "call": "Call",
+        "product": "product",
+        "auction": "Auction"
+      },
+      "updates": {
+        "reactivated": "Reactivated",
+        "paidInsurance": "Paid Insurance",
+        "avgMerchantsPerAuction": "Avg merchants/auction"
+      }
+    },
     "table": {
       "viewAll": "View all"
     },
