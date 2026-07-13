@@ -15,6 +15,10 @@ const icon = (name: string) => (
 
 const ICONS = {
   dashboard: icon('ic-dashboard'),
+  auctions: icon('ic-order'),
+  inspections: icon('ic-file'),
+  sales: icon('ic-analytics'),
+  operations: icon('ic-settings'),
   blank: icon('ic-blank'),
 };
 
@@ -32,8 +36,11 @@ export function navData(t: TFunction<any, any>): NavSectionProps['data'] {
     {
       subheader: t('overview'),
       items: [
-        { title: t('app'), path: paths.dashboard.root, icon: ICONS.dashboard },
-        { title: t('blank'), path: paths.dashboard.blank, icon: ICONS.blank },
+        { title: t('dashboard'), path: paths.dashboard.root, icon: ICONS.dashboard },
+        { title: t('auctions'), path: paths.dashboard.auctions, icon: ICONS.auctions },
+        { title: t('inspections'), path: paths.dashboard.inspections, icon: ICONS.inspections },
+        { title: t('sales'), path: paths.dashboard.sales, icon: ICONS.sales },
+        { title: t('operations'), path: paths.dashboard.operations, icon: ICONS.operations },
       ],
     },
   ];

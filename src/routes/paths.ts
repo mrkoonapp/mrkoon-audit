@@ -29,6 +29,10 @@ export const paths = {
     root: ROOTS.DASHBOARD,
     blank: `${ROOTS.DASHBOARD}/blank`,
     notifications: `${ROOTS.DASHBOARD}/notifications`,
+    auctions: `${ROOTS.DASHBOARD}/auctions`,
+    inspections: `${ROOTS.DASHBOARD}/inspections`,
+    sales: `${ROOTS.DASHBOARD}/sales`,
+    operations: `${ROOTS.DASHBOARD}/operations`,
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       account: `${ROOTS.DASHBOARD}/user/account`,

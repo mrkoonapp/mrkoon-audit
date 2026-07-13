@@ -16,6 +16,10 @@ import { lazyWithRetry } from '../components';
 // ----------------------------------------------------------------------
 
 const IndexPage = lazyWithRetry(() => import('src/pages/dashboard'));
+const AuctionsPage = lazyWithRetry(() => import('src/pages/dashboard/auctions'));
+const InspectionsPage = lazyWithRetry(() => import('src/pages/dashboard/inspections'));
+const SalesPage = lazyWithRetry(() => import('src/pages/dashboard/sales'));
+const OperationsPage = lazyWithRetry(() => import('src/pages/dashboard/operations'));
 const BlankPage = lazyWithRetry(() => import('src/pages/dashboard/blank'));
 
 // ----------------------------------------------------------------------
@@ -41,6 +45,10 @@ export const dashboardRoutes: RouteObject[] = [
     element: CONFIG.auth.skip ? dashboardLayout() : <AuthGuard>{dashboardLayout()}</AuthGuard>,
     children: [
       { index: true, element: <IndexPage /> },
+      { path: 'auctions', element: <AuctionsPage /> },
+      { path: 'inspections', element: <InspectionsPage /> },
+      { path: 'sales', element: <SalesPage /> },
+      { path: 'operations', element: <OperationsPage /> },
       { path: 'blank', element: <BlankPage /> },
     ],
   },
