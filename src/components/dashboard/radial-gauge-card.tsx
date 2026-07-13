@@ -74,10 +74,10 @@ export function RadialGaugeCard({
           type="radialBar"
           series={[value]}
           options={chartOptions}
-          sx={{ mx: 'auto', width: 360, height: 300, mt: -1, mb: -3 }}
+          sx={{ mx: 'auto', width: 360, height: 300, mt: -1, mb: -6 }}
         />
 
-        {children && <Box sx={{ mt: 2 }}>{children}</Box>}
+        {children && <Box sx={{ mt: 0 }}>{children}</Box>}
       </Box>
     </WidgetCard>
   );
