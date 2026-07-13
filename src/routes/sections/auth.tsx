@@ -7,7 +7,7 @@ import { AuthSplitLayout } from 'src/layouts/auth-split';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
-import { GuestGuard } from 'src/auth/guard';
+import { UnauthGuard } from 'src/auth/guard';
 
 import { lazyWithRetry } from '../components';
 
@@ -28,21 +28,21 @@ const authJwt = {
     {
       path: 'sign-in',
       element: (
-        <GuestGuard>
+        <UnauthGuard>
           <AuthSplitLayout>
             <Jwt.SignInPage />
           </AuthSplitLayout>
-        </GuestGuard>
+        </UnauthGuard>
       ),
     },
     {
       path: 'sign-up',
       element: (
-        <GuestGuard>
+        <UnauthGuard>
           <AuthSplitLayout>
             <Jwt.SignUpPage />
           </AuthSplitLayout>
-        </GuestGuard>
+        </UnauthGuard>
       ),
     },
     {
