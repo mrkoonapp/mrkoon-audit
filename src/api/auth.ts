@@ -111,7 +111,11 @@ export function useVerifyLogin() {
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.data.token);
       document.cookie = `token=${data.data.token}; path=/; max-age=${60 * 60 * 24 * 365}`;
-      dispatch(userActions.login(data));
+      // Pass the IUser payload (data.data), not the whole AuthResponse wrapper —
+      // the login reducer reads flat fields (payload.token, payload.id, ...), so
+      // dispatching `data` would leave state.user.token undefined and bounce the
+      // user back to sign-in via AuthGuard.
+      dispatch(userActions.login(data.data));
       invalidate(queryKeys.auth.all);
     },
     onError: (error) => {

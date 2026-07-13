@@ -47,7 +47,10 @@ export function AuthCallbackView() {
 
         // 3. Hydrate Redux with profile data + token
         dispatch(
-          userActions.hydrateFromProfile({ ...userInfo, token } as unknown as Partial<IMainUserInfo>)
+          userActions.hydrateFromProfile({
+            ...userInfo,
+            token,
+          } as unknown as Partial<IMainUserInfo>)
         );
 
         // 4. Sync locale from `lang` query param (website → dashboard handoff)
@@ -58,8 +61,7 @@ export function AuthCallbackView() {
         }
 
         // 5. Redirect to returnTo (if provided and starts with /) or dashboard
-        const redirectTo =
-          returnTo && returnTo.startsWith('/') ? returnTo : paths.dashboard.root;
+        const redirectTo = returnTo && returnTo.startsWith('/') ? returnTo : paths.dashboard.root;
         router.replace(redirectTo);
       } catch (error) {
         console.error('Auth callback failed:', error);
