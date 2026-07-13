@@ -105,6 +105,25 @@
         "avgMerchantsPerAuction": "Avg merchants/auction"
       }
     },
+    "operations": {
+      "slaBreakdown": "SLA compliance breakdown",
+      "stats": {
+        "transactionCompletionRate": "Transaction completion rate",
+        "slaCompliance": "SLA compliance",
+        "totalInspections": "Total Inspections",
+        "inspectionsPerAuction": "Inspections per auction"
+      },
+      "subtitles": {
+        "completionRatio": "11/90 Auctions",
+        "daysAfterAcceptance": "3 days after acceptance",
+        "paidInspection": "Paid inspection",
+        "average": "Average"
+      },
+      "sla": {
+        "successfulAuctions": "Successful auctions",
+        "completedTransactions": "Completed transactions"
+      }
+    },
     "table": {
       "viewAll": "View all"
     },

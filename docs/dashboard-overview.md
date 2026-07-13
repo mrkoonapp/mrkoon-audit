@@ -26,11 +26,12 @@ Sales, Operations, etc. with different keys and data.
 | `src/components/dashboard/types.ts` | All widget/toolbar/filter prop types. |
 | `src/components/dashboard/widget-card.tsx` | Base card shell (title, action, loading/empty states). |
 | `src/components/dashboard/stat-card.tsx` | KPI card. Trend is **full** (`value` → arrow + % + caption) or **compact** (`direction` → arrow-only badge). |
+| `src/components/dashboard/icon-stat-card.tsx` | Richer KPI card: label + value with inline trend chip + subtitle + tinted circular icon badge (Operations). |
 | `src/components/dashboard/highlight-stat-card.tsx` | Accent KPI tile (fixed `bgColor`/`borderColor` or palette tint) with corner `pattern` image. |
 | `src/components/dashboard/donut-card.tsx` | Donut chart + center total + legend. |
 | `src/components/dashboard/radial-gauge-card.tsx` | Semicircle gauge (%) + optional `children` body (stat rows, footer). |
 | `src/components/dashboard/area-chart-card.tsx` | Area/line chart card. |
-| `src/components/dashboard/bar-chart-card.tsx` | Vertical bar chart (distributed colors, value labels, legend). |
+| `src/components/dashboard/bar-chart-card.tsx` | Bar chart (distributed colors, value labels, legend); `horizontal` prop flips to a horizontal bar chart (SLA breakdown). |
 | `src/components/dashboard/list-widget-card.tsx` | Generic avatar list; item supports `avatar` (custom leading node, e.g. icon tile), `center` (chip) + trailing/badge. |
 | `src/components/dashboard/metric-list-card.tsx` | Avatar list with inline icon+value metrics per row (Top sellers). |
 | `src/components/dashboard/table-widget-card.tsx` | Generic column-driven data table (Latest inspections); horizontal scroll below `minWidth`. |
@@ -49,8 +50,10 @@ Sales, Operations, etc. with different keys and data.
 | `src/sections/inspections/view/inspections-view.tsx` | Inspections page composition. |
 | `src/sections/sales/data.ts` | Sales **mock** data + response shapes. |
 | `src/sections/sales/view/sales-view.tsx` | Sales page composition. |
-| `src/pages/dashboard/*` | Render `<DashboardView />` / `<AuctionsView />` / `<InspectionsView />` / `<SalesView />`. |
-| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | Keys under `dashboard.shared.*` (generic toolbar/filter/empty), `dashboard.dashboard.*`, `dashboard.auctions.*`, `dashboard.inspections.*`, `dashboard.sales.*` (one block per page). |
+| `src/sections/operations/data.ts` | Operations **mock** data + response shapes. |
+| `src/sections/operations/view/operations-view.tsx` | Operations page composition. |
+| `src/pages/dashboard/*` | Render `<DashboardView />` / `<AuctionsView />` / `<InspectionsView />` / `<SalesView />` / `<OperationsView />`. |
+| `src/locales/langs/{en,ar-SA,ar-EG}/dashboard.json` | Keys under `dashboard.shared.*` (generic toolbar/filter/empty), `dashboard.dashboard.*`, `dashboard.auctions.*`, `dashboard.inspections.*`, `dashboard.sales.*`, `dashboard.operations.*` (one block per page). |
 
 ## Reused building blocks
 

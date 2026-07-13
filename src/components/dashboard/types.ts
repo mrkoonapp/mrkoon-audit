@@ -52,6 +52,20 @@ export type StatCardProps = {
   sx?: SxProps<Theme>;
 };
 
+export type IconStatCardProps = {
+  label: string;
+  value: ReactNode;
+  /** Inline trend chip next to the value — signed percentage (arrow + "%"). */
+  trend?: number;
+  /** Muted caption rendered under the value (e.g. "11/90 Auctions"). */
+  subtitle?: ReactNode;
+  /** Icon shown in the tinted circular badge (top-right). */
+  icon?: ReactNode;
+  /** Palette key tinting the icon badge. */
+  iconColor?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+  sx?: SxProps<Theme>;
+};
+
 export type HighlightStatCardProps = {
   label: string;
   value: ReactNode;
@@ -131,6 +145,8 @@ export type BarChartCardProps = {
   /** Series name (tooltip label). */
   seriesName?: string;
   colors?: string[];
+  /** Render bars horizontally (category axis on the left). Default false. */
+  horizontal?: boolean;
   /** Each bar its own color (default true). */
   distributed?: boolean;
   /** Show the value on top of each bar (default true). */

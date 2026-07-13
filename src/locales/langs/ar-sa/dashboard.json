@@ -105,6 +105,25 @@
         "avgMerchantsPerAuction": "متوسط التجار لكل مزاد"
       }
     },
+    "operations": {
+      "slaBreakdown": "تفصيل الالتزام باتفاقية مستوى الخدمة",
+      "stats": {
+        "transactionCompletionRate": "معدل إتمام المعاملات",
+        "slaCompliance": "الالتزام باتفاقية مستوى الخدمة",
+        "totalInspections": "إجمالي عمليات الفحص",
+        "inspectionsPerAuction": "عمليات الفحص لكل مزاد"
+      },
+      "subtitles": {
+        "completionRatio": "11/90 مزاد",
+        "daysAfterAcceptance": "3 أيام بعد القبول",
+        "paidInspection": "فحص مدفوع",
+        "average": "المتوسط"
+      },
+      "sla": {
+        "successfulAuctions": "المزادات الناجحة",
+        "completedTransactions": "المعاملات المكتملة"
+      }
+    },
     "table": {
       "viewAll": "عرض الكل"
     },

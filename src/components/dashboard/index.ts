@@ -12,6 +12,8 @@ export * from './widget-card';
 
 export * from './icon-stat-row';
 
+export * from './icon-stat-card';
+
 export * from './stat-list-card';
 
 export * from './bar-chart-card';

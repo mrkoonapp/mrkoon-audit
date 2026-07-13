@@ -23,6 +23,7 @@ export function BarChartCard({
   series,
   seriesName,
   colors,
+  horizontal = false,
   distributed = true,
   showValues = true,
   showLegend = true,
@@ -61,12 +62,20 @@ export function BarChartCard({
     legend: { show: false },
     dataLabels: {
       enabled: showValues,
-      offsetY: -18,
+      offsetY: horizontal ? 0 : -18,
+      offsetX: horizontal ? 12 : 0,
       formatter: (value: number) => fNumber(value),
       style: { colors: [theme.vars.palette.text.secondary], fontWeight: 600 },
     },
     plotOptions: {
-      bar: { distributed, columnWidth: '55%', borderRadius: 4, dataLabels: { position: 'top' } },
+      bar: {
+        horizontal,
+        distributed,
+        borderRadius: 4,
+        columnWidth: '55%',
+        barHeight: '40%',
+        dataLabels: { position: 'top' },
+      },
     },
   });
 
