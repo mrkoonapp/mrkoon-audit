@@ -2,13 +2,13 @@
   "dashboard": {
     "shared": {
       "search": "بحث",
-      "filter": "فلترة",
+      "filter": "تصفية",
       "viewAll": "عرض الكل",
-      "joinedAt": "اشترك في",
+      "joinedAt": "انضم في",
       "trendCaption": "آخر 7 أيام",
       "empty": {
-        "title": "مفيش بيانات",
-        "description": "مفيش حاجة تتعرض للفلاتر اللي اخترتها لحد دلوقتي."
+        "title": "لا توجد بيانات",
+        "description": "لا يوجد شيء لعرضه للفلاتر المحددة حتى الآن."
       },
       "filters": {
         "title": "الفلاتر",
@@ -16,70 +16,70 @@
         "startDate": "تاريخ البداية",
         "endDate": "تاريخ النهاية",
         "country": "الدولة",
-        "countryPlaceholder": "اختار الدولة",
+        "countryPlaceholder": "اختر الدولة",
         "apply": "تطبيق",
-        "reset": "إعادة ضبط",
-        "dateError": "تاريخ النهاية لازم يكون بعد تاريخ البداية"
+        "reset": "إعادة تعيين",
+        "dateError": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"
       }
     },
     "dashboard": {
       "stats": {
         "gmv": "إجمالي قيمة المبيعات",
         "totalSellers": "إجمالي البائعين",
-        "totalInspections": "إجمالي المعاينات",
+        "totalInspections": "إجمالي عمليات الفحص",
         "totalBidders": "إجمالي المزايدين"
       },
       "successRate": {
-        "title": "نسبة النجاح",
-        "centerLabel": "نسبة النجاح",
+        "title": "معدل النجاح",
+        "centerLabel": "معدل النجاح",
         "successful": "مزادات ناجحة",
         "failed": "مزادات فاشلة"
       },
       "newClients": {
-        "title": "عملاء جداد"
+        "title": "عملاء جدد"
       },
       "transactions": {
-        "title": "كل المعاملات"
+        "title": "جميع المعاملات"
       },
       "totalTransaction": "إجمالي المعاملات ({{currency}})",
       "transactionsCount": "عدد المعاملات",
       "topSellers": {
-        "title": "أعلى 5 بائعين"
+        "title": "أفضل 5 بائعين"
       },
       "topCategories": {
-        "title": "أعلى 5 فئات"
+        "title": "أفضل 5 فئات"
       }
     },
     "auctions": {
       "byCategory": "المزادات حسب الفئة",
-      "participatedClients": "العملاء المشاركين",
+      "participatedClients": "العملاء المشاركون",
       "successfulAuctions": "مزادات ناجحة",
       "totalBidders": "إجمالي المزايدين",
       "averageBidders": "متوسط المزايدين لكل مزاد",
       "bidderUnit": "مزايد",
       "auctions": "المزادات",
       "stats": {
-        "totalAuctionsDone": "إجمالي المزادات المخلصة",
+        "totalAuctionsDone": "إجمالي المزادات المنجزة",
         "gmv": "إجمالي قيمة المبيعات",
         "ourPercentage": "نسبتنا",
         "totalBids": "إجمالي المزايدات"
       }
     },
     "inspections": {
-      "byCategory": "المعاينات حسب الفئة",
+      "byCategory": "عمليات الفحص حسب الفئة",
       "paymentMethod": "طريقة الدفع",
-      "latestInspections": "أحدث المعاينات",
+      "latestInspections": "أحدث عمليات الفحص",
       "stats": {
-        "totalInspections": "إجمالي المعاينات",
-        "categoriesCovered": "الفئات اللي اتغطت",
-        "clientServed": "العملاء اللي اتخدموا"
+        "totalInspections": "إجمالي عمليات الفحص",
+        "categoriesCovered": "الفئات المشمولة",
+        "clientServed": "العملاء الذين تم خدمتهم"
       },
       "table": {
         "product": "المنتج",
         "category": "الفئة",
         "successful": "الناجحة",
         "totalEarning": "إجمالي الأرباح",
-        "inspections": "المعاينات"
+        "inspections": "عمليات الفحص"
       }
     },
     "sales": {
@@ -87,7 +87,7 @@
       "overview": "نظرة عامة",
       "newMerchants": "التجار الجدد",
       "merchantsUpdates": "تحديثات التجار",
-      "top5Success": "أفضل 5 في النجاح",
+      "top5Success": "أفضل 5 من حيث النجاح",
       "top5Merchants": "أفضل 5 تجار",
       "stats": {
         "noOfCalls": "عدد المكالمات",
@@ -100,7 +100,7 @@
         "auction": "مزاد"
       },
       "updates": {
-        "reactivated": "اترجّعوا تاني",
+        "reactivated": "أعيد تفعيلهم",
         "paidInsurance": "دفعوا التأمين",
         "avgMerchantsPerAuction": "متوسط التجار لكل مزاد"
       }
@@ -120,12 +120,12 @@
       "inspectionsTable": {
         "statusNew": "جديد",
         "statusPaid": "مدفوع",
-        "statusUnpaid": "مش مدفوع",
+        "statusUnpaid": "غير مدفوع",
         "statusRefund": "مسترد",
         "statusExcluded": "مستبعد",
-        "inspectionNotRequested": "مش مطلوبة",
+        "inspectionNotRequested": "غير مطلوبة",
         "inspectionRequested": "مطلوبة",
-        "inspectionDone": "خلصت"
+        "inspectionDone": "مكتملة"
       }
     }
   }
