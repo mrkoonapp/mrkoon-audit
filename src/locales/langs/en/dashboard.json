@@ -27,7 +27,7 @@
     "dashboard": {
       "stats": {
         "gmv": "GMV",
-        "totalSellers": "Total Sellers",
+        "totalSellers": "Total Companies",
         "totalInspections": "Total Inspections",
         "totalBidders": "Total Bidders"
       },
@@ -46,7 +46,7 @@
       "totalTransaction": "Total Transaction ({{currency}})",
       "transactionsCount": "No. of Transactions",
       "topSellers": {
-        "title": "Top 5 sellers"
+        "title": "Top 5 companies"
       },
       "topCategories": {
         "title": "Top 5 Categories"
@@ -87,10 +87,10 @@
     "sales": {
       "title": "Sales",
       "overview": "Overview",
-      "newMerchants": "New Merchants",
-      "merchantsUpdates": "Merchants Updates",
+      "newMerchants": "New Companies",
+      "merchantsUpdates": "Companies Updates",
       "top5Success": "Top 5 success",
-      "top5Merchants": "Top 5 merchants",
+      "top5Merchants": "Top 5 companies",
       "stats": {
         "noOfCalls": "No. of calls",
         "noOfProducts": "No. of products",
@@ -104,7 +104,7 @@
       "updates": {
         "reactivated": "Reactivated",
         "paidInsurance": "Paid Insurance",
-        "avgMerchantsPerAuction": "Avg merchants/auction"
+        "avgMerchantsPerAuction": "Avg companies/auction"
       }
     },
     "operations": {
@@ -154,7 +154,7 @@
       "columns": {
         "product": "Product",
         "category": "Category",
-        "seller": "Seller",
+        "seller": "Company",
         "startPrice": "Start price",
         "quantity": "Quantity",
         "status": "Status",

@@ -27,7 +27,7 @@
     "dashboard": {
       "stats": {
         "gmv": "إجمالي قيمة المبيعات",
-        "totalSellers": "إجمالي البائعين",
+        "totalSellers": "إجمالي الشركات",
         "totalInspections": "إجمالي عمليات الفحص",
         "totalBidders": "إجمالي المزايدين"
       },
@@ -35,7 +35,7 @@
         "title": "معدل النجاح",
         "centerLabel": "معدل النجاح",
         "successful": "مزادات ناجحة",
-        "failed": "مزادات فاشلة"
+        "failed": "مزادات غير ناجحة"
       },
       "newClients": {
         "title": "عملاء جدد"
@@ -46,7 +46,7 @@
       "totalTransaction": "إجمالي المعاملات ({{currency}})",
       "transactionsCount": "عدد المعاملات",
       "topSellers": {
-        "title": "أفضل 5 بائعين"
+        "title": "أفضل 5 شركات"
       },
       "topCategories": {
         "title": "أفضل 5 فئات"
@@ -87,10 +87,10 @@
     "sales": {
       "title": "المبيعات",
       "overview": "نظرة عامة",
-      "newMerchants": "التجار الجدد",
-      "merchantsUpdates": "تحديثات التجار",
+      "newMerchants": "الشركات الجديدة",
+      "merchantsUpdates": "تحديثات الشركات",
       "top5Success": "أفضل 5 من حيث النجاح",
-      "top5Merchants": "أفضل 5 تجار",
+      "top5Merchants": "أفضل 5 شركات",
       "stats": {
         "noOfCalls": "عدد المكالمات",
         "noOfProducts": "عدد المنتجات",
@@ -104,7 +104,7 @@
       "updates": {
         "reactivated": "أعيد تفعيلهم",
         "paidInsurance": "دفعوا التأمين",
-        "avgMerchantsPerAuction": "متوسط التجار لكل مزاد"
+        "avgMerchantsPerAuction": "متوسط الشركات لكل مزاد"
       }
     },
     "operations": {
@@ -154,7 +154,7 @@
       "columns": {
         "product": "المنتج",
         "category": "الفئة",
-        "seller": "البائع",
+        "seller": "الشركة",
         "startPrice": "السعر الابتدائي",
         "quantity": "الكمية",
         "status": "الحالة",
