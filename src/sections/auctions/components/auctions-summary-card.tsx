@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
 
 import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 
 import { Iconify } from 'src/components/iconify';
+import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import { IconStatRow, RadialGaugeCard } from 'src/components/dashboard';
 
 import type { AuctionsData } from '../data';
@@ -62,18 +62,7 @@ export function AuctionsSummaryCard({ summary, onViewAuctions }: Props) {
           reverse
           label={t('dashboard.auctions.auctions')}
           value={`${fNumber(summary.auctionsDone)} / ${fNumber(summary.auctionsTotal)}`}
-          action={
-            <IconButton
-              onClick={onViewAuctions}
-              sx={{
-                color: 'background.paper',
-                bgcolor: 'text.primary',
-                '&:hover': { bgcolor: 'text.secondary' },
-              }}
-            >
-              <Iconify icon="eva:arrow-forward-fill" />
-            </IconButton>
-          }
+          action={<CircleArrowButton onClick={onViewAuctions} />}
         />
       </Stack>
     </RadialGaugeCard>

@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -18,6 +17,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import {
   StatCard,
   ViewAllLink,
@@ -127,15 +127,7 @@ export function SalesView() {
               onClick={statHref[stat.id] ? () => router.push(statHref[stat.id]!) : undefined}
               icon={
                 stat.action ? (
-                  <IconButton
-                    sx={{
-                      color: 'background.paper',
-                      bgcolor: 'text.primary',
-                      '&:hover': { bgcolor: 'text.secondary' },
-                    }}
-                  >
-                    <Iconify icon="eva:arrow-forward-fill" />
-                  </IconButton>
+                  <CircleArrowButton />
                 ) : (
                   stat.icon && <Iconify icon={stat.icon} width={28} />
                 )
