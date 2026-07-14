@@ -53,7 +53,6 @@ export interface IMainUserInfo {
   company_country: ICountry | null;
   is_plus: number;
   plus_price_permission: number;
-  unread_notification_count?: number;
   roles: IUserRole | null;
 }
 export interface IUser {
@@ -94,7 +93,6 @@ export interface IUser {
   tax_card: string;
   ticket_size: ITicketSize;
   token: string;
-  unread_notification_count: number;
   uploaded_papers_percentage: number;
   user_tags: ITags[];
   user_type: UserType;

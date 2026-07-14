@@ -18,7 +18,6 @@ export interface DashboardState {
   };
   preferences: {
     compactMode: boolean;
-    showNotifications: boolean;
     autoRefresh: boolean;
     refreshInterval: number; // in seconds
   };
@@ -36,7 +35,6 @@ const initialState: DashboardState = {
   },
   preferences: {
     compactMode: false,
-    showNotifications: true,
     autoRefresh: false,
     refreshInterval: 30,
   },
@@ -63,9 +61,6 @@ const dashboardSlice = createSlice({
     toggleCompactMode: (state) => {
       state.preferences.compactMode = !state.preferences.compactMode;
     },
-    toggleNotifications: (state) => {
-      state.preferences.showNotifications = !state.preferences.showNotifications;
-    },
     toggleAutoRefresh: (state) => {
       state.preferences.autoRefresh = !state.preferences.autoRefresh;
     },
@@ -81,7 +76,6 @@ export const {
   setFilters,
   setPreferences,
   toggleCompactMode,
-  toggleNotifications,
   toggleAutoRefresh,
   resetDashboard,
 } = dashboardSlice.actions;

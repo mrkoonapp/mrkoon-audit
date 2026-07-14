@@ -19,13 +19,6 @@ export const queryKeys = {
   general: {
     countries: ['general', 'countries'] as const,
   },
-
-  // Notifications
-  notifications: {
-    all: ['notifications'] as const,
-    list: (filters?: Record<string, any>) =>
-      [...queryKeys.notifications.all, 'list', filters] as const,
-  },
 } as const;
 
 // ----------------------------------------------------------------------
@@ -35,5 +28,4 @@ export const queryKeys = {
  */
 export const invalidateEntityQueries = {
   auth: () => queryKeys.auth.all,
-  notifications: () => queryKeys.notifications.all,
 } as const;

@@ -61,7 +61,7 @@ Manages dashboard-specific settings:
 - Selected dashboard view
 - Date range filters
 - Filter preferences
-- UI preferences (compact mode, notifications, auto-refresh)
+- UI preferences (compact mode, auto-refresh)
 
 **Actions:**
 - `setSelectedView(view)` - Change dashboard view
@@ -69,7 +69,6 @@ Manages dashboard-specific settings:
 - `setFilters(filters)` - Update filters
 - `setPreferences(prefs)` - Update preferences
 - `toggleCompactMode()` - Toggle compact mode
-- `toggleNotifications()` - Toggle notifications
 - `toggleAutoRefresh()` - Toggle auto-refresh
 - `resetDashboard()` - Reset to initial state
 
@@ -77,14 +76,12 @@ Manages dashboard-specific settings:
 Manages user-specific settings:
 - Language and localization
 - Currency settings
-- Notification preferences
 - Display settings (density, sidebar state, chart type)
 
 **Actions:**
 - `setLanguage(lang)` - Set language
 - `setCurrency(currency)` - Set currency
 - `setTimezone(timezone)` - Set timezone
-- `setNotifications(notifPrefs)` - Update notification preferences
 - `setDisplay(displayPrefs)` - Update display preferences
 - `toggleSidebar()` - Toggle sidebar collapsed state
 - `resetPreferences()` - Reset to initial state
@@ -112,7 +109,7 @@ State is automatically persisted to localStorage:
 - Does not persist: `dateRange`, `filters` (session-specific)
 
 **User Preferences Slice:**
-- Persists: All fields (language, currency, timezone, notifications, display)
+- Persists: All fields (language, currency, timezone, display)
 
 To customize persistence, edit the persist configs in `root-reducer.ts`.
 

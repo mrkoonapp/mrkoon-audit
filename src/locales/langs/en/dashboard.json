@@ -129,14 +129,6 @@
     "table": {
       "viewAll": "View all"
     },
-    "notifications": {
-      "title": "Notifications",
-      "all": "All",
-      "read": "Read",
-      "unread": "Unread",
-      "empty": "No notifications yet",
-      "markAllAsRead": "Mark all as read"
-    },
     "products": {
       "inspectionsTable": {
         "statusNew": "New",

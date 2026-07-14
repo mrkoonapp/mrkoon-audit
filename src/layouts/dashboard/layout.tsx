@@ -36,7 +36,6 @@ import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
 import { navData as navDataConfig } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
-import { NotificationsDrawer } from '../components/notifications-drawer';
 
 import type { MainSectionProps } from '../core/main-section';
 import type { HeaderSectionProps } from '../core/header-section';
@@ -217,9 +216,6 @@ export function DashboardLayout({
 
           {/** @slot Language popover */}
           <LanguagePopover />
-
-          {/** @slot Notifications popover */}
-          <NotificationsDrawer />
 
           {/* * @slot Contacts popover */}
           {/* <ContactsPopover data={_contacts} /> */}

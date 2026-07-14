@@ -8,11 +8,6 @@ export interface UserPreferencesState {
   language: string;
   currency: string;
   timezone: string;
-  notifications: {
-    email: boolean;
-    push: boolean;
-    sms: boolean;
-  };
   display: {
     density: 'comfortable' | 'compact' | 'standard';
     sidebarCollapsed: boolean;
@@ -24,11 +19,6 @@ const initialState: UserPreferencesState = {
   language: 'en',
   currency: 'USD',
   timezone: 'UTC',
-  notifications: {
-    email: true,
-    push: true,
-    sms: false,
-  },
   display: {
     density: 'standard',
     sidebarCollapsed: false,
@@ -51,12 +41,6 @@ const userPreferencesSlice = createSlice({
     setTimezone: (state, action: PayloadAction<string>) => {
       state.timezone = action.payload;
     },
-    setNotifications: (
-      state,
-      action: PayloadAction<Partial<UserPreferencesState['notifications']>>
-    ) => {
-      state.notifications = { ...state.notifications, ...action.payload };
-    },
     setDisplay: (state, action: PayloadAction<Partial<UserPreferencesState['display']>>) => {
       state.display = { ...state.display, ...action.payload };
     },
@@ -73,7 +57,6 @@ export const {
   setLanguage,
   setCurrency,
   setTimezone,
-  setNotifications,
   setDisplay,
   toggleSidebar,
   resetPreferences,

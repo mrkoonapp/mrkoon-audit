@@ -27,7 +27,6 @@ const initialState: IMainUserInfo = {
   company_country: null,
   is_plus: 0,
   plus_price_permission: 0,
-  unread_notification_count: 0,
   roles: null,
 };
 
@@ -62,7 +61,6 @@ const userSlice = createSlice({
       state.user_type = action?.payload?.user_type;
       state.is_plus = action?.payload?.is_plus;
       state.plus_price_permission = action?.payload?.plus_price_permission;
-      state.unread_notification_count = action?.payload?.unread_notification_count;
       state.roles = action?.payload?.roles ?? null;
     },
     logout: (state) => {
@@ -88,7 +86,6 @@ const userSlice = createSlice({
       state.user_type = null as unknown as UserType;
       state.is_plus = 0;
       state.plus_price_permission = 0;
-      state.unread_notification_count = 0;
       state.roles = null;
     },
     applyNewRegister: (state) => {
@@ -102,15 +99,6 @@ const userSlice = createSlice({
     },
     setActiveStatus: (state, action) => {
       state.active_status = action?.payload;
-    },
-    setUnreadNotificationCount: (state, action) => {
-      state.unread_notification_count = action.payload;
-    },
-    incrementUnreadCount: (state) => {
-      state.unread_notification_count = (state.unread_notification_count || 0) + 1;
-    },
-    decrementUnreadCount: (state) => {
-      state.unread_notification_count = Math.max(0, (state.unread_notification_count || 0) - 1);
     },
   },
 });

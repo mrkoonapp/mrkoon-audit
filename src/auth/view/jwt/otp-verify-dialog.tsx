@@ -15,8 +15,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { registerAndSendFcmToken } from 'src/hooks/use-push-notifications';
-
 import { useTranslate } from 'src/locales';
 import { useVerifyLogin, useLoginRequest } from 'src/api/auth';
 
@@ -79,11 +77,8 @@ export function OtpVerifyDialog({
       // Verify the OTP code — the hook stores the token + user on success
       await verifyLoginMutation.mutateAsync({ phone, code: data.code });
 
-      // Register FCM token before navigating so backend can push immediately
-      await registerAndSendFcmToken().finally(() => {
-        // Redirect to dashboard after successful login
-        router.push(paths.dashboard.root);
-      });
+      // Redirect to dashboard after successful login
+      router.push(paths.dashboard.root);
     } catch (error: any) {
       console.error('OTP verification error:', error);
       setErrorMessage(error.message || t('auth.verifyError'));

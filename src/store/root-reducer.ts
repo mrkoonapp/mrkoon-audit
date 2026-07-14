@@ -18,13 +18,12 @@ const dashboardPersistConfig = {
 const userPreferencesPersistConfig = {
   key: 'userPreferences',
   storage,
-  whitelist: ['language', 'currency', 'timezone', 'notifications', 'display'], // Persist all fields
+  whitelist: ['language', 'currency', 'timezone', 'display'], // Persist all fields
 };
 
 const userPersistConfig = {
   key: 'user',
   storage,
-  blacklist: ['unread_notification_count'], // Don't persist notification count (fetch fresh)
 };
 
 // ----------------------------------------------------------------------

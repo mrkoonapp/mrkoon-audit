@@ -16,7 +16,6 @@ import { I18nProvider } from 'src/locales/i18n-provider';
 import { Snackbar } from 'src/components/snackbar';
 import { ProgressBar } from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
-import { PushNotificationProvider } from 'src/components/push-notification-provider';
 import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
@@ -41,12 +40,10 @@ export default function App({ children }: AppProps) {
                   defaultMode={themeConfig.enableSystemMode ? 'system' : themeConfig.defaultMode}
                 >
                   <MotionLazy>
-                    <PushNotificationProvider>
-                      <Snackbar />
-                      <ProgressBar />
-                      <SettingsDrawer defaultSettings={defaultSettings} />
-                      {children}
-                    </PushNotificationProvider>
+                    <Snackbar />
+                    <ProgressBar />
+                    <SettingsDrawer defaultSettings={defaultSettings} />
+                    {children}
                   </MotionLazy>
                 </ThemeProvider>
               </LocalizationProvider>

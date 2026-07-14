@@ -22,7 +22,6 @@ import {
   toggleCompactMode,
   toggleAutoRefresh,
   type DashboardView,
-  toggleNotifications,
 } from 'src/store/slices/dashboard-slice';
 
 // ----------------------------------------------------------------------
@@ -108,16 +107,6 @@ export function DashboardSettings() {
               />
             }
             label="Compact Mode"
-          />
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={dashboard.preferences.showNotifications}
-                onChange={() => dispatch(toggleNotifications())}
-              />
-            }
-            label="Show Notifications"
           />
 
           <FormControlLabel

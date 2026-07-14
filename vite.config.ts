@@ -8,24 +8,10 @@ import react from '@vitejs/plugin-react-swc';
 
 const PORT = 8080;
 
-function firebaseSwPlugin(): Plugin {
-  return {
-    name: 'firebase-sw',
-    configResolved(config) {
-      const templatePath = path.resolve(config.root, 'src/sw-template.js');
-      const outputPath = path.resolve(config.root, 'public/firebase-messaging-sw.js');
-
-      if (!fs.existsSync(templatePath)) return;
-
-      fs.copyFileSync(templatePath, outputPath);
-    },
-  };
-}
-
 // Selects which environment's universal-links association files (Apple AASA +
 // Android assetlinks.json) get served at the canonical `/.well-known/` paths.
 // The per-env sources live in `public/.well-known/universal-links/<env>/`; the
-// two generated root files are gitignored (like the firebase SW above).
+// two generated root files are gitignored.
 // Choose the env with `VITE_APP_ENV` (dev | staging | prod), defaulting to prod.
 function wellKnownPlugin(): Plugin {
   const ALLOWED_ENVS = ['dev', 'staging', 'prod'];
@@ -70,7 +56,6 @@ export default defineConfig(() => {
         },
         overlay: false,
       }),
-      firebaseSwPlugin(),
       wellKnownPlugin(),
     ],
     resolve: {

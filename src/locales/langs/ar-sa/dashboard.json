@@ -129,14 +129,6 @@
     "table": {
       "viewAll": "عرض الكل"
     },
-    "notifications": {
-      "title": "الإشعارات",
-      "all": "الكل",
-      "read": "مقروءة",
-      "unread": "غير مقروءة",
-      "empty": "لا توجد إشعارات بعد",
-      "markAllAsRead": "تعليم الكل كمقروء"
-    },
     "products": {
       "inspectionsTable": {
         "statusNew": "جديد",

@@ -211,15 +211,3 @@ export function useResendCode() {
     },
   });
 }
-
-/**
- * Update FCM token mutation
- */
-export function useUpdateFcmToken() {
-  return useMutation({
-    mutationFn: async (token: string) => {
-      const response = await post(endpoints.auth.updateFcmToken, { token });
-      return response.data;
-    },
-  });
-}

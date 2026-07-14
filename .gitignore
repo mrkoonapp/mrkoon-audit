@@ -28,9 +28,6 @@ build
 .env.test.local
 .env.production.local
 
-# generated service worker
-public/firebase-messaging-sw.js
-
 # generated per-env universal-links association files (source: public/.well-known/universal-links/<env>/)
 public/.well-known/apple-app-site-association
 public/.well-known/assetlinks.json

@@ -59,5 +59,4 @@ export interface UserInfo {
   user_type: UserType;
   is_plus: number;
   plus_price_permission: number;
-  unread_notification_count?: number;
 }

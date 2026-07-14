@@ -14,7 +14,6 @@ export const endpoints = {
     checkCode: 'auth/check_active_code',
     resendCode: 'auth/resend_code',
     getUserInfo: 'auth/my_info',
-    updateFcmToken: 'auth/update_firebase',
   },
 
   // General
@@ -26,12 +25,5 @@ export const endpoints = {
   imagesBucket: {
     upload: 'aws/saveImageInBucket',
     deleteFromAws: 'aws/delete_image_from_aws_using_link',
-  },
-
-  // Notifications
-  notifications: {
-    get: 'notification/get',
-    markAllAsRead: 'notification/mark_all_read',
-    read: 'notification/read',
   },
 };
