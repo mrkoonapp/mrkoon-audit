@@ -154,8 +154,6 @@ export function AuctionsListView() {
         totalRows={filtered.length}
         table={table}
         getRowId={(row) => String(row.id)}
-        selectable
-        pageRowIds={pageRows.map((row) => String(row.id))}
         onViewRow={() => {}}
         viewLabel={t('dashboard.shared.view')}
         notFound={notFound}
