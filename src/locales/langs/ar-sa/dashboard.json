@@ -28,7 +28,7 @@
       "stats": {
         "gmv": "إجمالي قيمة المبيعات",
         "totalSellers": "إجمالي الشركات",
-        "totalInspections": "إجمالي عمليات الفحص",
+        "totalInspections": "إجمالي المعاينات",
         "totalBidders": "إجمالي المزايدين"
       },
       "successRate": {
@@ -68,11 +68,11 @@
       }
     },
     "inspections": {
-      "byCategory": "عمليات الفحص حسب الفئة",
+      "byCategory": "المعاينات حسب الفئة",
       "paymentMethod": "طريقة الدفع",
-      "latestInspections": "أحدث عمليات الفحص",
+      "latestInspections": "أحدث المعاينات",
       "stats": {
-        "totalInspections": "إجمالي عمليات الفحص",
+        "totalInspections": "إجمالي المعاينات",
         "categoriesCovered": "الفئات المشمولة",
         "clientServed": "العملاء الذين تم خدمتهم"
       },
@@ -81,7 +81,7 @@
         "category": "الفئة",
         "successful": "الناجحة",
         "totalEarning": "إجمالي الأرباح",
-        "inspections": "عمليات الفحص"
+        "inspections": "المعاينات"
       }
     },
     "sales": {
@@ -112,8 +112,8 @@
       "stats": {
         "transactionCompletionRate": "معدل إتمام المعاملات",
         "slaCompliance": "الالتزام باتفاقية مستوى الخدمة",
-        "totalInspections": "إجمالي عمليات الفحص",
-        "inspectionsPerAuction": "عمليات الفحص لكل مزاد"
+        "totalInspections": "إجمالي المعاينات",
+        "inspectionsPerAuction": "المعاينات لكل مزاد"
       },
       "subtitles": {
         "completionRatio": "11/90 مزاد",
