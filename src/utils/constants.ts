@@ -128,3 +128,23 @@ export const INSPECTION_STATUS = (t: (key: string) => string) => [
     name: t('dashboard.products.inspectionsTable.inspectionDone'),
   },
 ];
+
+// ----------------------------------------------------------------------
+// Date Period Constants (shared filters drawer)
+// ----------------------------------------------------------------------
+
+/**
+ * Date filter period presets used by the shared dashboard filters drawer.
+ * `CUSTOM` reveals the start/end date pickers; the other presets resolve to a
+ * concrete date range via `getPeriodRange` (see `src/components/dashboard/utils.ts`).
+ */
+export const DATE_PERIODS = {
+  WEEKLY: 'weekly',
+  MONTHLY: 'monthly',
+  QUARTERLY: 'quarterly',
+  YEARLY: 'yearly',
+  CUSTOM: 'custom',
+} as const;
+
+/** A selected date period, or `''` for "no date filter". */
+export type DatePeriod = (typeof DATE_PERIODS)[keyof typeof DATE_PERIODS] | '';

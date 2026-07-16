@@ -13,6 +13,12 @@
       "filters": {
         "title": "الفلاتر",
         "date": "التاريخ",
+        "period": "الفترة",
+        "periodWeekly": "أسبوعي",
+        "periodMonthly": "شهري",
+        "periodQuarterly": "ربع سنوي",
+        "periodYearly": "سنوي",
+        "periodCustom": "مخصص",
         "startDate": "تاريخ البداية",
         "endDate": "تاريخ النهاية",
         "country": "الدولة",
