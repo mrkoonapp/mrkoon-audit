@@ -12,6 +12,7 @@ import { useCustomFilter } from 'src/hooks/use-custom-filters';
 import { fNumber, fShortenNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
+import { useGetHomeDashboardData } from 'src/api/audit';
 import { DashboardContent } from 'src/layouts/dashboard';
 import usdPattern from 'src/assets/pattern/usd-pattern.svg';
 import { highlightCardColors } from 'src/theme/theme-config';
@@ -36,14 +37,10 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { dashboardMockData } from '../data';
-
 // ----------------------------------------------------------------------
 
 export function DashboardView() {
   const { t } = useTranslate('dashboard');
-
-  const data = dashboardMockData;
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -51,14 +48,22 @@ export function DashboardView() {
   const { filters, setFiltersHandler, clearFilters } =
     useCustomFilter<DashboardFilters>(defaultDashboardFilters);
 
+  const { data, isLoading } = useGetHomeDashboardData(filters);
+
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
   // Section labels — resolved here so widgets stay translation-free.
-  const trendCaption = t('dashboard.shared.trendCaption');
   const emptyTitle = t('dashboard.shared.empty.title');
   const emptyDescription = t('dashboard.shared.empty.description');
 
-  const newClientsItems = data.newClients.items.map((client) => ({
+  const statsList = data?.stats || [
+    { id: 'gmv', labelKey: 'gmv', value: 0 },
+    { id: 'sellers', labelKey: 'totalSellers', value: 0 },
+    { id: 'inspections', labelKey: 'totalInspections', value: 0 },
+    { id: 'bidders', labelKey: 'totalBidders', value: 0 },
+  ];
+
+  const newClientsItems = (data?.newClients?.items || []).map((client) => ({
     id: client.id,
     avatarUrl: client.avatarUrl,
     primary: client.name,
@@ -66,7 +71,7 @@ export function DashboardView() {
     trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
   }));
 
-  const topSellersItems = data.topSellers.map((seller) => ({
+  const topSellersItems = (data?.topSellers || []).map((seller) => ({
     id: seller.id,
     avatarUrl: seller.avatarUrl,
     primary: seller.name,
@@ -87,7 +92,7 @@ export function DashboardView() {
     />
   );
 
-  const topCategoriesItems = data.topCategories.map((category, index) => ({
+  const topCategoriesItems = (data?.topCategories || []).map((category, index) => ({
     id: category.id,
     label: category.name,
     value: fNumber(category.value),
@@ -108,12 +113,11 @@ export function DashboardView() {
 
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat cards */}
-        {data.stats.map((stat) => (
+        {statsList.map((stat) => (
           <Grid key={stat.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <StatCard
               label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
-              value={fNumber(stat.value)}
-              trend={{ value: stat.trend, caption: trendCaption }}
+              value={isLoading ? '-' : fNumber(stat.value)}
             />
           </Grid>
         ))}
@@ -122,16 +126,21 @@ export function DashboardView() {
         <Grid size={{ xs: 12, md: 5 }}>
           <DonutCard
             title={t('dashboard.dashboard.successRate.title')}
-            series={[data.successRate.successful, data.successRate.failed]}
+            series={data?.successRate ? [data.successRate.successful, data.successRate.failed] : []}
             labels={[
               t('dashboard.dashboard.successRate.successful'),
               t('dashboard.dashboard.successRate.failed'),
             ]}
-            legendValues={[fNumber(data.successRate.successful), fNumber(data.successRate.failed)]}
-            total={`${data.successRate.rate}%`}
+            legendValues={
+              data?.successRate
+                ? [fNumber(data.successRate.successful), fNumber(data.successRate.failed)]
+                : []
+            }
+            total={data?.successRate ? `${data.successRate.rate}%` : ''}
             totalLabel={t('dashboard.dashboard.successRate.centerLabel')}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}
+            loading={isLoading}
           />
         </Grid>
 
@@ -140,7 +149,7 @@ export function DashboardView() {
             title={t('dashboard.dashboard.newClients.title')}
             countBadge={
               <Label color="success" variant="soft">
-                {fNumber(data.newClients.total)}
+                {isLoading ? '-' : fNumber(data?.newClients?.total || 0)}
               </Label>
             }
             headerAction={
@@ -149,6 +158,7 @@ export function DashboardView() {
             items={newClientsItems}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}
+            loading={isLoading}
           />
         </Grid>
 
@@ -156,12 +166,16 @@ export function DashboardView() {
         <Grid size={{ xs: 12, md: 8 }}>
           <AreaChartCard
             title={t('dashboard.dashboard.transactions.title')}
-            categories={data.transactions.categories}
+            categories={data?.transactions?.categories || []}
             series={[
-              { name: t('dashboard.dashboard.transactions.title'), data: data.transactions.series },
+              {
+                name: t('dashboard.dashboard.transactions.title'),
+                data: data?.transactions?.series || [],
+              },
             ]}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}
+            loading={isLoading}
           />
         </Grid>
 
@@ -172,9 +186,9 @@ export function DashboardView() {
               bgColor={highlightCardColors.gold.bg}
               borderColor={highlightCardColors.gold.border}
               label={t('dashboard.dashboard.totalTransaction', {
-                currency: data.transactions.currency,
+                currency: data?.transactions?.currency || 'EGP',
               })}
-              value={fShortenNumber(data.transactions.totalAmount)}
+              value={isLoading ? '-' : fShortenNumber(data?.transactions?.totalAmount || 0)}
               pattern={usdPattern}
               sx={{ flex: 1 }}
             />
@@ -184,7 +198,7 @@ export function DashboardView() {
               bgColor={highlightCardColors.green.bg}
               borderColor={highlightCardColors.green.border}
               label={t('dashboard.dashboard.transactionsCount')}
-              value={fNumber(data.transactions.totalCount)}
+              value={isLoading ? '-' : fNumber(data?.transactions?.totalCount || 0)}
               pattern={transactionPattern}
               sx={{ flex: 1 }}
             />
@@ -199,6 +213,7 @@ export function DashboardView() {
             items={topSellersItems}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}
+            loading={isLoading}
           />
         </Grid>
 
@@ -208,6 +223,7 @@ export function DashboardView() {
             items={topCategoriesItems}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}
+            loading={isLoading}
           />
         </Grid>
       </Grid>

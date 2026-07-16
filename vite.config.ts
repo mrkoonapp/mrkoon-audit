@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react-swc';
 
 // ----------------------------------------------------------------------
 
-const PORT = 8080;
+const PORT = 3030;
 
 // Selects which environment's universal-links association files (Apple AASA +
 // Android assetlinks.json) get served at the canonical `/.well-known/` paths.
