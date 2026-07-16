@@ -13,6 +13,12 @@
       "filters": {
         "title": "Filters",
         "date": "Date",
+        "period": "Period",
+        "periodWeekly": "Weekly",
+        "periodMonthly": "Monthly",
+        "periodQuarterly": "Quarterly",
+        "periodYearly": "Yearly",
+        "periodCustom": "Custom",
         "startDate": "Start date",
         "endDate": "End date",
         "country": "Country",

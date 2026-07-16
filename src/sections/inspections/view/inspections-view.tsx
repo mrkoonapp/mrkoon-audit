@@ -216,6 +216,12 @@ export function InspectionsView() {
           apply: t('dashboard.shared.filters.apply'),
           reset: t('dashboard.shared.filters.reset'),
           dateError: t('dashboard.shared.filters.dateError'),
+          period: t('dashboard.shared.filters.period'),
+          periodWeekly: t('dashboard.shared.filters.periodWeekly'),
+          periodMonthly: t('dashboard.shared.filters.periodMonthly'),
+          periodQuarterly: t('dashboard.shared.filters.periodQuarterly'),
+          periodYearly: t('dashboard.shared.filters.periodYearly'),
+          periodCustom: t('dashboard.shared.filters.periodCustom'),
         }}
       />
     </DashboardContent>

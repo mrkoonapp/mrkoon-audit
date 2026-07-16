@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { DatePeriod } from 'src/utils/constants';
 import type { Theme, SxProps } from '@mui/material/styles';
 import type { IDatePickerControl } from 'src/types/common';
 
@@ -394,6 +395,12 @@ export type TableWidgetCardProps = {
  * page — additional filters are intentionally out of scope.
  */
 export type DashboardFilters = {
+  /**
+   * Selected date period. Presets (`weekly`/`monthly`/`quarterly`/`yearly`)
+   * resolve to a concrete `startDate`/`endDate` range; `custom` lets the user
+   * pick the range manually; `''` means "no date filter".
+   */
+  period: DatePeriod;
   startDate: IDatePickerControl;
   endDate: IDatePickerControl;
   /** Backend country id (as string) from `useGetCountries`; `''` means "All". */
@@ -426,6 +433,13 @@ export type DashboardFiltersDrawerProps = {
   labels?: {
     title?: string;
     date?: string;
+    /** Label for the period selector (e.g. "Period"). */
+    period?: string;
+    periodWeekly?: string;
+    periodMonthly?: string;
+    periodQuarterly?: string;
+    periodYearly?: string;
+    periodCustom?: string;
     startDate?: string;
     endDate?: string;
     country?: string;
