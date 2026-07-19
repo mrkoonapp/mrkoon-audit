@@ -7,21 +7,59 @@ import type { ILanguage } from 'src/types/main.types';
  * @param value The localized bag (e.g. a country/category `name`).
  * @param lang  The active locale value (`en` | `ar-SA` | `ar-EG`).
  */
-export function getLocalizedText(value: ILanguage | undefined | null, lang: string): string {
+export function getLocalizedText(
+  value: string | ILanguage | undefined | null,
+  lang: string
+): string {
   if (!value) {
     return '';
   }
 
-  const direct = value[lang as keyof ILanguage];
+  let parsedValue: any = value;
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      try {
+        parsedValue = JSON.parse(trimmed);
+      } catch {
+        // Return original string if JSON parsing fails
+        return value;
+      }
+    } else {
+      // It's a plain string, return it directly
+      return value;
+    }
+  }
+
+  // If parsedValue is not an object, return string representation
+  if (typeof parsedValue !== 'object' || parsedValue === null) {
+    return String(value);
+  }
+
+  const direct = parsedValue[lang as keyof ILanguage];
   if (direct) {
     return direct;
   }
 
-  if (lang.startsWith('ar') && value.ar) {
-    return value.ar;
+  // Handle case-insensitive keys (like ar-SA / ar-sa / ar-EG / ar-eg)
+  const normalizedLang = lang.toLowerCase();
+  for (const key of Object.keys(parsedValue)) {
+    if (key.toLowerCase() === normalizedLang) {
+      return parsedValue[key];
+    }
   }
 
-  return value.en ?? value.ar ?? '';
+  if (lang.startsWith('ar')) {
+    const arVal =
+      parsedValue.ar ||
+      parsedValue['ar-EG'] ||
+      parsedValue['ar-SA'] ||
+      parsedValue['ar-eg'] ||
+      parsedValue['ar-sa'];
+    if (arVal) return arVal;
+  }
+
+  return parsedValue.en ?? parsedValue.ar ?? Object.values(parsedValue)[0] ?? '';
 }
 
 /**

@@ -9,6 +9,7 @@ import { paths } from 'src/routes/paths';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
+import { getLocalizedText } from 'src/utils/format-string';
 import { fNumber, fShortenNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
@@ -40,7 +41,7 @@ import {
 // ----------------------------------------------------------------------
 
 export function DashboardView() {
-  const { t } = useTranslate('dashboard');
+  const { t, currentLang } = useTranslate('dashboard');
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -76,7 +77,7 @@ export function DashboardView() {
     id: seller.id,
     avatarUrl: seller.avatarUrl,
     primary: seller.name,
-    secondary: seller.category,
+    secondary: getLocalizedText(seller.category, currentLang.value),
     metrics: [
       { value: formatAmount(seller.amount, seller.currency) },
       {
@@ -95,7 +96,7 @@ export function DashboardView() {
 
   const topCategoriesItems = (data?.topCategories || []).map((category, index) => ({
     id: category.id,
-    label: category.name,
+    label: getLocalizedText(category.name, currentLang.value),
     value: fNumber(category.value),
     percent: category.percent,
     color: (['primary', 'success', 'warning', 'info', 'error'] as const)[index % 5],
