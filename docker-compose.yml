@@ -1,0 +1,27 @@
+services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_ENV=dev
+    ports:
+      - "3001:3000"
+
+  web-stg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_ENV=stg
+    ports:
+      - "3002:3000"
+
+  web-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_ENV=prod
+    ports:
+      - "3003:3000"
