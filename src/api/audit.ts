@@ -78,13 +78,13 @@ export function buildQueryParams(filters: DashboardFilters) {
 
   if (filters.period && filters.period !== 'custom') {
     params.period = filters.period;
-  } else {
-    if (filters.startDate) {
-      params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');
-    }
-    if (filters.endDate) {
-      params.date_to = dayjs(filters.endDate).format('YYYY-MM-DD');
-    }
+  }
+
+  if (filters.startDate) {
+    params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');
+  }
+  if (filters.endDate) {
+    params.date_to = dayjs(filters.endDate).format('YYYY-MM-DD');
   }
 
   if (filters.country) {
