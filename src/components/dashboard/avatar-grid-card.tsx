@@ -80,10 +80,10 @@ function GridCell({ item }: { item: AvatarGridItem }) {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
       <Avatar
         src={item.avatarUrl}
-        alt={item.avatarAlt ?? item.primary}
+        alt={item.avatarAlt ?? item.primary ?? ''}
         sx={{ width: 40, height: 40 }}
       >
-        {item.primary.charAt(0)}
+        {(item.primary || '').charAt(0)}
       </Avatar>
 
       <Box sx={{ minWidth: 0 }}>

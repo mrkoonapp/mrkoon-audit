@@ -61,15 +61,16 @@ export function ListWidgetCard({
 // ----------------------------------------------------------------------
 
 function ListRow({ item }: { item: ListWidgetItem }) {
+  console.log('item.secondary', item);
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       {item.avatar ?? (
         <Avatar
           src={item.avatarUrl}
-          alt={item.avatarAlt ?? item.primary}
+          alt={item.avatarAlt ?? item.primary ?? ''}
           sx={{ width: 40, height: 40 }}
         >
-          {item.primary.charAt(0)}
+          {(item.primary || '').charAt(0)}
         </Avatar>
       )}
 

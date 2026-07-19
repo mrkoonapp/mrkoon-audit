@@ -3,6 +3,7 @@ import type { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
 import { store } from 'src/store';
+import { userActions } from 'src/store/slices/user-slice';
 
 // ----------------------------------------------------------------------
 
@@ -133,6 +134,8 @@ axiosInstance.interceptors.response.use(
 
       // Clear token
       localStorage.removeItem('accessToken');
+      document.cookie = 'token=; path=/; max-age=0';
+      store.dispatch(userActions.logout());
 
       // Redirect to login — but only if not already on the sign-in or callback page,
       // and never from public pages (e.g. the CEO preview, which self-gates with a

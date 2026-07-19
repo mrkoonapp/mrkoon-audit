@@ -57,17 +57,18 @@ export function DashboardView() {
   const emptyDescription = t('dashboard.shared.empty.description');
 
   const statsList = data?.stats || [
-    { id: 'gmv', labelKey: 'gmv', value: 0 },
-    { id: 'sellers', labelKey: 'totalSellers', value: 0 },
-    { id: 'inspections', labelKey: 'totalInspections', value: 0 },
-    { id: 'bidders', labelKey: 'totalBidders', value: 0 },
+    // { id: 'gmv', labelKey: 'gmv', value: 0 },
+    { id: 'products', labelKey: 'totalProducts', value: 0, auctionsValue: 0 },
+    { id: 'sellers', labelKey: 'totalSellers', value: 0, activeValue: 0 },
+    { id: 'inspections', labelKey: 'totalInspections', value: 0, offlineValue: 0, onlineValue: 0 },
+    { id: 'buyers', labelKey: 'totalBuyers', value: 0, activeValue: 0 },
   ];
 
   const newClientsItems = (data?.newClients?.items || []).map((client) => ({
     id: client.id,
     avatarUrl: client.avatarUrl,
     primary: client.name,
-    secondary: client.category,
+    secondary: client.phone || '',
     trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
   }));
 
@@ -113,14 +114,58 @@ export function DashboardView() {
 
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat cards */}
-        {statsList.map((stat) => (
-          <Grid key={stat.id} size={{ xs: 12, sm: 6, md: 3 }}>
-            <StatCard
-              label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
-              value={isLoading ? '-' : fNumber(stat.value)}
-            />
-          </Grid>
-        ))}
+        {statsList.map((stat) => {
+          let subMetrics: { label: string; value: React.ReactNode }[] | undefined;
+
+          if (stat.id === 'products' && stat.auctionsValue !== undefined) {
+            subMetrics = [
+              {
+                label: t('dashboard.dashboard.stats.auctions'),
+                value: isLoading ? '-' : fNumber(stat.auctionsValue),
+              },
+            ];
+          } else if (stat.id === 'sellers' && stat.activeValue !== undefined) {
+            subMetrics = [
+              {
+                label: t('dashboard.dashboard.stats.active'),
+                value: isLoading ? '-' : fNumber(stat.activeValue),
+              },
+            ];
+          } else if (stat.id === 'buyers' && stat.activeValue !== undefined) {
+            subMetrics = [
+              {
+                label: t('dashboard.dashboard.stats.active'),
+                value: isLoading ? '-' : fNumber(stat.activeValue),
+              },
+            ];
+          } else if (
+            stat.id === 'inspections' &&
+            stat.offlineValue !== undefined &&
+            stat.onlineValue !== undefined
+          ) {
+            subMetrics = [
+              {
+                label: t('dashboard.dashboard.stats.offline'),
+                value: isLoading ? '-' : fNumber(stat.offlineValue),
+              },
+              {
+                label: t('dashboard.dashboard.stats.online'),
+                value: isLoading ? '-' : fNumber(stat.onlineValue),
+              },
+            ];
+          }
+
+          return (
+            <Grid key={stat.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <StatCard
+                label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
+                value={isLoading ? '-' : fNumber(stat.value)}
+                totalLabel={subMetrics ? t('dashboard.dashboard.stats.total') : undefined}
+                subMetrics={subMetrics}
+              />
+            </Grid>
+          );
+        })}
 
         {/* Row 2 — success rate donut + new clients list */}
         <Grid size={{ xs: 12, md: 5 }}>

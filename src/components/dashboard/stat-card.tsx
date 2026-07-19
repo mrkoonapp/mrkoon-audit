@@ -20,7 +20,16 @@ import type { StatCardProps } from './types';
  *   the header row, no text.
  * All copy is passed in — the widget renders no translated strings itself.
  */
-export function StatCard({ label, value, trend, icon, onClick, sx }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  trend,
+  icon,
+  onClick,
+  sx,
+  subMetrics,
+  totalLabel,
+}: StatCardProps) {
   const hasValue = trend?.value !== undefined;
   const isPositive = hasValue ? (trend?.value ?? 0) >= 0 : trend?.direction !== 'down';
   const trendColor = isPositive ? 'success.main' : 'error.main';
@@ -78,19 +87,67 @@ export function StatCard({ label, value, trend, icon, onClick, sx }: StatCardPro
       ]}
     >
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-        <Box sx={{ minWidth: 0 }}>
+        <Box sx={{ minWidth: 0, flexGrow: 1 }}>
           <Typography variant="subtitle2" sx={{ color: 'text.secondary' }} noWrap>
             {label}
           </Typography>
 
-          <Typography variant="h3" sx={{ mt: 1 }}>
-            {value}
-          </Typography>
+          {subMetrics && subMetrics.length > 0 ? (
+            <Box sx={{ mt: 1.5 }}>
+              {totalLabel && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.disabled',
+                    display: 'block',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {totalLabel}
+                </Typography>
+              )}
+              <Typography variant="h3" sx={{ mt: totalLabel ? 0.5 : 0 }}>
+                {value}
+              </Typography>
+              <Box sx={{ mt: 1.5, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {subMetrics.map((sub, idx) => (
+                  <Box
+                    key={idx}
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      px: 1,
+                      py: 0.25,
+                      borderRadius: 0.75,
+                      typography: 'subtitle2',
+                      bgcolor: (theme) => varAlpha(theme.vars.palette.text.secondaryChannel, 0.08),
+                      color: 'text.secondary',
+                    }}
+                  >
+                    {sub.label}
+                    <Box
+                      component="span"
+                      sx={{ color: 'text.primary', ml: 0.5, fontWeight: 'bold' }}
+                    >
+                      ({sub.value})
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          ) : (
+            <Typography variant="h3" sx={{ mt: 1 }}>
+              {value}
+            </Typography>
+          )}
         </Box>
 
         {isCompactTrend
           ? renderArrowBadge(true)
-          : icon && <Box sx={{ color: 'text.disabled', display: 'inline-flex' }}>{icon}</Box>}
+          : icon && (
+              <Box sx={{ color: 'text.disabled', display: 'inline-flex', ml: 1.5 }}>{icon}</Box>
+            )}
       </Box>
 
       {hasValue && (

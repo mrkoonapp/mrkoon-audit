@@ -14,10 +14,10 @@
         "title": "الفلاتر",
         "date": "التاريخ",
         "period": "الفترة",
-        "periodWeekly": "أسبوعي",
-        "periodMonthly": "شهري",
-        "periodQuarterly": "ربع سنوي",
-        "periodYearly": "سنوي",
+        "periodWeekly": "الأسبوع الحالي",
+        "periodMonthly": "الشهر الحالي",
+        "periodQuarterly": "الربع الحالي",
+        "periodYearly": "العام الحالي",
         "periodCustom": "مخصص",
         "startDate": "تاريخ البداية",
         "endDate": "تاريخ النهاية",
@@ -35,13 +35,19 @@
         "gmv": "إجمالي قيمة المبيعات",
         "totalSellers": "إجمالي الشركات",
         "totalInspections": "إجمالي المعاينات",
-        "totalBidders": "إجمالي المزايدين"
+        "totalBuyers": "إجمالي المشترين",
+        "total": "الإجمالي",
+        "active": "نشط",
+        "offline": "حضوري",
+        "online": "إلكتروني",
+        "totalProducts": "إجمالي المنتجات",
+        "auctions": "المزادات"
       },
       "successRate": {
         "title": "معدل النجاح",
         "centerLabel": "معدل النجاح",
         "successful": "مزادات ناجحة",
-        "failed": "مزادات غير ناجحة"
+        "failed": "مزادات غير مكتملة"
       },
       "newClients": {
         "title": "عملاء جدد"

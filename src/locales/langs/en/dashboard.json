@@ -14,10 +14,10 @@
         "title": "Filters",
         "date": "Date",
         "period": "Period",
-        "periodWeekly": "Weekly",
-        "periodMonthly": "Monthly",
-        "periodQuarterly": "Quarterly",
-        "periodYearly": "Yearly",
+        "periodWeekly": "Current week",
+        "periodMonthly": "Current month",
+        "periodQuarterly": "Current quarter",
+        "periodYearly": "Current year",
         "periodCustom": "Custom",
         "startDate": "Start date",
         "endDate": "End date",
@@ -35,13 +35,19 @@
         "gmv": "GMV",
         "totalSellers": "Total Companies",
         "totalInspections": "Total Inspections",
-        "totalBidders": "Total Bidders"
+        "totalBuyers": "Total Buyers",
+        "total": "Total",
+        "active": "Active",
+        "offline": "Offline",
+        "online": "Online",
+        "totalProducts": "Total Products",
+        "auctions": "Auctions"
       },
       "successRate": {
         "title": "Success rate",
         "centerLabel": "Success rate",
         "successful": "Successful auctions",
-        "failed": "Failed auctions"
+        "failed": "Incomplete auctions"
       },
       "newClients": {
         "title": "New Clients"

@@ -53,6 +53,8 @@ export type StatCardProps = {
   /** When set, the whole card becomes clickable (pointer + hover lift). */
   onClick?: () => void;
   sx?: SxProps<Theme>;
+  subMetrics?: { label: string; value: ReactNode }[];
+  totalLabel?: string;
 };
 
 export type IconStatCardProps = {

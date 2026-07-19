@@ -57,10 +57,10 @@ function MetricRow({ item }: { item: MetricListItem }) {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       <Avatar
         src={item.avatarUrl}
-        alt={item.avatarAlt ?? item.primary}
+        alt={item.avatarAlt ?? item.primary ?? ''}
         sx={{ width: 44, height: 44 }}
       >
-        {item.primary.charAt(0)}
+        {(item.primary || '').charAt(0)}
       </Avatar>
 
       <Box sx={{ flex: '1 1 auto', minWidth: 0 }}>

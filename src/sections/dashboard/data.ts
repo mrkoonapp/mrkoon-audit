@@ -18,7 +18,11 @@ export type DashboardStat = {
   labelKey: string;
   value: number;
   /** Signed percentage trend vs. the previous period. */
-  trend: number;
+  trend?: number;
+  activeValue?: number;
+  offlineValue?: number;
+  onlineValue?: number;
+  auctionsValue?: number;
 };
 
 export type DashboardClient = {
@@ -26,6 +30,7 @@ export type DashboardClient = {
   name: string;
   category: string;
   avatarUrl?: string;
+  phone?: string;
   /** ISO date string. */
   joinedAt: string;
 };
@@ -76,10 +81,18 @@ export type DashboardData = {
 
 export const dashboardMockData: DashboardData = {
   stats: [
-    { id: 'gmv', labelKey: 'gmv', value: 9890776, trend: 12 },
-    { id: 'sellers', labelKey: 'totalSellers', value: 2323, trend: 86.6 },
-    { id: 'inspections', labelKey: 'totalInspections', value: 70783, trend: 12 },
-    { id: 'bidders', labelKey: 'totalBidders', value: 73900, trend: 73.9 },
+    // { id: 'gmv', labelKey: 'gmv', value: 9890776, trend: 12 },
+    { id: 'products', labelKey: 'totalProducts', value: 12500, auctionsValue: 8400 },
+    { id: 'sellers', labelKey: 'totalSellers', value: 2323, trend: 86.6, activeValue: 120 },
+    {
+      id: 'inspections',
+      labelKey: 'totalInspections',
+      value: 70783,
+      trend: 12,
+      offlineValue: 45000,
+      onlineValue: 25783,
+    },
+    { id: 'buyers', labelKey: 'totalBuyers', value: 73900, trend: 73.9, activeValue: 340 },
   ],
   successRate: {
     successful: 28900,
@@ -109,11 +122,41 @@ export const dashboardMockData: DashboardData = {
   newClients: {
     total: 8392,
     items: [
-      { id: 'c1', name: 'BMW', category: 'Cars & Trucks', joinedAt: '2024-02-08' },
-      { id: 'c2', name: 'HP', category: 'Electronics', joinedAt: '2025-05-10' },
-      { id: 'c3', name: 'Ezz Steel', category: 'Steel', joinedAt: '2020-03-01' },
-      { id: 'c4', name: 'Daraby', category: 'Electronics', joinedAt: '2023-11-19' },
-      { id: 'c5', name: 'Marlboro', category: 'Vape', joinedAt: '2022-07-24' },
+      {
+        id: 'c1',
+        name: 'BMW',
+        category: 'Cars & Trucks',
+        phone: '+20 100 123 4567',
+        joinedAt: '2024-02-08',
+      },
+      {
+        id: 'c2',
+        name: 'HP',
+        category: 'Electronics',
+        phone: '+20 111 234 5678',
+        joinedAt: '2025-05-10',
+      },
+      {
+        id: 'c3',
+        name: 'Ezz Steel',
+        category: 'Steel',
+        phone: '+20 122 345 6789',
+        joinedAt: '2020-03-01',
+      },
+      {
+        id: 'c4',
+        name: 'Daraby',
+        category: 'Electronics',
+        phone: '+20 155 456 7890',
+        joinedAt: '2023-11-19',
+      },
+      {
+        id: 'c5',
+        name: 'Marlboro',
+        category: 'Vape',
+        phone: '+20 106 567 8901',
+        joinedAt: '2022-07-24',
+      },
     ],
   },
   topSellers: [

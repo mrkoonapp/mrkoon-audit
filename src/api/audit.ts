@@ -15,18 +15,23 @@ import axiosInstance from 'src/lib/axios';
 export interface HomeKpiResponse {
   gmv: number;
   total_sellers: number;
+  active_sellers: number;
   total_inspections: {
     total: number;
     offline: number;
     online: number;
   };
-  total_bidders: number;
-  all_clients_count: number;
+  total_buyers: number;
+  active_buyers: number;
+  total_products: number;
+  total_auctions: number;
+  all_clients_count?: number;
   new_clients: {
     id: number;
     name: string;
     image: string | null;
     joined_at: string;
+    phone?: string | null;
   }[];
 }
 
@@ -71,12 +76,17 @@ export interface SuccessRateResponse {
 export function buildQueryParams(filters: DashboardFilters) {
   const params: Record<string, any> = {};
 
-  if (filters.startDate) {
-    params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');
+  if (filters.period && filters.period !== 'custom') {
+    params.period = filters.period;
+  } else {
+    if (filters.startDate) {
+      params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');
+    }
+    if (filters.endDate) {
+      params.date_to = dayjs(filters.endDate).format('YYYY-MM-DD');
+    }
   }
-  if (filters.endDate) {
-    params.date_to = dayjs(filters.endDate).format('YYYY-MM-DD');
-  }
+
   if (filters.country) {
     params.country_id = filters.country;
   }
@@ -95,9 +105,12 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   const kpisQuery = useQuery({
     queryKey: queryKeys.audit.home.kpis(queryParams),
     queryFn: async () => {
-      const response = await axiosInstance.get<{ data: HomeKpiResponse }>(endpoints.audit.home.kpis, {
-        params: queryParams,
-      });
+      const response = await axiosInstance.get<{ data: HomeKpiResponse }>(
+        endpoints.audit.home.kpis,
+        {
+          params: queryParams,
+        }
+      );
       return response.data.data;
     },
   });
@@ -200,10 +213,32 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
     kpis && chart && totals && topSellers && topCategories && successRate
       ? {
           stats: [
-            { id: 'gmv', labelKey: 'gmv', value: kpis.gmv },
-            { id: 'sellers', labelKey: 'totalSellers', value: kpis.total_sellers },
-            { id: 'inspections', labelKey: 'totalInspections', value: kpis.total_inspections.total },
-            { id: 'bidders', labelKey: 'totalBidders', value: kpis.total_bidders },
+            // { id: 'gmv', labelKey: 'gmv', value: kpis.gmv },
+            {
+              id: 'products',
+              labelKey: 'totalProducts',
+              value: kpis.total_products,
+              auctionsValue: kpis.total_auctions,
+            },
+            {
+              id: 'sellers',
+              labelKey: 'totalSellers',
+              value: kpis.total_sellers,
+              activeValue: kpis.active_sellers,
+            },
+            {
+              id: 'inspections',
+              labelKey: 'totalInspections',
+              value: kpis.total_inspections.total,
+              offlineValue: kpis.total_inspections.offline,
+              onlineValue: kpis.total_inspections.online,
+            },
+            {
+              id: 'buyers',
+              labelKey: 'totalBuyers',
+              value: kpis.total_buyers,
+              activeValue: kpis.active_buyers,
+            },
           ],
           successRate: {
             successful: successRate.successful_count,
@@ -218,13 +253,14 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             currency: 'EGP',
           },
           newClients: {
-            total: kpis.all_clients_count,
+            total: kpis.all_clients_count ?? kpis.new_clients.length,
             items: kpis.new_clients.map((c) => ({
               id: String(c.id),
               name: c.name,
               category: '', // category not present in home/kpis client object
               avatarUrl: c.image || undefined,
               joinedAt: c.joined_at,
+              phone: c.phone || undefined,
             })),
           },
           topSellers: topSellers.map((s) => ({
