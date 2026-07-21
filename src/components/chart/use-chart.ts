@@ -123,7 +123,19 @@ const baseChartOptions = (theme: Theme): ChartOptions => {
      * https://apexcharts.com/docs/options/yaxis/
      *************************************** */
     xaxis: { axisBorder: { show: false }, axisTicks: { show: false } },
-    yaxis: { tickAmount: 5 },
+    yaxis: {
+      tickAmount: 5,
+      labels: {
+        formatter: (val: number) => {
+          const sign = val < 0 ? '-' : '';
+          const absVal = Math.abs(val);
+          if (absVal >= 1_000_000_000) return `${sign}${(absVal / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`;
+          if (absVal >= 1_000_000) return `${sign}${(absVal / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+          if (absVal >= 1_000) return `${sign}${(absVal / 1_000).toFixed(1).replace(/\.0$/, '')}k`;
+          return `${sign}${absVal}`;
+        },
+      },
+    },
 
     /** **************************************
      * Markers
