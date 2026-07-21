@@ -2,55 +2,87 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
+import { CircleArrowButton } from 'src/components/circle-arrow-button';
+import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboard';
 
 import { useDataRoom } from '../hooks/use-data-room';
-import { DataRoomHeader, DataRoomKpiCard, DataRoomChartCard } from '../components';
+import { DataRoomKpiCard, DataRoomChartCard } from '../components';
 
 // ----------------------------------------------------------------------
 
 export function DataRoomView() {
+  const router = useRouter();
+  const theme = useTheme();
+  const { t } = useTranslate('dashboard');
+
   const {
-    theme,
     selectedCountry,
-    setSelectedCountry,
     search,
     setSearch,
     selectedTab,
     setSelectedTab,
-    selectedQuarter,
-    setSelectedQuarter,
-    selectedPeriodType,
-    setSelectedPeriodType,
+    filters,
+    filtersOpen,
+    setFiltersOpen,
+    setFiltersHandler,
+    clearFilters,
+    activeFilterCount,
     activeData,
     egyptChartOptions,
     saudiChartOptions,
     egyptSeries,
     saudiSeries,
     performanceTabs,
+    chartType,
     onViewAll,
   } = useDataRoom();
 
   return (
     <DashboardContent maxWidth="xl" sx={{ pb: 5 }}>
-      {/* Header component */}
-      <DataRoomHeader
-        selectedCountry={selectedCountry}
-        onCountryChange={setSelectedCountry}
-        search={search}
+      {/* Title & Back Button Stack */}
+      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
+        <CircleArrowButton
+          icon="eva:arrow-ios-back-fill"
+          onClick={() => router.push(paths.dashboard.root)}
+          sx={{
+            border: `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper',
+          }}
+        />
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+            Data Room
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Overview • Data Room
+          </Typography>
+        </Box>
+      </Stack>
+
+      {/* Shared Dashboard Toolbar */}
+      <DashboardToolbar
+        searchValue={search}
         onSearchChange={setSearch}
-        selectedPeriodType={selectedPeriodType}
-        onPeriodTypeChange={setSelectedPeriodType}
-        selectedQuarter={selectedQuarter}
-        onQuarterChange={setSelectedQuarter}
+        onOpenFilters={() => setFiltersOpen(true)}
+        searchPlaceholder={t('dashboard.shared.search')}
+        filterLabel={t('dashboard.shared.filter')}
+        activeFilterCount={activeFilterCount}
       />
 
       {/* Row 1 — KPI Stat Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={3} sx={{ mb: 4, mt: 1 }}>
         {activeData.kpis.map((kpi) => (
           <Grid key={kpi.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <DataRoomKpiCard kpi={kpi} />
@@ -59,11 +91,101 @@ export function DataRoomView() {
       </Grid>
 
       {/* Performance Analytics Header */}
-      <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 3, mt: 5 }}>
-        <Box sx={{ width: 4, height: 24, borderRadius: '4px', bgcolor: '#BF8654' }} />
-        <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-          Performance Analytics
-        </Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3, mt: 5 }}>
+        <Stack direction="row" alignItems="center" spacing={1.5}>
+          <Box sx={{ width: 4, height: 24, borderRadius: '4px', bgcolor: '#BF8654' }} />
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            Performance Analytics
+          </Typography>
+        </Stack>
+
+        <ToggleButtonGroup
+          size="small"
+          value={filters.group_by || 'date'}
+          exclusive
+          onChange={(event, newValue) => {
+            if (newValue !== null) {
+              setFiltersHandler({ ...filters, group_by: newValue });
+            }
+          }}
+          sx={{
+            bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
+            p: 0.5,
+            borderRadius: '8px',
+            border: 'none',
+            '& .MuiToggleButtonGroup-grouped': {
+              margin: 0,
+              border: 0,
+              '&.Mui-disabled': {
+                border: 0,
+              },
+              '&:not(:first-of-type)': {
+                borderRadius: '6px',
+              },
+              '&:first-of-type': {
+                borderRadius: '6px',
+              },
+            },
+          }}
+        >
+          <ToggleButton
+            value="date"
+            sx={{
+              px: 2,
+              py: 0.5,
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&.Mui-selected': {
+                bgcolor: 'background.paper',
+                color: 'text.primary',
+                boxShadow: theme.customShadows?.z4,
+                '&:hover': {
+                  bgcolor: 'background.paper',
+                },
+              },
+            }}
+          >
+            Date
+          </ToggleButton>
+          <ToggleButton
+            value="tags_group"
+            sx={{
+              px: 2,
+              py: 0.5,
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&.Mui-selected': {
+                bgcolor: 'background.paper',
+                color: 'text.primary',
+                boxShadow: theme.customShadows?.z4,
+                '&:hover': {
+                  bgcolor: 'background.paper',
+                },
+              },
+            }}
+          >
+            Tag Groups
+          </ToggleButton>
+          <ToggleButton
+            value="tag"
+            sx={{
+              px: 2,
+              py: 0.5,
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&.Mui-selected': {
+                bgcolor: 'background.paper',
+                color: 'text.primary',
+                boxShadow: theme.customShadows?.z4,
+                '&:hover': {
+                  bgcolor: 'background.paper',
+                },
+              },
+            }}
+          >
+            Tags
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Stack>
 
       {/* Pill Tab Selector */}
@@ -133,6 +255,7 @@ export function DataRoomView() {
               trendDirection={activeData.egyptTrendDirection}
               series={egyptSeries}
               options={egyptChartOptions}
+              type={chartType}
               onViewAll={onViewAll}
             />
           </Grid>
@@ -149,11 +272,39 @@ export function DataRoomView() {
               trendDirection={activeData.saudiTrendDirection}
               series={saudiSeries}
               options={saudiChartOptions}
+              type={chartType}
               onViewAll={onViewAll}
             />
           </Grid>
         )}
       </Grid>
+
+      {/* Shared Dashboard Filters Drawer */}
+      <DashboardFiltersDrawer
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        filters={filters}
+        onApply={(next) => setFiltersHandler(next)}
+        onReset={clearFilters}
+        labels={{
+          title: t('dashboard.shared.filters.title'),
+          date: t('dashboard.shared.filters.date'),
+          startDate: t('dashboard.shared.filters.startDate'),
+          endDate: t('dashboard.shared.filters.endDate'),
+          country: t('dashboard.shared.filters.country'),
+          countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
+          allCountries: t('dashboard.shared.filters.allCountries'),
+          apply: t('dashboard.shared.filters.apply'),
+          reset: t('dashboard.shared.filters.reset'),
+          dateError: t('dashboard.shared.filters.dateError'),
+          period: t('dashboard.shared.filters.period'),
+          periodWeekly: t('dashboard.shared.filters.periodWeekly'),
+          periodMonthly: t('dashboard.shared.filters.periodMonthly'),
+          periodQuarterly: t('dashboard.shared.filters.periodQuarterly'),
+          periodYearly: t('dashboard.shared.filters.periodYearly'),
+          periodCustom: t('dashboard.shared.filters.periodCustom'),
+        }}
+      />
     </DashboardContent>
   );
 }

@@ -1,13 +1,28 @@
-import { useMemo, useState } from 'react';
+import type { DashboardFilters } from 'src/components/dashboard';
+
+import { useMemo, useState, useEffect } from 'react';
 
 import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useChart } from 'src/components/chart';
+import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
-import { dataRoomMockData } from '../data';
+import { fShortenNumber } from 'src/utils/format-number';
+
+import { useTranslate } from 'src/locales';
+import {
+  buildQueryParams,
+  useGetDataRoomCompare,
+  useGetHomeDashboardData,
+} from 'src/api/audit';
+
+import { useChart } from 'src/components/chart';
+import {
+  countActiveFilters,
+  defaultDashboardFilters,
+} from 'src/components/dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -16,28 +31,353 @@ export type CountryCode = 'all' | 'egypt' | 'ksa';
 export function useDataRoom() {
   const theme = useTheme();
   const router = useRouter();
+  const { i18n } = useTranslate();
+  const currentLang = i18n.language || 'en';
 
-  // Filters State
-  const [selectedCountry, setSelectedCountry] = useState<CountryCode>('all');
-  const [search, setSearch] = useState('');
+  // Selected tab visual state
   const [selectedTab, setSelectedTab] = useState<string>('orders');
-  const [selectedQuarter, setSelectedQuarter] = useState<string>('Q2 2026');
-  const [selectedPeriodType, setSelectedPeriodType] = useState<string>('Quarter');
+  const [search, setSearch] = useState('');
 
-  const activeData = useMemo(
-    () => dataRoomMockData[selectedTab] || dataRoomMockData.orders,
-    [selectedTab]
-  );
+  // Shared Filters State Drawer
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const { filters, setFiltersHandler, clearFilters } =
+    useCustomFilter<DashboardFilters & { group_by?: string }>(defaultDashboardFilters);
+
+  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
+
+  // Map filters.country (which matches DB IDs 6 or 26) to visual selectedCountry code
+  const selectedCountry = useMemo(() => {
+    if (!filters.country) return 'all';
+    if (String(filters.country) === '6') return 'egypt';
+    if (String(filters.country) === '26') return 'ksa';
+    return 'all';
+  }, [filters.country]);
+
+  // 1. Fetch general KPIs to populate the 4 stat cards in a single lightweight query
+  const homeDataQuery = useGetHomeDashboardData(filters);
+
+  // 2. Map selected visual Tab to backend compare type
+  const selectedTabType = useMemo(() => {
+    if (selectedTab === 'buyers' || selectedTab === 'newusers') return 'buyers';
+    if (selectedTab === 'sellers') return 'sellers';
+    if (selectedTab === 'auctions') return 'auctions';
+    return 'transactions';
+  }, [selectedTab]);
+
+  // Determine chart rendering type (area for date-based, bar for tag-based)
+  const chartType = useMemo<'area' | 'bar'>(() => (filters.group_by === 'tag' || filters.group_by === 'tags_group' ? 'bar' : 'area'), [filters.group_by]);
+
+  const queryParams = useMemo(() => ({
+    ...buildQueryParams(filters),
+    type: selectedTabType,
+    period: filters.period || 'monthly',
+    group_by: filters.group_by || 'date',
+  }), [filters, selectedTabType]);
+
+  // 3. Fetch detailed comparison values ONLY for the selected tab and grouping mode
+  const compareQuery = useGetDataRoomCompare(queryParams);
+
+  // Local cache to store loaded compare data per tab type & grouping mode
+  const [compareCache, setCompareCache] = useState<Record<string, any>>({});
+  const cacheKey = `${selectedTabType}_${filters.group_by || 'date'}`;
+
+  useEffect(() => {
+    if (compareQuery.data) {
+      setCompareCache((prev) => ({
+        ...prev,
+        [cacheKey]: compareQuery.data,
+      }));
+    }
+  }, [compareQuery.data, cacheKey]);
+
+  // Helper to calculate totals and month-over-month trend
+  const calculateStats = (data: number[]) => {
+    const total = data.reduce((sum, val) => sum + val, 0);
+    let trendValue = 0;
+    let trendDirection: 'up' | 'down' = 'up';
+
+    if (data.length >= 2) {
+      const last = data[data.length - 1];
+      const prev = data[data.length - 2];
+      if (prev > 0) {
+        trendValue = ((last - prev) / prev) * 100;
+      } else if (last > 0) {
+        trendValue = 100;
+      }
+    } else if (data.length === 1 && data[0] > 0) {
+      trendValue = 100;
+    }
+
+    trendDirection = trendValue >= 0 ? 'up' : 'down';
+    const trendText = `${trendValue >= 0 ? '+' : ''}${Math.round(trendValue)}%`;
+
+    return { total, trendText, trendValue: Math.round(trendValue), trendDirection };
+  };
+
+  // Process data for rendering
+  const processedData = useMemo(() => {
+    const activeTabCompareData = compareCache[cacheKey] || compareQuery.data;
+    const defaultLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    // Extract label helper
+    let labelMap = activeTabCompareData?.label_map || {};
+
+    const formatLabel = (label: string | number) => {
+      if (labelMap && labelMap[label]) {
+        const trans = labelMap[label];
+        if (typeof trans === 'string') return trans;
+        return trans[currentLang] || trans['en'] || String(label);
+      }
+
+      const labelStr = String(label);
+      if (labelStr.includes('-')) {
+        const parts = labelStr.split('-');
+        const monthIndex = parseInt(parts[1], 10) - 1;
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        return months[monthIndex] || labelStr;
+      }
+      return labelStr;
+    };
+
+    // Resolve labels
+    const rawLabels = activeTabCompareData?.labels || defaultLabels;
+
+    // Smart helper to resolve countries by ID, code suffix, or name
+    const findCountry = (countries: any[], code: string) => countries?.find((c: any) => {
+      const cCode = String(c.country_code).trim();
+      const cNameEn = String(c.name?.en || c.name || '').toLowerCase();
+      if (code === 'EG') {
+        return c.id === 6 || cCode === '2+' || cCode === '+2' || cNameEn === 'egypt';
+      }
+      if (code === 'SA') {
+        return c.id === 26 || cCode === '966+' || cCode === '+966' || cNameEn === 'saudi' || cNameEn === 'saudi arabia';
+      }
+      return false;
+    });
+
+    const getCountryData = (queryData: any, code: string) => {
+      const country = findCountry(queryData?.countries, code);
+      const defaultVals = new Array(rawLabels.length).fill(0);
+      return {
+        val1: country?.val1 || defaultVals,
+        val2: country?.val2 || defaultVals,
+      };
+    };
+
+    // Active tab series selections
+    const egData = getCountryData(activeTabCompareData, 'EG');
+    const saData = getCountryData(activeTabCompareData, 'SA');
+
+    const egSeriesRaw = selectedTab === 'revenue' ? egData.val2 : egData.val1;
+    const saSeriesRaw = selectedTab === 'revenue' ? saData.val2 : saData.val1;
+
+    let finalLabels = rawLabels;
+    let activeEG = egSeriesRaw;
+    let activeSA = saSeriesRaw;
+
+    // Sort and group tags into "Other" if tags exceed 10
+    if (filters.group_by === 'tag' && rawLabels.length > 10) {
+      const tagItems = rawLabels.map((label: string | number, idx: number) => {
+        const egVal = egSeriesRaw[idx] || 0;
+        const saVal = saSeriesRaw[idx] || 0;
+        const totalVal = egVal + saVal;
+        return { label, egVal, saVal, totalVal };
+      });
+
+      // Sort descending
+      tagItems.sort((a: { totalVal: number }, b: { totalVal: number }) => b.totalVal - a.totalVal);
+
+      // Keep top 9 and group the rest
+      const topTags = tagItems.slice(0, 9);
+      const otherTags = tagItems.slice(9);
+
+      const otherEgVal = otherTags.reduce((sum: number, item: { egVal: number }) => sum + item.egVal, 0);
+      const otherSaVal = otherTags.reduce((sum: number, item: { saVal: number }) => sum + item.saVal, 0);
+
+      finalLabels = [...topTags.map((item: { label: string | number }) => item.label), 'other'];
+      activeEG = [...topTags.map((item: { egVal: number }) => item.egVal), otherEgVal];
+      activeSA = [...topTags.map((item: { saVal: number }) => item.saVal), otherSaVal];
+
+      labelMap = {
+        ...labelMap,
+        other: { en: 'Other', ar: 'أخرى' },
+      };
+    }
+
+    const formattedLabels = finalLabels.map(formatLabel);
+
+    const statsEG = calculateStats(activeEG);
+    const statsSA = calculateStats(activeSA);
+
+    // Resolve KPI Card values from general dashboard data
+    const buyersStat = homeDataQuery.data?.stats?.find((s: any) => s.id === 'buyers');
+    const sellersStat = homeDataQuery.data?.stats?.find((s: any) => s.id === 'sellers');
+    const productsStat = homeDataQuery.data?.stats?.find((s: any) => s.id === 'products');
+    const totalRevenueVal = homeDataQuery.data?.transactions?.totalAmount || 0;
+    const totalOrdersVal = homeDataQuery.data?.transactions?.totalCount || 0;
+
+    // Helper to calculate cached country total
+    const getCachedCountryTotal = (compareData: any, code: string, useVal2 = false) => {
+      if (!compareData) return null;
+      const country = findCountry(compareData.countries, code);
+      const vals = useVal2 ? country?.val2 : country?.val1;
+      return vals ? vals.reduce((a: number, b: number) => a + b, 0) : 0;
+    };
+
+    // Calculate dynamic values for each KPI
+    // Buyers KPI
+    const buyersCompare = compareCache[`buyers_${filters.group_by || 'date'}`];
+    const egBuyers = getCachedCountryTotal(buyersCompare, 'EG');
+    const saBuyers = getCachedCountryTotal(buyersCompare, 'SA');
+    const buyersTrend = buyersCompare
+      ? calculateStats([
+        ...(findCountry(buyersCompare.countries, 'EG')?.val1 || []),
+        ...(findCountry(buyersCompare.countries, 'SA')?.val1 || []),
+      ])
+      : {
+        trendValue: Math.round(
+          ((buyersStat?.activeValue || 0) / (buyersStat?.value || 1)) * 100
+        ),
+        trendDirection: 'up' as const,
+      };
+
+    // Sellers KPI
+    const sellersCompare = compareCache[`sellers_${filters.group_by || 'date'}`];
+    const egSellers = getCachedCountryTotal(sellersCompare, 'EG');
+    const saSellers = getCachedCountryTotal(sellersCompare, 'SA');
+    const sellersTrend = sellersCompare
+      ? calculateStats([
+        ...(findCountry(sellersCompare.countries, 'EG')?.val1 || []),
+        ...(findCountry(sellersCompare.countries, 'SA')?.val1 || []),
+      ])
+      : {
+        trendValue: Math.round(
+          ((sellersStat?.activeValue || 0) / (sellersStat?.value || 1)) * 100
+        ),
+        trendDirection: 'up' as const,
+      };
+
+    // Auctions KPI
+    const auctionsCompare = compareCache[`auctions_${filters.group_by || 'date'}`];
+    const egAuctions = getCachedCountryTotal(auctionsCompare, 'EG');
+    const saAuctions = getCachedCountryTotal(auctionsCompare, 'SA');
+    const auctionsTrend = auctionsCompare
+      ? calculateStats([
+        ...(findCountry(auctionsCompare.countries, 'EG')?.val1 || []),
+        ...(findCountry(auctionsCompare.countries, 'SA')?.val1 || []),
+      ])
+      : { trendValue: 12, trendDirection: 'up' as const };
+
+    // Revenue KPI
+    const transactionsCompare = compareCache[`transactions_${filters.group_by || 'date'}`];
+    const egRevenue = getCachedCountryTotal(transactionsCompare, 'EG', true);
+    const saRevenue = getCachedCountryTotal(transactionsCompare, 'SA', true);
+    const revenueTrend = transactionsCompare
+      ? calculateStats([
+        ...(findCountry(transactionsCompare.countries, 'EG')?.val2 || []),
+        ...(findCountry(transactionsCompare.countries, 'SA')?.val2 || []),
+      ])
+      : {
+        trendValue: Math.round(totalRevenueVal > 0 ? (totalRevenueVal / (totalOrdersVal || 1)) / 100 : 8),
+        trendDirection: 'up' as const,
+      };
+
+    const kpis = [
+      {
+        id: 'buyers',
+        label: 'Total Buyers',
+        value: fShortenNumber(buyersStat?.value || 0),
+        trend: { value: buyersTrend.trendValue, direction: buyersTrend.trendDirection },
+        distribution: {
+          eg: egBuyers !== null ? fShortenNumber(egBuyers) : '-',
+          sa: saBuyers !== null ? fShortenNumber(saBuyers) : '-',
+        },
+      },
+      {
+        id: 'sellers',
+        label: 'Total Sellers',
+        value: fShortenNumber(sellersStat?.value || 0),
+        trend: { value: sellersTrend.trendValue, direction: sellersTrend.trendDirection },
+        distribution: {
+          eg: egSellers !== null ? fShortenNumber(egSellers) : '-',
+          sa: saSellers !== null ? fShortenNumber(saSellers) : '-',
+        },
+      },
+      {
+        id: 'auctions',
+        label: 'Total Auctions',
+        value: fShortenNumber(productsStat?.auctionsValue || 0),
+        trend: { value: auctionsTrend.trendValue, direction: auctionsTrend.trendDirection },
+        distribution: {
+          eg: egAuctions !== null ? fShortenNumber(egAuctions) : '-',
+          sa: saAuctions !== null ? fShortenNumber(saAuctions) : '-',
+        },
+      },
+      {
+        id: 'revenue',
+        label: 'Revenue',
+        value: fShortenNumber(totalRevenueVal),
+        trend: { value: revenueTrend.trendValue, direction: revenueTrend.trendDirection },
+        distribution: {
+          eg: egRevenue !== null ? fShortenNumber(egRevenue) : '-',
+          sa: saRevenue !== null ? fShortenNumber(saRevenue) : '-',
+        },
+      },
+    ];
+
+    return {
+      labels: formattedLabels,
+      egyptSeriesData: activeEG,
+      saudiSeriesData: activeSA,
+      egyptTotal: fShortenNumber(statsEG.total),
+      egyptTrend: statsEG.trendText,
+      egyptTrendDirection: statsEG.trendDirection,
+      saudiTotal: fShortenNumber(statsSA.total),
+      saudiTrend: statsSA.trendText,
+      saudiTrendDirection: statsSA.trendDirection,
+      kpis,
+    };
+  }, [
+    compareQuery.data,
+    compareCache,
+    selectedTab,
+    homeDataQuery.data,
+    cacheKey,
+    currentLang,
+    filters.group_by,
+  ]);
+
+  // Smart number abbreviation helper shared by annotation labels and tooltips
+  const formatAxisValue = (val: number): string => {
+    const sign = val < 0 ? '-' : '';
+    const abs = Math.abs(val);
+    if (abs >= 1_000_000_000) return `${sign}${(abs / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`;
+    if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+    if (abs >= 1_000) return `${sign}${(abs / 1_000).toFixed(1).replace(/\.0$/, '')}k`;
+    return `${sign}${abs}`;
+  };
 
   // Chart configuration builder
-  const buildChartOptions = (lineColor: string, hoverVal: number, hoverMonth: string) => {
+  const buildChartOptions = (lineColor: string, hoverVal: number, hoverMonth: string, labels: string[]) => {
     const isDark = theme.palette.mode === 'dark';
 
     return {
       colors: [lineColor],
-      stroke: { curve: 'smooth' as any, width: 3 },
+      stroke: {
+        show: true,
+        width: chartType === 'bar' ? 2 : 3,
+        colors: chartType === 'bar' ? ['transparent'] : [lineColor],
+        curve: 'smooth' as any,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '35%',
+          borderRadius: 6,
+        },
+      },
       xaxis: {
-        categories: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+        categories: labels,
         labels: {
           style: {
             colors: theme.palette.text.disabled,
@@ -51,15 +391,8 @@ export function useDataRoom() {
       },
       yaxis: {
         min: 0,
-        max: 100000,
         tickAmount: 5,
         labels: {
-          formatter: (val: number) => {
-            if (selectedTab === 'revenue' || selectedTab === 'sales') {
-              return `${(val / 1000).toFixed(0)}M`;
-            }
-            return `${(val / 1000).toFixed(0)}K`;
-          },
           style: {
             colors: theme.palette.text.disabled,
             fontSize: '11px',
@@ -72,20 +405,25 @@ export function useDataRoom() {
         xaxis: { lines: { show: true } },
         yaxis: { lines: { show: true } },
       },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shadeIntensity: 0,
-          opacityFrom: 0.25,
-          opacityTo: 0,
-          stops: [0, 100],
-        },
-      },
+      fill: chartType === 'bar'
+        ? {
+            type: 'solid',
+            opacity: 0.85,
+          }
+        : {
+            type: 'gradient',
+            gradient: {
+              shadeIntensity: 0,
+              opacityFrom: 0.25,
+              opacityTo: 0,
+              stops: [0, 100],
+            },
+          },
       markers: {
         size: 0,
         hover: { size: 6 },
       },
-      annotations: {
+      annotations: chartType === 'area' ? {
         points: [
           {
             x: hoverMonth,
@@ -101,7 +439,7 @@ export function useDataRoom() {
               borderColor: lineColor,
               borderWidth: 1,
               borderRadius: 6,
-              text: `${hoverMonth}: ${selectedTab === 'revenue' || selectedTab === 'sales' ? (hoverVal / 1000).toFixed(1) + 'M' : (hoverVal / 1000).toFixed(1) + 'k'}`,
+              text: `${hoverMonth}: ${formatAxisValue(hoverVal)}`,
               style: {
                 color: '#FFFFFF',
                 background: lineColor,
@@ -112,50 +450,41 @@ export function useDataRoom() {
             },
           },
         ],
-      },
+      } : undefined,
       tooltip: {
         shared: true,
         intersect: false,
         theme: isDark ? 'dark' : 'light',
         y: {
-          formatter: (value: number) => {
-            if (selectedTab === 'revenue' || selectedTab === 'sales') {
-              return `${(value / 1000000).toFixed(1)} M EGP`;
-            }
-            return `${(value / 1000).toFixed(1)}k`;
-          },
+          formatter: (value: number) => formatAxisValue(value),
         },
       },
     };
   };
 
+  const hoverMonth = processedData.labels[processedData.labels.length - 1] || 'AUG';
+  const egyptHoverVal = processedData.egyptSeriesData[processedData.egyptSeriesData.length - 1] || 0;
+  const saudiHoverVal = processedData.saudiSeriesData[processedData.saudiSeriesData.length - 1] || 0;
+
   const egyptChartOptions = useChart(
-    buildChartOptions(
-      '#E05665',
-      selectedTab === 'orders' ? 58600 : selectedTab === 'revenue' || selectedTab === 'sales' ? 85200 : 50400,
-      'AUG'
-    )
+    buildChartOptions('#E05665', egyptHoverVal, hoverMonth, processedData.labels)
   );
 
   const saudiChartOptions = useChart(
-    buildChartOptions(
-      '#2EB67D',
-      selectedTab === 'orders' ? 85000 : selectedTab === 'revenue' || selectedTab === 'sales' ? 20300 : 23500,
-      'AUG'
-    )
+    buildChartOptions('#2EB67D', saudiHoverVal, hoverMonth, processedData.labels)
   );
 
   const egyptSeries = [
     {
       name: 'Egypt',
-      data: activeData.chartData.map((d) => (selectedTab === 'revenue' || selectedTab === 'sales' ? d.egypt / 1000 : d.egypt)),
+      data: processedData.egyptSeriesData,
     },
   ];
 
   const saudiSeries = [
     {
       name: 'Saudi Arabia',
-      data: activeData.chartData.map((d) => (selectedTab === 'revenue' || selectedTab === 'sales' ? d.saudiArabia / 1000 : d.saudiArabia)),
+      data: processedData.saudiSeriesData,
     },
   ];
 
@@ -164,9 +493,9 @@ export function useDataRoom() {
     { value: 'sellers', label: 'Sellers', icon: 'solar:shop-bold-duotone' },
     { value: 'orders', label: 'Orders', icon: 'solar:clipboard-list-bold-duotone' },
     { value: 'auctions', label: 'Auctions', icon: 'solar:hammer-bold-duotone' },
-    { value: 'sales', label: 'Sales', icon: 'solar:chart-square-bold-duotone' },
-    { value: 'revenue', label: 'Revenue', icon: 'solar:wad-of-money-bold-duotone' },
-    { value: 'newusers', label: 'New User', icon: 'solar:user-plus-bold-duotone' },
+    // { value: 'sales', label: 'Sales', icon: 'solar:chart-square-bold-duotone' },
+    // { value: 'revenue', label: 'Revenue', icon: 'solar:wad-of-money-bold-duotone' },
+    // { value: 'newusers', label: 'New User', icon: 'solar:user-plus-bold-duotone' },
   ];
 
   const handleViewAll = () => {
@@ -176,21 +505,23 @@ export function useDataRoom() {
   return {
     theme,
     selectedCountry,
-    setSelectedCountry,
     search,
     setSearch,
     selectedTab,
     setSelectedTab,
-    selectedQuarter,
-    setSelectedQuarter,
-    selectedPeriodType,
-    setSelectedPeriodType,
-    activeData,
+    filters,
+    filtersOpen,
+    setFiltersOpen,
+    setFiltersHandler,
+    clearFilters,
+    activeFilterCount,
+    activeData: processedData,
     egyptChartOptions,
     saudiChartOptions,
     egyptSeries,
     saudiSeries,
     performanceTabs,
+    chartType,
     onViewAll: handleViewAll,
   };
 }

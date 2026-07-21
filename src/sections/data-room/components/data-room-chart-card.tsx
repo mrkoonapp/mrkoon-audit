@@ -22,6 +22,7 @@ interface Props {
     data: number[];
   }[];
   options: any;
+  type?: 'area' | 'bar';
   onViewAll: () => void;
 }
 
@@ -33,6 +34,7 @@ export function DataRoomChartCard({
   trendDirection,
   series,
   options,
+  type = 'area',
   onViewAll,
 }: Props) {
   const theme = useTheme();
@@ -92,7 +94,7 @@ export function DataRoomChartCard({
       </Stack>
 
       <Box sx={{ height: 320 }}>
-        <Chart type="area" series={series} options={options} sx={{ height: 300 }} />
+        <Chart type={type} series={series} options={options} sx={{ height: 300 }} />
       </Box>
     </Card>
   );

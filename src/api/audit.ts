@@ -295,3 +295,46 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
     },
   };
 }
+
+// ----------------------------------------------------------------------
+// Data Room Comparison
+// ----------------------------------------------------------------------
+
+export interface DataRoomCompareFilters {
+  type: string;
+  group_by?: string;
+  period?: string;
+  country_id?: string | number;
+  date_from?: string;
+  date_to?: string;
+}
+
+export interface DataRoomCompareCountry {
+  id: number;
+  name: { en: string; ar: string } | string;
+  country_code: string;
+  val1: number[];
+  val2: number[];
+}
+
+export interface DataRoomCompareResponse {
+  labels: string[];
+  label_map: Record<string, { en: string; ar: string } | string>;
+  countries: DataRoomCompareCountry[];
+}
+
+export function useGetDataRoomCompare(filters: DataRoomCompareFilters) {
+  return useQuery({
+    queryKey: queryKeys.audit.home.compare(filters),
+    queryFn: async () => {
+      const response = await axiosInstance.get<{ data: DataRoomCompareResponse }>(
+        endpoints.audit.home.compare,
+        {
+          params: filters,
+        }
+      );
+      return response.data.data;
+    },
+  });
+}
+
