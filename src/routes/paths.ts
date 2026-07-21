@@ -28,6 +28,7 @@ export const paths = {
   dashboard: {
     root: ROOTS.DASHBOARD,
     blank: `${ROOTS.DASHBOARD}/blank`,
+    dataRoom: `${ROOTS.DASHBOARD}/data-room`,
     auctions: `${ROOTS.DASHBOARD}/auctions`,
     auctionsList: `${ROOTS.DASHBOARD}/auctions/list`,
     products: `${ROOTS.DASHBOARD}/products`,

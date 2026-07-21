@@ -23,6 +23,7 @@ const ClientsListPage = lazyWithRetry(() => import('src/pages/dashboard/clients-
 const InspectionsPage = lazyWithRetry(() => import('src/pages/dashboard/inspections'));
 const SalesPage = lazyWithRetry(() => import('src/pages/dashboard/sales'));
 const OperationsPage = lazyWithRetry(() => import('src/pages/dashboard/operations'));
+const DataRoomPage = lazyWithRetry(() => import('src/pages/dashboard/data-room'));
 const BlankPage = lazyWithRetry(() => import('src/pages/dashboard/blank'));
 
 // ----------------------------------------------------------------------
@@ -55,6 +56,7 @@ export const dashboardRoutes: RouteObject[] = [
       { path: 'inspections', element: <InspectionsPage /> },
       { path: 'sales', element: <SalesPage /> },
       { path: 'operations', element: <OperationsPage /> },
+      { path: 'data-room', element: <DataRoomPage /> },
       { path: 'blank', element: <BlankPage /> },
     ],
   },
