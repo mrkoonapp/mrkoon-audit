@@ -36,6 +36,8 @@ export const queryKeys = {
       topTags: (filters: any) => [...queryKeys.audit.all, 'home', 'topTags', filters] as const,
       successRate: (filters: any) =>
         [...queryKeys.audit.all, 'home', 'successRate', filters] as const,
+      compare: (filters: any) =>
+        [...queryKeys.audit.all, 'home', 'compare', filters] as const,
     },
     auctions: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'auctions', 'kpis', filters] as const,

@@ -19,6 +19,7 @@ const ICONS = {
   inspections: icon('ic-file'),
   sales: icon('ic-analytics'),
   operations: icon('ic-settings'),
+  dataRoom: icon('ic-lock'),
   blank: icon('ic-blank'),
 };
 
@@ -37,10 +38,11 @@ export function navData(t: TFunction<any, any>): NavSectionProps['data'] {
       subheader: t('overview'),
       items: [
         { title: t('dashboard'), path: paths.dashboard.root, icon: ICONS.dashboard },
-        // { title: t('auctions'), path: paths.dashboard.auctions, icon: ICONS.auctions },
-        // { title: t('inspections'), path: paths.dashboard.inspections, icon: ICONS.inspections },
-        // { title: t('sales'), path: paths.dashboard.sales, icon: ICONS.sales },
-        // { title: t('operations'), path: paths.dashboard.operations, icon: ICONS.operations },
+        { title: t('auctions'), path: paths.dashboard.auctions, icon: ICONS.auctions },
+        { title: t('inspections'), path: paths.dashboard.inspections, icon: ICONS.inspections },
+        { title: t('sales'), path: paths.dashboard.sales, icon: ICONS.sales },
+        { title: t('operations'), path: paths.dashboard.operations, icon: ICONS.operations },
+        { title: t('dataRoom'), path: paths.dashboard.dataRoom, icon: ICONS.dataRoom },
       ],
     },
   ];
