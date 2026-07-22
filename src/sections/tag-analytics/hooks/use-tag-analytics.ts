@@ -1,7 +1,7 @@
 import type { DashboardFilters } from 'src/components/dashboard';
 
 import dayjs from 'dayjs';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
@@ -19,8 +19,6 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { mockTags, mockTagGroups, mockWoodReportData } from '../data';
-
 // ----------------------------------------------------------------------
 
 export type TagMode = 'tag' | 'tags_group';
@@ -33,7 +31,7 @@ const initialTagAnalyticsFilters: DashboardFilters = {
 };
 
 export function useTagAnalytics() {
-  // ── Tag selector state ──────────────────────────────────────────────
+  // ── Tag selector state — null by default until user selects ────────
   const [tagMode, setTagMode] = useState<TagMode>('tag');
   const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
   const [selectedTagGroupId, setSelectedTagGroupId] = useState<number | null>(null);
@@ -54,17 +52,8 @@ export function useTagAnalytics() {
   const tagsQuery = useGetTagsList();
   const tagGroupsQuery = useGetTagGroupsList();
 
-  const tagsList = tagsQuery.data && tagsQuery.data.length > 0 ? tagsQuery.data : mockTags;
-  const tagGroupsList = tagGroupsQuery.data && tagGroupsQuery.data.length > 0 ? tagGroupsQuery.data : mockTagGroups;
-
-  // Auto-select first tag or tag group once loaded if none is selected
-  useEffect(() => {
-    if (tagMode === 'tag' && selectedTagId === null && tagsList.length > 0) {
-      setSelectedTagId(tagsList[0].id);
-    } else if (tagMode === 'tags_group' && selectedTagGroupId === null && tagGroupsList.length > 0) {
-      setSelectedTagGroupId(tagGroupsList[0].id);
-    }
-  }, [tagMode, selectedTagId, selectedTagGroupId, tagsList, tagGroupsList]);
+  const tagsList = tagsQuery.data ?? [];
+  const tagGroupsList = tagGroupsQuery.data ?? [];
 
   // ── Determine whether a valid selection exists ────────────────────────
   const hasSelection = useMemo(() => {
@@ -72,7 +61,7 @@ export function useTagAnalytics() {
     return selectedTagGroupId !== null;
   }, [tagMode, selectedTagId, selectedTagGroupId]);
 
-  // ── Fetch report (Actual API call) ───────────────────────────────────
+  // ── Fetch report (Actual API call — only enabled when user picks a tag) ──
   const reportFilters = useMemo(() => ({
     tag_mode: tagMode,
     tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
@@ -84,7 +73,7 @@ export function useTagAnalytics() {
   }), [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]);
 
   const reportQuery = useGetTagAnalyticsReport(reportFilters, hasSelection);
-  const reportData = reportQuery.data || mockWoodReportData;
+  const reportData = reportQuery.data;
 
   // ── Period breakdown segments from summary ────────────────────────────
   const periodBreakdownSegments = useMemo(() => {
@@ -96,12 +85,7 @@ export function useTagAnalytics() {
   }, [reportData]);
 
   // ── Computed aggregates from summary ─────────────────────────────────
-  const totalAuctions = useMemo(() => {
-    const rawTotal = reportData?.summary?.total_auctions ?? 0;
-    const breakdownSum = periodBreakdownSegments.reduce((sum, item) => sum + item.count, 0);
-    return Math.max(rawTotal, breakdownSum);
-  }, [reportData, periodBreakdownSegments]);
-
+  const totalAuctions = reportData?.summary?.total_auctions ?? 0;
   const highestPrice = reportData?.summary?.highest_price ?? 0;
   const lowestPrice = reportData?.summary?.lowest_price ?? 0;
   const currency = reportData?.auctions?.[0]?.currency ?? 'EGP';
