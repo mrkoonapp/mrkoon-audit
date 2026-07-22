@@ -18,7 +18,7 @@ const COLUMNS = [
   { id: 'index', label: '#', width: 48, align: 'center' as const },
   { id: 'auction_code', label: 'Auction Code', width: 140 },
   { id: 'auction_date', label: 'Date', width: 130, hideOnMobile: true },
-  { id: 'start_price', label: 'Start Price', width: 160, align: 'right' as const, hideOnMobile: true },
+  { id: 'start_price', label: 'Start Price', width: 160, align: 'right' as const },
   { id: 'highest_price', label: 'Highest Price', width: 160, align: 'right' as const },
 ];
 
@@ -42,13 +42,13 @@ export function TagAnalyticsTable({ auctions, loading, currency }: Props) {
         </Typography>
       ),
       start_price: (
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {fNumber(auction.start_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled' }}>{currency}</Typography>
+        <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 600 }}>
+          {fNumber(auction.start_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled', fontWeight: 400 }}>{currency}</Typography>
         </Typography>
       ),
       highest_price: (
         <Typography variant="subtitle2" sx={{ color: '#BF8654', fontWeight: 700 }}>
-          {fNumber(auction.highest_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled' }}>{currency}</Typography>
+          {fNumber(auction.highest_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled', fontWeight: 400 }}>{currency}</Typography>
         </Typography>
       ),
     },
