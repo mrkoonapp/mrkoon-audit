@@ -37,6 +37,7 @@ export const endpoints = {
       topCategories: 'audit/home/top-categories',
       topTags: 'audit/home/top-tags',
       successRate: 'audit/home/success-rate',
+      compare: 'audit/home/compare',
     },
     auctions: {
       kpis: 'audit/auctions/kpis',
