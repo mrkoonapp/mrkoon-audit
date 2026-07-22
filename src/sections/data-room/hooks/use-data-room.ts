@@ -119,8 +119,11 @@ export function useDataRoom() {
     const activeTabCompareData = compareCache[cacheKey] || compareQuery.data;
     const defaultLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-    // Extract label helper
-    let labelMap = activeTabCompareData?.label_map || {};
+    // labelMap may come as array [] from backend — normalize to plain object
+    const rawLabelMap = activeTabCompareData?.label_map;
+    let labelMap: Record<string | number, any> = (rawLabelMap && !Array.isArray(rawLabelMap))
+      ? rawLabelMap
+      : {};
 
     const formatLabel = (label: string | number) => {
       if (labelMap && labelMap[label]) {
@@ -175,36 +178,59 @@ export function useDataRoom() {
     let activeEG = egSeriesRaw;
     let activeSA = saSeriesRaw;
 
-    // Sort and group tags into "Other" if tags exceed 10
-    if (filters.group_by === 'tag' && rawLabels.length > 10) {
-      const tagItems = rawLabels.map((label: string | number, idx: number) => {
-        const egVal = egSeriesRaw[idx] || 0;
-        const saVal = saSeriesRaw[idx] || 0;
-        const totalVal = egVal + saVal;
-        return { label, egVal, saVal, totalVal };
-      });
+    // Typed helper for tag items
+    type TagItem = { label: string | number; egVal: number; saVal: number; totalVal: number };
+    let otherTagsBreakdown: TagItem[] = [];
 
-      // Sort descending
-      tagItems.sort((a: { totalVal: number }, b: { totalVal: number }) => b.totalVal - a.totalVal);
+    // Tag grouping: filter zeros, sort desc, keep top N, group rest into Others
+    if (filters.group_by === 'tag' || filters.group_by === 'tags_group') {
+      const MAX_VISIBLE = 9;
 
-      // Keep top 9 and group the rest
-      const topTags = tagItems.slice(0, 9);
-      const otherTags = tagItems.slice(9);
+      // Build tag items and filter out completely zero entries
+      const tagItems: TagItem[] = rawLabels
+        .map((label: string | number, idx: number) => {
+          const egVal = egSeriesRaw[idx] || 0;
+          const saVal = saSeriesRaw[idx] || 0;
+          const totalVal = egVal + saVal;
+          return { label, egVal, saVal, totalVal };
+        })
+        .filter((item: TagItem) => item.totalVal > 0);
 
-      const otherEgVal = otherTags.reduce((sum: number, item: { egVal: number }) => sum + item.egVal, 0);
-      const otherSaVal = otherTags.reduce((sum: number, item: { saVal: number }) => sum + item.saVal, 0);
+      // Sort descending by combined value
+      tagItems.sort((a: TagItem, b: TagItem) => b.totalVal - a.totalVal);
 
-      finalLabels = [...topTags.map((item: { label: string | number }) => item.label), 'other'];
-      activeEG = [...topTags.map((item: { egVal: number }) => item.egVal), otherEgVal];
-      activeSA = [...topTags.map((item: { saVal: number }) => item.saVal), otherSaVal];
+      if (tagItems.length <= MAX_VISIBLE) {
+        // No grouping needed — show all non-zero tags
+        finalLabels = tagItems.map((item: TagItem) => item.label);
+        activeEG = tagItems.map((item: TagItem) => item.egVal);
+        activeSA = tagItems.map((item: TagItem) => item.saVal);
+      } else {
+        // Keep top N, group the rest into "Others"
+        const topTags = tagItems.slice(0, MAX_VISIBLE);
+        otherTagsBreakdown = tagItems.slice(MAX_VISIBLE);
 
-      labelMap = {
-        ...labelMap,
-        other: { en: 'Other', ar: 'أخرى' },
-      };
+        const otherEgVal = otherTagsBreakdown.reduce((sum: number, item: TagItem) => sum + item.egVal, 0);
+        const otherSaVal = otherTagsBreakdown.reduce((sum: number, item: TagItem) => sum + item.saVal, 0);
+
+        finalLabels = [...topTags.map((item: TagItem) => item.label), 'other'];
+        activeEG = [...topTags.map((item: TagItem) => item.egVal), otherEgVal];
+        activeSA = [...topTags.map((item: TagItem) => item.saVal), otherSaVal];
+
+        labelMap = {
+          ...labelMap,
+          other: { en: 'Other', ar: 'أخرى' },
+        };
+      }
     }
 
     const formattedLabels = finalLabels.map(formatLabel);
+
+    // Debug: verify sort order in dev
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[DataRoom] sorted labels:', formattedLabels);
+      console.log('[DataRoom] EG data:', activeEG);
+      console.log('[DataRoom] otherTagsBreakdown:', otherTagsBreakdown);
+    }
 
     const statsEG = calculateStats(activeEG);
     const statsSA = calculateStats(activeSA);
@@ -336,6 +362,12 @@ export function useDataRoom() {
       saudiTrend: statsSA.trendText,
       saudiTrendDirection: statsSA.trendDirection,
       kpis,
+      // Breakdown of tags grouped into "Others" for rich tooltip display
+      otherTagsBreakdown: otherTagsBreakdown.map((item) => ({
+        label: String(labelMap?.[item.label]?.[currentLang] || labelMap?.[item.label]?.en || item.label),
+        egVal: item.egVal,
+        saVal: item.saVal,
+      })),
     };
   }, [
     compareQuery.data,
@@ -452,11 +484,46 @@ export function useDataRoom() {
         ],
       } : undefined,
       tooltip: {
-        shared: true,
-        intersect: false,
+        shared: false,
+        intersect: true,
         theme: isDark ? 'dark' : 'light',
-        y: {
-          formatter: (value: number) => formatAxisValue(value),
+        custom: ({ seriesIndex: _si, dataPointIndex, w }: {
+          seriesIndex: number;
+          dataPointIndex: number;
+          w: { config: { xaxis: { categories: string[] }; colors: string[] } };
+        }) => {
+          const label = w.config.xaxis.categories[dataPointIndex] ?? '';
+          // Detect the Others bar — last index when grouping, or by label text
+          const isOther = label === 'Other' || label === 'أخرى' ||
+            (dataPointIndex === processedData.labels.length - 1 && processedData.otherTagsBreakdown.length > 0);
+          const breakdown = processedData.otherTagsBreakdown;
+          const color = w.config.colors[0] ?? lineColor;
+
+          if (isOther && breakdown && breakdown.length > 0) {
+            const rows = breakdown
+              .map(
+                (item: { label: string; egVal: number; saVal: number }) =>
+                  `<div style="display:flex;justify-content:space-between;gap:12px;padding:2px 0;font-size:11px;">
+                    <span style="opacity:0.75">${item.label}</span>
+                    <span style="font-weight:600">${formatAxisValue(item.egVal + item.saVal)}</span>
+                  </div>`
+              )
+              .join('');
+
+            return `<div style="padding:10px 14px;min-width:180px;background:${isDark ? '#1C2430' : '#fff'};border-radius:8px;border:1px solid ${color}33;font-family:inherit">
+              <div style="font-weight:700;margin-bottom:6px;color:${color};font-size:12px">Other Tags</div>
+              ${rows}
+            </div>`;
+          }
+
+          // Default single-value tooltip
+          const egVal = processedData.egyptSeriesData[dataPointIndex] ?? 0;
+          const saVal = processedData.saudiSeriesData[dataPointIndex] ?? 0;
+          const val = lineColor === '#E05665' ? egVal : saVal;
+          return `<div style="padding:8px 12px;background:${isDark ? '#1C2430' : '#fff'};border-radius:8px;border:1px solid ${color}33;font-size:12px;font-family:inherit">
+            <span style="color:${color};font-weight:600">${label}: </span>
+            <span>${formatAxisValue(val)}</span>
+          </div>`;
         },
       },
     };
