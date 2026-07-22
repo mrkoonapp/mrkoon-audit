@@ -64,8 +64,9 @@ export function useDataRoom() {
     return 'transactions';
   }, [selectedTab]);
 
-  // Determine chart rendering type (area for date-based, bar for tag-based)
-  const chartType = useMemo<'area' | 'bar'>(() => (filters.group_by === 'tag' || filters.group_by === 'tags_group' ? 'bar' : 'area'), [filters.group_by]);
+  // Interactive Chart Mode state (Bar BI Chart by default, with Pie/Donut & Line options)
+  const [chartMode, setChartMode] = useState<'bar' | 'pie' | 'area'>('bar');
+  const chartType = useMemo<'bar' | 'donut' | 'area'>(() => (chartMode === 'pie' ? 'donut' : chartMode), [chartMode]);
 
   const queryParams = useMemo(() => ({
     ...buildQueryParams(filters),
@@ -393,19 +394,62 @@ export function useDataRoom() {
   const buildChartOptions = (lineColor: string, hoverVal: number, hoverMonth: string, labels: string[]) => {
     const isDark = theme.palette.mode === 'dark';
 
+    const pieColors = [
+      lineColor,
+      '#00A76F',
+      '#FFAB00',
+      '#00B8D9',
+      '#FF5630',
+      '#8E33FF',
+      '#FFC107',
+      '#007B55',
+    ];
+
     return {
-      colors: [lineColor],
+      colors: chartType === 'donut' ? pieColors : [lineColor],
+      labels,
       stroke: {
         show: true,
-        width: chartType === 'bar' ? 2 : 3,
-        colors: chartType === 'bar' ? ['transparent'] : [lineColor],
+        width: chartType === 'bar' ? 2 : chartType === 'donut' ? 2 : 3,
+        colors: chartType === 'bar' ? ['transparent'] : chartType === 'donut' ? [isDark ? '#11161D' : '#ffffff'] : [lineColor],
         curve: 'smooth' as any,
+      },
+      legend: {
+        show: chartType === 'donut',
+        position: 'bottom' as const,
+        horizontalAlign: 'center' as const,
       },
       plotOptions: {
         bar: {
           horizontal: false,
           columnWidth: '35%',
           borderRadius: 6,
+        },
+        pie: {
+          donut: {
+            size: '72%',
+            labels: {
+              show: true,
+              value: {
+                offsetY: 8,
+                color: theme.palette.text.primary,
+                fontSize: theme.typography.h4.fontSize as string,
+                fontWeight: theme.typography.h4.fontWeight,
+                formatter: (val: string | number) => formatAxisValue(Number(val)),
+              },
+              total: {
+                show: true,
+                label: 'Total',
+                color: theme.palette.text.secondary,
+                fontSize: theme.typography.subtitle2.fontSize as string,
+                fontWeight: theme.typography.subtitle2.fontWeight,
+                formatter: (w: any) => {
+                  const sum = (w.globals?.seriesTotals || []).reduce((a: number, b: number) => a + b, 0);
+                  return formatAxisValue(sum);
+                },
+              },
+            },
+          },
         },
       },
       xaxis: {
@@ -437,67 +481,113 @@ export function useDataRoom() {
         xaxis: { lines: { show: true } },
         yaxis: { lines: { show: true } },
       },
-      fill: chartType === 'bar'
-        ? {
-            type: 'solid',
-            opacity: 0.85,
-          }
-        : {
-            type: 'gradient',
-            gradient: {
-              shadeIntensity: 0,
-              opacityFrom: 0.25,
-              opacityTo: 0,
-              stops: [0, 100],
+      fill:
+        chartType === 'bar' || chartType === 'donut'
+          ? {
+              type: 'solid',
+              opacity: 0.85,
+            }
+          : {
+              type: 'gradient',
+              gradient: {
+                shadeIntensity: 0,
+                opacityFrom: 0.25,
+                opacityTo: 0,
+                stops: [0, 100],
+              },
             },
-          },
       markers: {
         size: 0,
         hover: { size: 6 },
       },
-      annotations: chartType === 'area' ? {
-        points: [
-          {
-            x: hoverMonth,
-            y: hoverVal,
-            marker: {
-              size: 6,
-              fillColor: lineColor,
-              strokeColor: '#FFFFFF',
-              strokeWidth: 2,
-              radius: 2,
-            },
-            label: {
-              borderColor: lineColor,
-              borderWidth: 1,
-              borderRadius: 6,
-              text: `${hoverMonth}: ${formatAxisValue(hoverVal)}`,
-              style: {
-                color: '#FFFFFF',
-                background: lineColor,
-                fontSize: '11px',
-                fontWeight: 'bold',
-                cssClass: 'apexcharts-point-annotation-label',
-              },
-            },
-          },
-        ],
-      } : undefined,
+      annotations:
+        chartType === 'area'
+          ? {
+              points: [
+                {
+                  x: hoverMonth,
+                  y: hoverVal,
+                  marker: {
+                    size: 6,
+                    fillColor: lineColor,
+                    strokeColor: '#FFFFFF',
+                    strokeWidth: 2,
+                    radius: 2,
+                  },
+                  label: {
+                    borderColor: lineColor,
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    text: `${hoverMonth}: ${formatAxisValue(hoverVal)}`,
+                    style: {
+                      color: '#FFFFFF',
+                      background: lineColor,
+                      fontSize: '11px',
+                      fontWeight: 'bold',
+                      cssClass: 'apexcharts-point-annotation-label',
+                    },
+                  },
+                },
+              ],
+            }
+          : undefined,
       tooltip: {
         shared: false,
         intersect: true,
         theme: isDark ? 'dark' : 'light',
-        custom: ({ seriesIndex: _si, dataPointIndex, w }: {
+        custom: ({
+          seriesIndex,
+          dataPointIndex,
+          w,
+        }: {
           seriesIndex: number;
           dataPointIndex: number;
-          w: { config: { xaxis: { categories: string[] }; colors: string[] } };
+          w: any;
         }) => {
-          const label = w.config.xaxis.categories[dataPointIndex] ?? '';
+          if (chartType === 'donut') {
+            const idx = seriesIndex !== undefined && seriesIndex !== -1 ? seriesIndex : dataPointIndex;
+            const label = labels[idx] ?? '';
+            const val = w.globals?.series?.[idx] ?? 0;
+            const colorsList = w.config?.colors ?? pieColors;
+            const sliceColor = colorsList[idx % colorsList.length] ?? lineColor;
+
+            const isOther =
+              label === 'Other' ||
+              label === 'أخرى' ||
+              (idx === processedData.labels.length - 1 && processedData.otherTagsBreakdown.length > 0);
+            const breakdown = processedData.otherTagsBreakdown;
+
+            if (isOther && breakdown && breakdown.length > 0) {
+              const rows = breakdown
+                .map(
+                  (item: { label: string; egVal: number; saVal: number }) =>
+                    `<div style="display:flex;justify-content:space-between;gap:12px;padding:2px 0;font-size:11px;">
+                      <span style="opacity:0.75">${item.label}</span>
+                      <span style="font-weight:600">${formatAxisValue(lineColor === '#E05665' ? item.egVal : item.saVal)}</span>
+                    </div>`
+                )
+                .join('');
+
+              return `<div style="padding:10px 14px;min-width:180px;background:${isDark ? '#1C2430' : '#fff'};border-radius:8px;border:1px solid ${sliceColor}33;font-family:inherit">
+                <div style="font-weight:700;margin-bottom:6px;color:${sliceColor};font-size:12px">Other Tags</div>
+                ${rows}
+              </div>`;
+            }
+
+            return `<div style="padding:8px 12px;background:${isDark ? '#1C2430' : '#fff'};border-radius:8px;border:1px solid ${sliceColor}33;font-size:12px;font-family:inherit">
+              <span style="color:${sliceColor};font-weight:600">${label}: </span>
+              <span>${formatAxisValue(val)}</span>
+            </div>`;
+          }
+
+          const label = w.config?.xaxis?.categories?.[dataPointIndex] ?? labels[dataPointIndex] ?? '';
           // Detect the Others bar — last index when grouping, or by label text
-          const isOther = label === 'Other' || label === 'أخرى' ||
+          const isOther =
+            label === 'Other' ||
+            label === 'أخرى' ||
             (dataPointIndex === processedData.labels.length - 1 && processedData.otherTagsBreakdown.length > 0);
           const breakdown = processedData.otherTagsBreakdown;
-          const color = w.config.colors[0] ?? lineColor;
+          const color = w.config?.colors?.[0] ?? lineColor;
 
           if (isOther && breakdown && breakdown.length > 0) {
             const rows = breakdown
@@ -541,19 +631,25 @@ export function useDataRoom() {
     buildChartOptions('#2EB67D', saudiHoverVal, hoverMonth, processedData.labels)
   );
 
-  const egyptSeries = [
-    {
-      name: 'Egypt',
-      data: processedData.egyptSeriesData,
-    },
-  ];
+  const egyptSeries =
+    chartType === 'donut'
+      ? processedData.egyptSeriesData
+      : [
+          {
+            name: 'Egypt',
+            data: processedData.egyptSeriesData,
+          },
+        ];
 
-  const saudiSeries = [
-    {
-      name: 'Saudi Arabia',
-      data: processedData.saudiSeriesData,
-    },
-  ];
+  const saudiSeries =
+    chartType === 'donut'
+      ? processedData.saudiSeriesData
+      : [
+          {
+            name: 'Saudi Arabia',
+            data: processedData.saudiSeriesData,
+          },
+        ];
 
   const performanceTabs = [
     { value: 'buyers', label: 'Buyers', icon: 'solar:users-group-rounded-bold-duotone' },
@@ -589,6 +685,8 @@ export function useDataRoom() {
     saudiSeries,
     performanceTabs,
     chartType,
+    chartMode,
+    setChartMode,
     onViewAll: handleViewAll,
   };
 }
