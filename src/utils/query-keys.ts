@@ -46,6 +46,7 @@ export const queryKeys = {
       participatedClients: (filters: any) =>
         [...queryKeys.audit.all, 'auctions', 'participatedClients', filters] as const,
       list: (filters: any) => [...queryKeys.audit.all, 'auctions', 'list', filters] as const,
+      reportByTag: (filters: any) => [...queryKeys.audit.all, 'auctions', 'reportByTag', filters] as const,
     },
     inspections: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'inspections', 'kpis', filters] as const,
@@ -74,6 +75,8 @@ export const queryKeys = {
     onboarding: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'onboarding', 'kpis', filters] as const,
     },
+    tags: (filters: any) => [...queryKeys.audit.all, 'tags', filters] as const,
+    tagGroups: (filters: any) => [...queryKeys.audit.all, 'tagGroups', filters] as const,
   },
 } as const;
 
