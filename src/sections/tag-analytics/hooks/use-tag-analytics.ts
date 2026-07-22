@@ -102,13 +102,13 @@ export function useTagAnalytics() {
     }
 
     const map: Record<string, string> = {
-      weekly: 'Weekly',
-      monthly: 'Monthly',
-      quarterly: 'Quarterly',
-      yearly: 'Yearly',
+      weekly: 'Last Week',
+      monthly: 'Last Month',
+      quarterly: 'Last Quarter',
+      yearly: 'Last Year',
     };
 
-    return map[filters.period] ?? (filters.period ? filters.period : 'Quarterly');
+    return map[filters.period] ?? (filters.period ? filters.period : 'Last Quarter');
   }, [filters]);
 
   // ── Period label for display ─────────────────────────────────────────
