@@ -1,10 +1,10 @@
+import type { TagAnalyticsAuction } from 'src/api/tag-analytics';
+
 import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
 
 import { TableWidgetCard } from 'src/components/dashboard';
-
-import type { TagAnalyticsAuction } from 'src/api/tag-analytics';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ export function TagAnalyticsTable({ auctions, loading, currency }: Props) {
         </Typography>
       ),
       auction_code: (
-        <Typography variant="body2" sx={{ fontWeight: 600, fontFamily: 'monospace' }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
           {auction.auction_code}
         </Typography>
       ),
@@ -43,18 +43,12 @@ export function TagAnalyticsTable({ auctions, loading, currency }: Props) {
       ),
       start_price: (
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {fNumber(auction.start_price)}{' '}
-          <Typography component="span" variant="caption" sx={{ color: 'text.disabled' }}>
-            {currency}
-          </Typography>
+          {fNumber(auction.start_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled' }}>{currency}</Typography>
         </Typography>
       ),
       highest_price: (
-        <Typography variant="body2" sx={{ fontWeight: 700, color: '#BF8654' }}>
-          {fNumber(auction.highest_price)}{' '}
-          <Typography component="span" variant="caption" sx={{ color: 'text.secondary', fontWeight: 400 }}>
-            {currency}
-          </Typography>
+        <Typography variant="subtitle2" sx={{ color: '#BF8654', fontWeight: 700 }}>
+          {fNumber(auction.highest_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled' }}>{currency}</Typography>
         </Typography>
       ),
     },
@@ -65,10 +59,7 @@ export function TagAnalyticsTable({ auctions, loading, currency }: Props) {
       title="Auction Details"
       columns={COLUMNS}
       rows={rows}
-      minWidth={580}
       loading={loading}
-      emptyTitle="No Auctions"
-      emptyDescription="Select a tag or tag group and a date range to see auction results."
     />
   );
 }

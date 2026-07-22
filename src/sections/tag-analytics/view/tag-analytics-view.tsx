@@ -4,11 +4,11 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
 import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { paths } from 'src/routes/paths';
@@ -20,14 +20,14 @@ import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
-import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import { DashboardFiltersDrawer } from 'src/components/dashboard';
+import { CircleArrowButton } from 'src/components/circle-arrow-button';
 
 import { useTagAnalytics } from '../hooks/use-tag-analytics';
 import {
   TagAnalyticsTable,
-  TagAnalyticsHeroCards,
   TagAnalyticsPriceBox,
+  TagAnalyticsHeroCards,
 } from '../components';
 
 import type { TagMode } from '../hooks/use-tag-analytics';
@@ -209,7 +209,7 @@ export function TagAnalyticsView() {
                 sx={{ minWidth: 220, flex: 1, maxWidth: 340 }}
                 options={tags}
                 loading={tagsLoading}
-                value={tags.find((t) => t.id === selectedTagId) ?? null}
+                value={tags.find((item) => item.id === selectedTagId) ?? null}
                 onChange={(_e, val) => setSelectedTagId(val?.id ?? null)}
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(opt, val) => opt.id === val.id}
