@@ -1,3 +1,5 @@
+import { useState, useMemo } from 'react';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
@@ -28,6 +30,7 @@ import {
   TagAnalyticsTable,
   TagAnalyticsPriceBox,
   TagAnalyticsHeroCards,
+  TagAnalyticsSuccessRate,
 } from '../components';
 
 import type { TagMode } from '../hooks/use-tag-analytics';
@@ -46,6 +49,10 @@ export function TagAnalyticsView() {
     setSelectedTagId,
     selectedTagGroupId,
     setSelectedTagGroupId,
+    tagSearchQuery,
+    setTagSearchQuery,
+    groupSearchQuery,
+    setGroupSearchQuery,
     filters,
     filtersOpen,
     setFiltersOpen,
@@ -57,13 +64,16 @@ export function TagAnalyticsView() {
     setSearch,
     isLoading,
     hasSelection,
+    selectedOptionName,
     totalAuctions,
     highestPrice,
     lowestPrice,
     currency,
-    granularityLabel,
-    periodBreakdownSegments,
+    // granularityLabel,
+    // periodBreakdownSegments,
     auctionRows,
+    tagsSuccessRate,
+    tagsSuccessRateLoading,
     tags,
     tagGroups,
     tagsLoading,
@@ -71,6 +81,80 @@ export function TagAnalyticsView() {
   } = useTagAnalytics();
 
   const isDark = theme.palette.mode === 'dark';
+
+  // ── State for Autocomplete Dropdown Scroll Pagination ──────────
+  const [tagLimit, setTagLimit] = useState(20);
+  const [groupLimit, setGroupLimit] = useState(20);
+
+  // Filter tags list based on tagSearchQuery
+  const filteredTags = useMemo(() => {
+    if (!tagSearchQuery.trim()) return tags;
+    const q = tagSearchQuery.trim().toLowerCase();
+    return tags.filter((opt) => {
+      const idStr = String(opt.id);
+      let enStr = '';
+      let arStr = '';
+      if (typeof opt.name === 'string') {
+        enStr = opt.name.toLowerCase();
+        arStr = opt.name.toLowerCase();
+      } else if (opt.name) {
+        enStr = (opt.name.en || '').toLowerCase();
+        arStr = (opt.name.ar || '').toLowerCase();
+      }
+      if (opt.name_en) enStr = opt.name_en.toLowerCase();
+      if (opt.name_ar) arStr = opt.name_ar.toLowerCase();
+      return idStr.includes(q) || enStr.includes(q) || arStr.includes(q);
+    });
+  }, [tags, tagSearchQuery]);
+
+  const visibleTags = useMemo(
+    () => filteredTags.slice(0, tagLimit),
+    [filteredTags, tagLimit]
+  );
+
+  // Filter tag groups list based on groupSearchQuery
+  const filteredTagGroups = useMemo(() => {
+    if (!groupSearchQuery.trim()) return tagGroups;
+    const q = groupSearchQuery.trim().toLowerCase();
+    return tagGroups.filter((opt) => {
+      const idStr = String(opt.id);
+      let enStr = '';
+      let arStr = '';
+      if (typeof opt.name === 'string') {
+        enStr = opt.name.toLowerCase();
+        arStr = opt.name.toLowerCase();
+      } else if (opt.name) {
+        enStr = (opt.name.en || '').toLowerCase();
+        arStr = (opt.name.ar || '').toLowerCase();
+      }
+      if (opt.name_en) enStr = opt.name_en.toLowerCase();
+      if (opt.name_ar) arStr = opt.name_ar.toLowerCase();
+      return idStr.includes(q) || enStr.includes(q) || arStr.includes(q);
+    });
+  }, [tagGroups, groupSearchQuery]);
+
+  const visibleTagGroups = useMemo(
+    () => filteredTagGroups.slice(0, groupLimit),
+    [filteredTagGroups, groupLimit]
+  );
+
+  const handleTagScroll = (e: React.UIEvent<HTMLUListElement>) => {
+    const target = e.currentTarget;
+    if (target.scrollHeight - (target.scrollTop + target.clientHeight) < 40) {
+      if (tagLimit < filteredTags.length) {
+        setTagLimit((prev) => prev + 20);
+      }
+    }
+  };
+
+  const handleGroupScroll = (e: React.UIEvent<HTMLUListElement>) => {
+    const target = e.currentTarget;
+    if (target.scrollHeight - (target.scrollTop + target.clientHeight) < 40) {
+      if (groupLimit < filteredTagGroups.length) {
+        setGroupLimit((prev) => prev + 20);
+      }
+    }
+  };
 
   // Resolve display name for a tag/group option
   const getOptionLabel = (option: { id: number; name: string | { en: string; ar: string } }) =>
@@ -146,6 +230,10 @@ export function TagAnalyticsView() {
                   setTagMode(val);
                   setSelectedTagId(null);
                   setSelectedTagGroupId(null);
+                  setTagSearchQuery('');
+                  setGroupSearchQuery('');
+                  setTagLimit(20);
+                  setGroupLimit(20);
                 }
               }}
               sx={{
@@ -207,12 +295,27 @@ export function TagAnalyticsView() {
             {tagMode === 'tag' ? (
               <Autocomplete
                 sx={{ minWidth: 220, flex: 1, maxWidth: 340 }}
-                options={tags}
+                options={visibleTags}
                 loading={tagsLoading}
+                autoHighlight
                 value={tags.find((item) => item.id === selectedTagId) ?? null}
                 onChange={(_e, val) => setSelectedTagId(val?.id ?? null)}
+                onInputChange={(_e, newInputValue, reason) => {
+                  if (reason === 'input' || reason === 'clear') {
+                    setTagSearchQuery(newInputValue);
+                    setTagLimit(20);
+                  }
+                }}
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                filterOptions={(x) => x}
+                ListboxProps={{
+                  onScroll: handleTagScroll,
+                  sx: {
+                    maxHeight: 260,
+                    overflow: 'auto',
+                  },
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -225,12 +328,27 @@ export function TagAnalyticsView() {
             ) : (
               <Autocomplete
                 sx={{ minWidth: 220, flex: 1, maxWidth: 340 }}
-                options={tagGroups}
+                options={visibleTagGroups}
                 loading={tagGroupsLoading}
+                autoHighlight
                 value={tagGroups.find((g) => g.id === selectedTagGroupId) ?? null}
                 onChange={(_e, val) => setSelectedTagGroupId(val?.id ?? null)}
+                onInputChange={(_e, newInputValue, reason) => {
+                  if (reason === 'input' || reason === 'clear') {
+                    setGroupSearchQuery(newInputValue);
+                    setGroupLimit(20);
+                  }
+                }}
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                filterOptions={(x) => x}
+                ListboxProps={{
+                  onScroll: handleGroupScroll,
+                  sx: {
+                    maxHeight: 260,
+                    overflow: 'auto',
+                  },
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -301,74 +419,70 @@ export function TagAnalyticsView() {
         </Stack>
       </Card>
 
-      {/* ── Content (Shown when a tag/group is selected) ── */}
-      {hasSelection ? (
-        <Stack spacing={4}>
-          {/* Row 1 — Hero Period Cards (Total Auctions 1st, then April, May, June) */}
-          <TagAnalyticsHeroCards
-            segments={periodBreakdownSegments}
-            totalAuctions={totalAuctions}
-            granularityLabel={granularityLabel}
-          />
-
-          {/* Row 2 — Highest Price & Lowest Price Cards */}
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TagAnalyticsPriceBox
-                type="highest"
-                price={highestPrice}
-                currency={currency}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TagAnalyticsPriceBox
-                type="lowest"
-                price={lowestPrice}
-                currency={currency}
-              />
-            </Grid>
-          </Grid>
-
-          {/* Row 3 — Auctions Table */}
-          <TagAnalyticsTable
-            auctions={auctionRows}
-            loading={isLoading}
-            currency={currency}
-          />
-        </Stack>
-      ) : (
-        /* Empty State */
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          spacing={2}
-          sx={{
-            py: 12,
-            borderRadius: 2.5,
-            border: `1px dashed ${isDark ? '#1D2633' : theme.palette.divider}`,
+      {/* ── Always Visible: Success Rate Report for All Tags/Groups ── */}
+      <Stack spacing={4}>
+        <TagAnalyticsSuccessRate
+          data={tagsSuccessRate}
+          loading={tagsSuccessRateLoading}
+          tagMode={tagMode}
+          selectedName={selectedOptionName}
+          onSelectTag={(id) => {
+            if (tagMode === 'tag') {
+              setSelectedTagId(id);
+            } else {
+              setSelectedTagGroupId(id);
+            }
           }}
-        >
-          <Box
+        />
+
+        {/* ── Selection Specific Details (Hero cards, Prices, Auctions Table) ── */}
+        {hasSelection ? (
+          <>
+            <TagAnalyticsHeroCards
+              totalAuctions={totalAuctions}
+              /* segments={periodBreakdownSegments} */
+              /* granularityLabel={granularityLabel} */
+            />
+
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TagAnalyticsPriceBox
+                  type="highest"
+                  price={highestPrice}
+                  currency={currency}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TagAnalyticsPriceBox
+                  type="lowest"
+                  price={lowestPrice}
+                  currency={currency}
+                />
+              </Grid>
+            </Grid>
+
+            <TagAnalyticsTable
+              auctions={auctionRows}
+              loading={isLoading}
+              currency={currency}
+            />
+          </>
+        ) : (
+          <Card
             sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              bgcolor: isDark ? '#1D2633' : '#F4F6F8',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              p: 3,
+              textAlign: 'center',
+              bgcolor: isDark ? '#11161D' : 'background.paper',
+              border: `1px dashed ${isDark ? '#1D2633' : theme.palette.divider}`,
+              borderRadius: 2.5,
             }}
           >
-            <Iconify icon={"solar:tag-bold-duotone" as any} width={32} sx={{ color: '#BF8654' }} />
-          </Box>
-          <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-            Select a tag to view analytics
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.disabled', textAlign: 'center', maxWidth: 360 }}>
-            Use the tag selector in the toolbar above to choose a tag or tag group.
-          </Typography>
-        </Stack>
-      )}
+            <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+              💡 Select a tag or tag group from the dropdown above to inspect detailed auction records and price ranges.
+            </Typography>
+          </Card>
+        )}
+      </Stack>
 
       {/* ── Dashboard Filters Drawer ── */}
       <DashboardFiltersDrawer

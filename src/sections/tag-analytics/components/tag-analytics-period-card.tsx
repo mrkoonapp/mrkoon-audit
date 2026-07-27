@@ -80,7 +80,7 @@ export function TagAnalyticsPeriodCard({
         {/* Right — total auctions */}
         <Stack alignItems="flex-end">
           <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
-            Total Auctions
+            Total Ended Auctions
           </Typography>
           <Typography variant="h4" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
             {totalAuctions}

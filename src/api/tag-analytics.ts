@@ -46,6 +46,19 @@ export interface TagAnalyticsAuction {
   currency?: string;
 }
 
+export interface TagSuccessRateItem {
+  id: number;
+  name: string | { en: string; ar: string };
+  period_key?: string;
+  date_label?: string;
+  title_ar?: string;
+  title_en?: string;
+  total_products: number;
+  successful_auctions: number;
+  failed_auctions: number;
+  success_rate: number;
+}
+
 export interface TagAnalyticsReportResponse {
   summary: TagAnalyticsSummary;
   auctions: TagAnalyticsAuction[];
@@ -72,10 +85,17 @@ export interface TagAnalyticsFilters {
 export function buildTagAnalyticsParams(filters: TagAnalyticsFilters) {
   const params: Record<string, any> = {};
 
-  if (filters.tag_mode === 'tag' && filters.tag_id) {
+  if (filters.tag_id) {
     params.tag_id = filters.tag_id;
-  } else if (filters.tag_mode === 'tags_group' && filters.tags_group_id) {
+  }
+  if (filters.tags_group_id) {
     params.tags_group_id = filters.tags_group_id;
+  }
+
+  if (filters.group_by) {
+    params.group_by = filters.group_by;
+  } else if (filters.tag_mode) {
+    params.group_by = filters.tag_mode;
   }
 
   if (filters.period && filters.period !== 'custom') {
@@ -96,11 +116,17 @@ export function buildTagAnalyticsParams(filters: TagAnalyticsFilters) {
  * Fetches all available product tags for dropdown selection.
  * Maps to GET /apiAdmin/audit/tags
  */
-export function useGetTagsList() {
+export function useGetTagsList(search?: string) {
+  const params: Record<string, any> = { limit: 1000, per_page: 1000 };
+  if (search?.trim()) {
+    params.search_text = search.trim();
+    params.search = search.trim();
+  }
+
   return useQuery({
-    queryKey: queryKeys.audit.tags({}),
+    queryKey: queryKeys.audit.tags({ search }),
     queryFn: async () => {
-      const response = await axiosInstance.get<any>(endpoints.audit.tags);
+      const response = await axiosInstance.get<any>(endpoints.audit.tags, { params });
       const resData = response.data?.data;
       if (Array.isArray(resData)) return resData as TagOption[];
       if (Array.isArray(resData?.data)) return resData.data as TagOption[];
@@ -113,11 +139,17 @@ export function useGetTagsList() {
  * Fetches all available tag groups for tag group selection.
  * Maps to GET /apiAdmin/audit/tag-groups
  */
-export function useGetTagGroupsList() {
+export function useGetTagGroupsList(search?: string) {
+  const params: Record<string, any> = { limit: 1000, per_page: 1000 };
+  if (search?.trim()) {
+    params.search_text = search.trim();
+    params.search = search.trim();
+  }
+
   return useQuery({
-    queryKey: queryKeys.audit.tagGroups({}),
+    queryKey: queryKeys.audit.tagGroups({ search }),
     queryFn: async () => {
-      const response = await axiosInstance.get<any>(endpoints.audit.tagGroups);
+      const response = await axiosInstance.get<any>(endpoints.audit.tagGroups, { params });
       const resData = response.data?.data;
       if (Array.isArray(resData)) return resData as TagGroupOption[];
       if (Array.isArray(resData?.data)) return resData.data as TagGroupOption[];
@@ -132,17 +164,39 @@ export function useGetTagGroupsList() {
  *   GET /apiAdmin/audit/auctions/report-by-tag?tag_id=3&period=monthly
  *   GET /apiAdmin/audit/auctions/report-by-tag?tags_group_id=1&period=monthly&country_id=2
  */
-export function useGetTagAnalyticsReport(filters: TagAnalyticsFilters, enabled: boolean) {
+export function useGetTagAnalyticsReport(filters: TagAnalyticsFilters, enabled: boolean = true) {
   const params = buildTagAnalyticsParams(filters);
 
   return useQuery({
-    queryKey: queryKeys.audit.auctions.reportByTag(filters),
+    queryKey: queryKeys.audit.auctions.reportByTag(params),
     queryFn: async () => {
       const response = await axiosInstance.get<{ data: TagAnalyticsReportResponse }>(
         endpoints.audit.auctions.reportByTag,
         { params }
       );
       return response.data.data;
+    },
+    enabled,
+  });
+}
+
+/**
+ * Fetches tags success rate report.
+ * Maps to GET /apiAdmin/audit/auctions/tags-success-rate
+ */
+export function useGetTagsSuccessRate(filters: TagAnalyticsFilters, enabled: boolean = true) {
+  const params = buildTagAnalyticsParams(filters);
+
+  return useQuery({
+    queryKey: queryKeys.audit.auctions.tagsSuccessRate(params),
+    queryFn: async () => {
+      const response = await axiosInstance.get<{ data: TagSuccessRateItem[] }>(
+        endpoints.audit.auctions.tagsSuccessRate,
+        { params }
+      );
+      const resData = response.data?.data;
+      if (Array.isArray(resData)) return resData;
+      return [];
     },
     enabled,
   });

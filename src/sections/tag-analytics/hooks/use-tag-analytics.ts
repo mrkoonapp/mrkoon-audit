@@ -6,11 +6,13 @@ import { useMemo, useState } from 'react';
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
 import { DATE_PERIODS } from 'src/utils/constants';
+import { getLocalizedText } from 'src/utils/format-string';
 
 import { buildQueryParams } from 'src/api/audit';
 import {
   useGetTagsList,
   useGetTagGroupsList,
+  useGetTagsSuccessRate,
   useGetTagAnalyticsReport,
 } from 'src/api/tag-analytics';
 
@@ -37,6 +39,10 @@ export function useTagAnalytics() {
   const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
   const [selectedTagGroupId, setSelectedTagGroupId] = useState<number | null>(null);
 
+  // ── Search query states for Autocomplete dropdowns ─────────────────
+  const [tagSearchQuery, setTagSearchQuery] = useState('');
+  const [groupSearchQuery, setGroupSearchQuery] = useState('');
+
   // ── Search & filters drawer ──────────────────────────────────────────
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -50,11 +56,36 @@ export function useTagAnalytics() {
   const baseParams = useMemo(() => buildQueryParams(filters), [filters]);
 
   // ── Dropdown options fetched via API ─────────────────────────────────
-  const tagsQuery = useGetTagsList();
-  const tagGroupsQuery = useGetTagGroupsList();
+  const tagsQuery = useGetTagsList(tagSearchQuery);
+  const tagGroupsQuery = useGetTagGroupsList(groupSearchQuery);
 
   const tagsList = tagsQuery.data ?? [];
   const tagGroupsList = tagGroupsQuery.data ?? [];
+
+  // ── Selected option object & name resolution ─────────────────────────
+  const selectedTag = useMemo(
+    () => tagsList.find((item) => item.id === selectedTagId) ?? null,
+    [tagsList, selectedTagId]
+  );
+
+  const selectedTagGroup = useMemo(
+    () => tagGroupsList.find((g) => g.id === selectedTagGroupId) ?? null,
+    [tagGroupsList, selectedTagGroupId]
+  );
+
+  const selectedOptionName = useMemo(() => {
+    if (tagMode === 'tag' && selectedTag) {
+      return typeof selectedTag.name === 'string'
+        ? selectedTag.name
+        : getLocalizedText(selectedTag.name as any, 'en');
+    }
+    if (tagMode === 'tags_group' && selectedTagGroup) {
+      return typeof selectedTagGroup.name === 'string'
+        ? selectedTagGroup.name
+        : getLocalizedText(selectedTagGroup.name as any, 'en');
+    }
+    return null;
+  }, [tagMode, selectedTag, selectedTagGroup]);
 
   // ── Determine whether a valid selection exists ────────────────────────
   const hasSelection = useMemo(() => {
@@ -75,6 +106,20 @@ export function useTagAnalytics() {
 
   const reportQuery = useGetTagAnalyticsReport(reportFilters, hasSelection);
   const reportData = reportQuery.data;
+
+  // ── Fetch tags success rate standalone report ──
+  const tagsSuccessRateFilters = useMemo(() => ({
+    tag_mode: tagMode,
+    group_by: tagMode,
+    tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
+    tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
+    period: filters.period || 'quarterly',
+    date_from: baseParams.date_from,
+    date_to: baseParams.date_to,
+    country_id: baseParams.country_id,
+  }), [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]);
+
+  const tagsSuccessRateQuery = useGetTagsSuccessRate(tagsSuccessRateFilters, true);
 
   // ── Period breakdown segments from summary ────────────────────────────
   const periodBreakdownSegments = useMemo(() => {
@@ -144,6 +189,20 @@ export function useTagAnalytics() {
     );
   }, [reportData, search]);
 
+  // ── Tags success rate rows — apply search filter ──────────────────────
+  const successRateRows = useMemo(() => {
+    const rows = tagsSuccessRateQuery.data ?? [];
+    if (!search) return rows;
+    const q = search.toLowerCase();
+    return rows.filter((item) => {
+      const nameStr =
+        typeof item.name === 'string'
+          ? item.name
+          : `${item.name?.en ?? ''} ${item.name?.ar ?? ''}`;
+      return nameStr.toLowerCase().includes(q) || String(item.id).includes(q);
+    });
+  }, [tagsSuccessRateQuery.data, search]);
+
   return {
     // tag selector
     tagMode,
@@ -152,6 +211,10 @@ export function useTagAnalytics() {
     setSelectedTagId,
     selectedTagGroupId,
     setSelectedTagGroupId,
+    tagSearchQuery,
+    setTagSearchQuery,
+    groupSearchQuery,
+    setGroupSearchQuery,
     // filter drawer
     filters,
     filtersOpen,
@@ -166,6 +229,7 @@ export function useTagAnalytics() {
     // data states
     isLoading: reportQuery.isLoading,
     hasSelection,
+    selectedOptionName,
     // aggregates
     totalAuctions,
     highestPrice,
@@ -175,8 +239,10 @@ export function useTagAnalytics() {
     granularityLabel,
     // breakdown segments
     periodBreakdownSegments,
-    // table
+    // tables
     auctionRows,
+    tagsSuccessRate: successRateRows,
+    tagsSuccessRateLoading: tagsSuccessRateQuery.isLoading,
     // dropdown options
     tags: tagsList,
     tagGroups: tagGroupsList,
