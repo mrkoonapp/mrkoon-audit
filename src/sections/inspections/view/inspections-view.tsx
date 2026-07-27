@@ -11,11 +11,12 @@ import Typography from '@mui/material/Typography';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
+import { getLocalizedText } from 'src/utils/format-string';
 import { fNumber, fPercent } from 'src/utils/format-number';
 
-import { getLocalizedText } from 'src/utils/format-string';
 import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetInspectionsDashboardData } from 'src/api/audit';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -32,7 +33,6 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { useGetInspectionsDashboardData } from 'src/api/audit';
 import { inspectionsMockData } from '../data';
 
 import type { InspectionStat } from '../data';

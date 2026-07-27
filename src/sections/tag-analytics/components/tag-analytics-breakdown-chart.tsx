@@ -121,7 +121,11 @@ export function TagAnalyticsBreakdownChart({ granularityLabel, breakdown }: Prop
         {breakdown.length > 0 ? (
           <Chart type="bar" series={series} options={chartOptions} sx={{ height: 260 }} />
         ) : (
-          <Stack alignItems="center" justifyContent="center" sx={{ height: 1, color: 'text.disabled' }}>
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            sx={{ height: 1, color: 'text.disabled' }}
+          >
             <Typography variant="body2">No data for selected period</Typography>
           </Stack>
         )}

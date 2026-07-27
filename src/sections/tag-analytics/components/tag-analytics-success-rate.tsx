@@ -1,13 +1,16 @@
+import type { TagSuccessRateItem } from 'src/api/tag-analytics';
+
+import { useMemo, useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useState, useMemo } from 'react';
 
 import { getLocalizedText } from 'src/utils/format-string';
 import { fNumber, fPercent } from 'src/utils/format-number';
@@ -19,8 +22,6 @@ import { Iconify } from 'src/components/iconify';
 import { Chart, useChart } from 'src/components/chart';
 import { TableWidgetCard } from 'src/components/dashboard';
 import { TablePaginationCustom } from 'src/components/table';
-
-import type { TagSuccessRateItem } from 'src/api/tag-analytics';
 
 // ----------------------------------------------------------------------
 
@@ -67,8 +68,8 @@ export function TagAnalyticsSuccessRate({
   const title = hasPeriodData
     ? `${displayName ? `${displayName} — ` : ''}${tagMode === 'tag' ? 'Success Rate Over Time' : 'Group Success Rate Over Time'}`
     : tagMode === 'tag'
-    ? 'Tags Success Rate Overview'
-    : 'Tag Groups Success Rate Overview';
+      ? 'Tags Success Rate Overview'
+      : 'Tag Groups Success Rate Overview';
 
   const subtitle = hasPeriodData
     ? 'Success rate percentage trends over time'
@@ -183,7 +184,12 @@ export function TagAnalyticsSuccessRate({
       ? [{ id: 'period', label: 'Period', width: 160 }]
       : [{ id: 'name', label: 'Name', width: 200 }]),
     { id: 'total_products', label: 'Total Products', width: 140, align: 'right' as const },
-    { id: 'successful_auctions', label: 'Successful Auctions', width: 160, align: 'right' as const },
+    {
+      id: 'successful_auctions',
+      label: 'Successful Auctions',
+      width: 160,
+      align: 'right' as const,
+    },
     { id: 'failed_auctions', label: 'Failed Auctions', width: 140, align: 'right' as const },
     { id: 'success_rate', label: 'Success Rate', width: 220 },
   ];
@@ -197,8 +203,8 @@ export function TagAnalyticsSuccessRate({
 
     const periodText =
       currentLang.value === 'ar'
-        ? (item.title_ar || item.date_label || item.period_key)
-        : (item.title_en || item.date_label || item.period_key);
+        ? item.title_ar || item.date_label || item.period_key
+        : item.title_en || item.date_label || item.period_key;
 
     const rate = typeof item.success_rate === 'number' ? item.success_rate : 0;
     const color = rate >= 70 ? 'success' : rate >= 40 ? 'warning' : 'error';
@@ -257,8 +263,10 @@ export function TagAnalyticsSuccessRate({
                   mr: 1.5,
                   height: 6,
                   borderRadius: 3,
-                  bgcolor: (theme) =>
-                    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+                  bgcolor: (themeObj) =>
+                    themeObj.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.08)'
+                      : 'rgba(0,0,0,0.08)',
                   '& .MuiLinearProgress-bar': {
                     bgcolor: barColor,
                     borderRadius: 3,
@@ -316,7 +324,11 @@ export function TagAnalyticsSuccessRate({
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Iconify icon={"solar:magnifer-linear" as any} width={16} sx={{ color: 'text.disabled' }} />
+                      <Iconify
+                        icon={'solar:magnifer-linear' as any}
+                        width={16}
+                        sx={{ color: 'text.disabled' }}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -330,7 +342,7 @@ export function TagAnalyticsSuccessRate({
                   variant={viewMode === 'chart' ? 'contained' : 'outlined'}
                   color="primary"
                   onClick={() => setViewMode('chart')}
-                  startIcon={<Iconify icon={"solar:chart-2-bold-duotone" as any} />}
+                  startIcon={<Iconify icon={'solar:chart-2-bold-duotone' as any} />}
                   sx={{ textTransform: 'none', fontWeight: 600 }}
                 >
                   Chart
@@ -340,7 +352,7 @@ export function TagAnalyticsSuccessRate({
                   variant={viewMode === 'table' ? 'contained' : 'outlined'}
                   color="inherit"
                   onClick={() => setViewMode('table')}
-                  startIcon={<Iconify icon={"solar:list-bold-duotone" as any} />}
+                  startIcon={<Iconify icon={'solar:list-bold-duotone' as any} />}
                   sx={{ textTransform: 'none', fontWeight: 600 }}
                 >
                   Table

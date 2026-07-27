@@ -13,6 +13,7 @@ import { fDate } from 'src/utils/format-time';
 import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
+import { useGetAuctionsList } from 'src/api/audit';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Label } from 'src/components/label';
@@ -25,7 +26,6 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { useGetAuctionsList } from 'src/api/audit';
 import { auctionsListMockData } from '../data';
 import { applyAuctionFilter, getAuctionStatusColor } from '../utils';
 
@@ -46,12 +46,7 @@ export function AuctionsListView() {
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
-  const { data: apiRes } = useGetAuctionsList(
-    filters,
-    table.page + 1,
-    table.rowsPerPage,
-    search
-  );
+  const { data: apiRes } = useGetAuctionsList(filters, table.page + 1, table.rowsPerPage, search);
 
   const filtered = useMemo(
     () =>

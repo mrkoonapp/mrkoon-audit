@@ -85,10 +85,7 @@ export function TagAnalyticsPriceBox({ type, price, currency }: Props) {
           >
             <Iconify icon={cfg.icon as any} width={20} sx={{ color: cfg.iconColor }} />
           </Box>
-          <Typography
-            variant="subtitle2"
-            sx={{ color: 'text.secondary', fontWeight: 600 }}
-          >
+          <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontWeight: 600 }}>
             {cfg.label}
           </Typography>
         </Stack>

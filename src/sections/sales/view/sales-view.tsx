@@ -14,6 +14,7 @@ import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetSalesDashboardData } from 'src/api/audit';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -32,7 +33,6 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { useGetSalesDashboardData } from 'src/api/audit';
 import { salesMockData } from '../data';
 
 // ----------------------------------------------------------------------

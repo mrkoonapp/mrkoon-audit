@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -52,10 +51,19 @@ export function TagAnalyticsHeroCards({ segments = [], totalAuctions, granularit
             '& > *': { width: 100, height: 100 },
           }}
         >
-          <Iconify icon={"solar:hammer-bold-duotone" as any} width={100} sx={{ color: '#BF8654' }} />
+          <Iconify
+            icon={'solar:hammer-bold-duotone' as any}
+            width={100}
+            sx={{ color: '#BF8654' }}
+          />
         </Box>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5, position: 'relative' }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mb: 1.5, position: 'relative' }}
+        >
           <Typography variant="subtitle2" sx={{ color: '#BF8654', fontWeight: 700 }}>
             Total Ended Auctions
           </Typography>
@@ -71,7 +79,11 @@ export function TagAnalyticsHeroCards({ segments = [], totalAuctions, granularit
               border: '1px solid rgba(191,134,84,0.3)',
             }}
           >
-            <Iconify icon={"solar:hammer-bold-duotone" as any} width={20} sx={{ color: '#BF8654' }} />
+            <Iconify
+              icon={'solar:hammer-bold-duotone' as any}
+              width={20}
+              sx={{ color: '#BF8654' }}
+            />
           </Box>
         </Stack>
 
@@ -88,7 +100,10 @@ export function TagAnalyticsHeroCards({ segments = [], totalAuctions, granularit
           {totalAuctions}
         </Typography>
 
-        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, mt: 1, position: 'relative' }}>
+        <Typography
+          variant="caption"
+          sx={{ color: 'text.secondary', fontWeight: 600, mt: 1, position: 'relative' }}
+        >
           ended auctions total
         </Typography>
       </Card>

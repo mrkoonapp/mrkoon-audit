@@ -47,8 +47,9 @@ export function useTagAnalytics() {
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { filters, setFiltersHandler, clearFilters } =
-    useCustomFilter<DashboardFilters>(initialTagAnalyticsFilters);
+  const { filters, setFiltersHandler, clearFilters } = useCustomFilter<DashboardFilters>(
+    initialTagAnalyticsFilters
+  );
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
@@ -59,8 +60,8 @@ export function useTagAnalytics() {
   const tagsQuery = useGetTagsList(tagSearchQuery);
   const tagGroupsQuery = useGetTagGroupsList(groupSearchQuery);
 
-  const tagsList = tagsQuery.data ?? [];
-  const tagGroupsList = tagGroupsQuery.data ?? [];
+  const tagsList = useMemo(() => tagsQuery.data ?? [], [tagsQuery.data]);
+  const tagGroupsList = useMemo(() => tagGroupsQuery.data ?? [], [tagGroupsQuery.data]);
 
   // ── Selected option object & name resolution ─────────────────────────
   const selectedTag = useMemo(
@@ -94,30 +95,36 @@ export function useTagAnalytics() {
   }, [tagMode, selectedTagId, selectedTagGroupId]);
 
   // ── Fetch report (Actual API call — only enabled when user picks a tag) ──
-  const reportFilters = useMemo(() => ({
-    tag_mode: tagMode,
-    tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
-    tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
-    period: filters.period || 'quarterly',
-    date_from: baseParams.date_from,
-    date_to: baseParams.date_to,
-    country_id: baseParams.country_id,
-  }), [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]);
+  const reportFilters = useMemo(
+    () => ({
+      tag_mode: tagMode,
+      tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
+      tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
+      period: filters.period || 'quarterly',
+      date_from: baseParams.date_from,
+      date_to: baseParams.date_to,
+      country_id: baseParams.country_id,
+    }),
+    [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]
+  );
 
   const reportQuery = useGetTagAnalyticsReport(reportFilters, hasSelection);
   const reportData = reportQuery.data;
 
   // ── Fetch tags success rate standalone report ──
-  const tagsSuccessRateFilters = useMemo(() => ({
-    tag_mode: tagMode,
-    group_by: tagMode,
-    tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
-    tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
-    period: filters.period || 'quarterly',
-    date_from: baseParams.date_from,
-    date_to: baseParams.date_to,
-    country_id: baseParams.country_id,
-  }), [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]);
+  const tagsSuccessRateFilters = useMemo(
+    () => ({
+      tag_mode: tagMode,
+      group_by: tagMode,
+      tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
+      tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
+      period: filters.period || 'quarterly',
+      date_from: baseParams.date_from,
+      date_to: baseParams.date_to,
+      country_id: baseParams.country_id,
+    }),
+    [tagMode, selectedTagId, selectedTagGroupId, filters.period, baseParams]
+  );
 
   const tagsSuccessRateQuery = useGetTagsSuccessRate(tagsSuccessRateFilters, true);
 
@@ -138,7 +145,10 @@ export function useTagAnalytics() {
 
   // ── Text summary of active filter for toolbar display ───────────────
   const activeFilterText = useMemo(() => {
-    if (filters.period === 'custom' || (!filters.period && (filters.startDate || filters.endDate))) {
+    if (
+      filters.period === 'custom' ||
+      (!filters.period && (filters.startDate || filters.endDate))
+    ) {
       if (filters.startDate && filters.endDate) {
         return `${dayjs(filters.startDate).format('D/M/YYYY')} - ${dayjs(filters.endDate).format('D/M/YYYY')}`;
       }
@@ -184,9 +194,7 @@ export function useTagAnalytics() {
     const rows = reportData?.auctions ?? [];
     if (!search) return rows;
     const q = search.toLowerCase();
-    return rows.filter(
-      (a) => String(a.auction_code).toLowerCase().includes(q)
-    );
+    return rows.filter((a) => String(a.auction_code).toLowerCase().includes(q));
   }, [reportData, search]);
 
   // ── Tags success rate rows — apply search filter ──────────────────────
@@ -196,9 +204,7 @@ export function useTagAnalytics() {
     const q = search.toLowerCase();
     return rows.filter((item) => {
       const nameStr =
-        typeof item.name === 'string'
-          ? item.name
-          : `${item.name?.en ?? ''} ${item.name?.ar ?? ''}`;
+        typeof item.name === 'string' ? item.name : `${item.name?.en ?? ''} ${item.name?.ar ?? ''}`;
       return nameStr.toLowerCase().includes(q) || String(item.id).includes(q);
     });
   }, [tagsSuccessRateQuery.data, search]);

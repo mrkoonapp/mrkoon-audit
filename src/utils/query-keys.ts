@@ -36,8 +36,7 @@ export const queryKeys = {
       topTags: (filters: any) => [...queryKeys.audit.all, 'home', 'topTags', filters] as const,
       successRate: (filters: any) =>
         [...queryKeys.audit.all, 'home', 'successRate', filters] as const,
-      compare: (filters: any) =>
-        [...queryKeys.audit.all, 'home', 'compare', filters] as const,
+      compare: (filters: any) => [...queryKeys.audit.all, 'home', 'compare', filters] as const,
     },
     auctions: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'auctions', 'kpis', filters] as const,
@@ -46,7 +45,8 @@ export const queryKeys = {
       participatedClients: (filters: any) =>
         [...queryKeys.audit.all, 'auctions', 'participatedClients', filters] as const,
       list: (filters: any) => [...queryKeys.audit.all, 'auctions', 'list', filters] as const,
-      reportByTag: (filters: any) => [...queryKeys.audit.all, 'auctions', 'reportByTag', filters] as const,
+      reportByTag: (filters: any) =>
+        [...queryKeys.audit.all, 'auctions', 'reportByTag', filters] as const,
       tagsSuccessRate: (filters: any) =>
         [...queryKeys.audit.all, 'auctions', 'tagsSuccessRate', filters] as const,
     },

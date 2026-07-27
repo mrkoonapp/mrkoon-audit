@@ -34,7 +34,13 @@ export function TagAnalyticsPeriodCard({
         boxShadow: theme.customShadows?.card,
       }}
     >
-      <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        gap={2}
+      >
         {/* Left — period info */}
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Box
@@ -48,10 +54,22 @@ export function TagAnalyticsPeriodCard({
               justifyContent: 'center',
             }}
           >
-            <Iconify icon={"solar:calendar-bold-duotone" as any} width={22} sx={{ color: '#BF8654' }} />
+            <Iconify
+              icon={'solar:calendar-bold-duotone' as any}
+              width={22}
+              sx={{ color: '#BF8654' }}
+            />
           </Box>
           <Box>
-            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: 'text.secondary',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
               Period
             </Typography>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mt: 0.25 }}>
@@ -71,7 +89,15 @@ export function TagAnalyticsPeriodCard({
               border: `1px solid rgba(191,134,84,0.3)`,
             }}
           >
-            <Typography variant="caption" sx={{ color: '#BF8654', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#BF8654',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
               By {granularityLabel}
             </Typography>
           </Box>

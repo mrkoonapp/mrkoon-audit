@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -107,10 +107,7 @@ export function TagAnalyticsView() {
     });
   }, [tags, tagSearchQuery]);
 
-  const visibleTags = useMemo(
-    () => filteredTags.slice(0, tagLimit),
-    [filteredTags, tagLimit]
-  );
+  const visibleTags = useMemo(() => filteredTags.slice(0, tagLimit), [filteredTags, tagLimit]);
 
   // Filter tag groups list based on groupSearchQuery
   const filteredTagGroups = useMemo(() => {
@@ -214,7 +211,11 @@ export function TagAnalyticsView() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Iconify icon={"solar:magnifer-linear" as any} width={18} sx={{ color: 'text.disabled' }} />
+                    <Iconify
+                      icon={'solar:magnifer-linear' as any}
+                      width={18}
+                      sx={{ color: 'text.disabled' }}
+                    />
                   </InputAdornment>
                 ),
               }}
@@ -267,7 +268,7 @@ export function TagAnalyticsView() {
                   },
                 }}
               >
-                <Iconify icon={"solar:tag-bold-duotone" as any} width={14} sx={{ mr: 0.5 }} />
+                <Iconify icon={'solar:tag-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
                 Tag
               </ToggleButton>
               <ToggleButton
@@ -286,7 +287,11 @@ export function TagAnalyticsView() {
                   },
                 }}
               >
-                <Iconify icon={"solar:tag-horizontal-bold-duotone" as any} width={14} sx={{ mr: 0.5 }} />
+                <Iconify
+                  icon={'solar:tag-horizontal-bold-duotone' as any}
+                  width={14}
+                  sx={{ mr: 0.5 }}
+                />
                 Group
               </ToggleButton>
             </ToggleButtonGroup>
@@ -380,7 +385,11 @@ export function TagAnalyticsView() {
                   gap: 0.75,
                 }}
               >
-                <Iconify icon={"solar:calendar-bold-duotone" as any} width={16} sx={{ color: '#BF8654' }} />
+                <Iconify
+                  icon={'solar:calendar-bold-duotone' as any}
+                  width={16}
+                  sx={{ color: '#BF8654' }}
+                />
                 {activeFilterText}
               </Typography>
             )}
@@ -389,7 +398,7 @@ export function TagAnalyticsView() {
               variant="outlined"
               color="inherit"
               size="medium"
-              startIcon={<Iconify icon={"eva:options-2-fill" as any} />}
+              startIcon={<Iconify icon={'eva:options-2-fill' as any} />}
               onClick={() => setFiltersOpen(true)}
               sx={{ textTransform: 'none', fontWeight: 600, height: 40 }}
             >
@@ -446,26 +455,14 @@ export function TagAnalyticsView() {
 
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, sm: 6 }}>
-                <TagAnalyticsPriceBox
-                  type="highest"
-                  price={highestPrice}
-                  currency={currency}
-                />
+                <TagAnalyticsPriceBox type="highest" price={highestPrice} currency={currency} />
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                <TagAnalyticsPriceBox
-                  type="lowest"
-                  price={lowestPrice}
-                  currency={currency}
-                />
+                <TagAnalyticsPriceBox type="lowest" price={lowestPrice} currency={currency} />
               </Grid>
             </Grid>
 
-            <TagAnalyticsTable
-              auctions={auctionRows}
-              loading={isLoading}
-              currency={currency}
-            />
+            <TagAnalyticsTable auctions={auctionRows} loading={isLoading} currency={currency} />
           </>
         ) : (
           <Card
@@ -478,7 +475,8 @@ export function TagAnalyticsView() {
             }}
           >
             <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              💡 Select a tag or tag group from the dropdown above to inspect detailed auction records and price ranges.
+              💡 Select a tag or tag group from the dropdown above to inspect detailed auction
+              records and price ranges.
             </Typography>
           </Card>
         )}

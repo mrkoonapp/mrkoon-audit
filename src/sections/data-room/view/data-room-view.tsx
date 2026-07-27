@@ -93,7 +93,13 @@ export function DataRoomView() {
       </Grid>
 
       {/* Performance Analytics Header */}
-      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'flex-start', sm: 'center' }} justifyContent="space-between" gap={2} sx={{ mb: 3, mt: 5 }}>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        justifyContent="space-between"
+        gap={2}
+        sx={{ mb: 3, mt: 5 }}
+      >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Box sx={{ width: 4, height: 24, borderRadius: '4px', bgcolor: '#BF8654' }} />
           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
@@ -138,7 +144,7 @@ export function DataRoomView() {
                 },
               }}
             >
-              <Iconify icon={"solar:chart-2-bold-duotone" as any} width={14} sx={{ mr: 0.5 }} />
+              <Iconify icon={'solar:chart-2-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
               Bar
             </ToggleButton>
             <ToggleButton
@@ -157,7 +163,7 @@ export function DataRoomView() {
                 },
               }}
             >
-              <Iconify icon={"solar:pie-chart-3-bold-duotone" as any} width={14} sx={{ mr: 0.5 }} />
+              <Iconify icon={'solar:pie-chart-3-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
               Pie
             </ToggleButton>
             <ToggleButton
@@ -176,98 +182,98 @@ export function DataRoomView() {
                 },
               }}
             >
-              <Iconify icon={"solar:graph-up-bold-duotone" as any} width={14} sx={{ mr: 0.5 }} />
+              <Iconify icon={'solar:graph-up-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
               Line
             </ToggleButton>
           </ToggleButtonGroup>
 
           {/* Group By Selector Toggle */}
           <ToggleButtonGroup
-          size="small"
-          value={filters.group_by || 'date'}
-          exclusive
-          onChange={(event, newValue) => {
-            if (newValue !== null) {
-              setFiltersHandler({ ...filters, group_by: newValue });
-            }
-          }}
-          sx={{
-            bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
-            p: 0.5,
-            borderRadius: '8px',
-            border: 'none',
-            '& .MuiToggleButtonGroup-grouped': {
-              margin: 0,
-              border: 0,
-              '&.Mui-disabled': {
+            size="small"
+            value={filters.group_by || 'date'}
+            exclusive
+            onChange={(event, newValue) => {
+              if (newValue !== null) {
+                setFiltersHandler({ ...filters, group_by: newValue });
+              }
+            }}
+            sx={{
+              bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
+              p: 0.5,
+              borderRadius: '8px',
+              border: 'none',
+              '& .MuiToggleButtonGroup-grouped': {
+                margin: 0,
                 border: 0,
-              },
-              '&:not(:first-of-type)': {
-                borderRadius: '6px',
-              },
-              '&:first-of-type': {
-                borderRadius: '6px',
-              },
-            },
-          }}
-        >
-          <ToggleButton
-            value="date"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
-                  bgcolor: 'background.paper',
+                '&.Mui-disabled': {
+                  border: 0,
+                },
+                '&:not(:first-of-type)': {
+                  borderRadius: '6px',
+                },
+                '&:first-of-type': {
+                  borderRadius: '6px',
                 },
               },
             }}
           >
-            Date
-          </ToggleButton>
-          <ToggleButton
-            value="tags_group"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
+            <ToggleButton
+              value="date"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
                   bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
                 },
-              },
-            }}
-          >
-            Tag Groups
-          </ToggleButton>
-          <ToggleButton
-            value="tag"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
+              }}
+            >
+              Date
+            </ToggleButton>
+            <ToggleButton
+              value="tags_group"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
                   bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
                 },
-              },
-            }}
-          >
-            Tags
-          </ToggleButton>
+              }}
+            >
+              Tag Groups
+            </ToggleButton>
+            <ToggleButton
+              value="tag"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
+                  bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
+                },
+              }}
+            >
+              Tags
+            </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
       </Stack>

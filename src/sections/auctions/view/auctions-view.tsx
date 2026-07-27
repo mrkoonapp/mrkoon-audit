@@ -14,6 +14,7 @@ import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetAuctionsDashboardData } from 'src/api/audit';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -30,7 +31,6 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
-import { useGetAuctionsDashboardData } from 'src/api/audit';
 import { auctionsMockData } from '../data';
 import { AuctionsSummaryCard } from '../components';
 

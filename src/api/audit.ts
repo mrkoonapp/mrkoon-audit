@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
-
-import { useTranslate } from 'src/locales';
 import { getLocalizedText } from 'src/utils/format-string';
+
 import axiosInstance from 'src/lib/axios';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 // Types
@@ -259,7 +259,9 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
           },
           transactions: {
             categories: chart.breakdown
-              ? chart.breakdown.map((item) => (currentLang.value === 'ar' ? item.title_ar : item.title_en))
+              ? chart.breakdown.map((item) =>
+                  currentLang.value === 'ar' ? item.title_ar : item.title_en
+                )
               : chart.labels,
             series: chart.amounts,
             totalAmount: totals.total_money,
@@ -401,74 +403,76 @@ export function useGetAuctionsDashboardData(filters: DashboardFilters, lang: str
     },
   });
 
-  const isLoading = kpisQuery.isLoading || byCategoryQuery.isLoading || participatedClientsQuery.isLoading;
+  const isLoading =
+    kpisQuery.isLoading || byCategoryQuery.isLoading || participatedClientsQuery.isLoading;
   const isError = kpisQuery.isError || byCategoryQuery.isError || participatedClientsQuery.isError;
 
   const kpis = kpisQuery.data;
   const byCategory = byCategoryQuery.data;
   const participatedClients = participatedClientsQuery.data;
 
-  const data = kpis && byCategory && participatedClients
-    ? {
-        stats: [
-          {
-            id: 'done',
-            labelKey: 'totalAuctionsDone',
-            value: kpis.successful_auctions ?? kpis.total_auctions,
-            format: 'number' as const,
-            direction: 'up' as const,
+  const data =
+    kpis && byCategory && participatedClients
+      ? {
+          stats: [
+            {
+              id: 'done',
+              labelKey: 'totalAuctionsDone',
+              value: kpis.successful_auctions ?? kpis.total_auctions,
+              format: 'number' as const,
+              direction: 'up' as const,
+            },
+            {
+              id: 'gmv',
+              labelKey: 'gmv',
+              value: kpis.gmv,
+              format: 'currency' as const,
+              currency: ' EGP',
+              direction: 'up' as const,
+            },
+            {
+              id: 'pct',
+              labelKey: 'ourPercentage',
+              value: kpis.our_percentage,
+              format: 'percent' as const,
+              direction: 'up' as const,
+            },
+            {
+              id: 'bids',
+              labelKey: 'totalBids',
+              value: kpis.total_bids,
+              format: 'number' as const,
+              direction: 'up' as const,
+            },
+          ],
+          byCategory: {
+            percent: kpis.success_rate,
+            items: byCategory.map((c) => ({
+              name: getLocalizedText(c.name, lang),
+              value: c.auction_count,
+            })),
           },
-          {
-            id: 'gmv',
-            labelKey: 'gmv',
-            value: kpis.gmv,
-            format: 'currency' as const,
-            currency: ' EGP',
-            direction: 'up' as const,
+          participatedClients: {
+            total: participatedClients.total,
+            items: participatedClients.data.map((c) => ({
+              id: String(c.id),
+              name: getLocalizedText(c.name, lang),
+              category: getLocalizedText(c.category, lang),
+              avatarUrl: c.image || undefined,
+              joinedAt: c.joined_at,
+              chipLabel: 'Participated',
+              chipIcon: 'eva:checkmark-circle-2-fill',
+            })),
           },
-          {
-            id: 'pct',
-            labelKey: 'ourPercentage',
-            value: kpis.our_percentage,
-            format: 'percent' as const,
-            direction: 'up' as const,
+          summary: {
+            successRate: kpis.success_rate,
+            totalBidders: kpis.total_bidders,
+            averageBidders: kpis.avg_bidders_per_auction,
+            auctionsDone: kpis.successful_auctions,
+            auctionsTotal: kpis.total_auctions,
           },
-          {
-            id: 'bids',
-            labelKey: 'totalBids',
-            value: kpis.total_bids,
-            format: 'number' as const,
-            direction: 'up' as const,
-          },
-        ],
-        byCategory: {
-          percent: kpis.success_rate,
-          items: byCategory.map((c) => ({
-            name: getLocalizedText(c.name, lang),
-            value: c.auction_count,
-          })),
-        },
-        participatedClients: {
-          total: participatedClients.total,
-          items: participatedClients.data.map((c) => ({
-            id: String(c.id),
-            name: getLocalizedText(c.name, lang),
-            category: getLocalizedText(c.category, lang),
-            avatarUrl: c.image || undefined,
-            joinedAt: c.joined_at,
-            chipLabel: 'Participated',
-            chipIcon: 'eva:checkmark-circle-2-fill',
-          })),
-        },
-        summary: {
-          successRate: kpis.success_rate,
-          totalBidders: kpis.total_bidders,
-          averageBidders: kpis.avg_bidders_per_auction,
-          auctionsDone: kpis.successful_auctions,
-          auctionsTotal: kpis.total_auctions,
-        },
-      }
-    : null;
+        }
+      : null;
 
   return {
     data,
@@ -493,10 +497,9 @@ export function useGetAuctionsList(filters: DashboardFilters, page = 1, perPage 
   return useQuery({
     queryKey: queryKeys.audit.auctions.list(queryParams),
     queryFn: async () => {
-      const response = await axiosInstance.get<{ data: PaginatedResponse<AuctionListItemResponse> }>(
-        endpoints.audit.auctions.list,
-        { params: queryParams }
-      );
+      const response = await axiosInstance.get<{
+        data: PaginatedResponse<AuctionListItemResponse>;
+      }>(endpoints.audit.auctions.list, { params: queryParams });
       return response.data.data;
     },
   });
@@ -621,10 +624,9 @@ export function useGetInspectionsDashboardData(filters: DashboardFilters, lang: 
   const listQuery = useQuery({
     queryKey: queryKeys.audit.inspections.list(queryParams),
     queryFn: async () => {
-      const response = await axiosInstance.get<{ data: PaginatedResponse<InspectionListItemResponse> }>(
-        endpoints.audit.inspections.list,
-        { params: { ...queryParams, per_page: 5 } }
-      );
+      const response = await axiosInstance.get<{
+        data: PaginatedResponse<InspectionListItemResponse>;
+      }>(endpoints.audit.inspections.list, { params: { ...queryParams, per_page: 5 } });
       return response.data.data;
     },
   });
@@ -636,71 +638,69 @@ export function useGetInspectionsDashboardData(filters: DashboardFilters, lang: 
     listQuery.isLoading;
 
   const isError =
-    kpisQuery.isError ||
-    byCategoryQuery.isError ||
-    paymentMethodQuery.isError ||
-    listQuery.isError;
+    kpisQuery.isError || byCategoryQuery.isError || paymentMethodQuery.isError || listQuery.isError;
 
   const kpis = kpisQuery.data;
   const byCategory = byCategoryQuery.data;
   const paymentMethod = paymentMethodQuery.data;
   const list = listQuery.data;
 
-  const data = kpis && byCategory && paymentMethod && list
-    ? {
-        stats: [
-          {
-            id: 'inspections',
-            labelKey: 'totalInspections',
-            value: kpis.total_inspections,
-            format: 'number' as const,
-            trend: 5.2,
+  const data =
+    kpis && byCategory && paymentMethod && list
+      ? {
+          stats: [
+            {
+              id: 'inspections',
+              labelKey: 'totalInspections',
+              value: kpis.total_inspections,
+              format: 'number' as const,
+              trend: 5.2,
+            },
+            {
+              id: 'categories',
+              labelKey: 'categoriesCovered',
+              value: kpis.categories_covered_pct,
+              format: 'percent' as const,
+              trend: 2.1,
+            },
+            {
+              id: 'clients',
+              labelKey: 'clientsServed',
+              value: kpis.clients_served,
+              format: 'number' as const,
+              trend: 8.4,
+            },
+          ],
+          byCategory: {
+            items: byCategory.map((c) => ({
+              name: getLocalizedText(c.name, lang),
+              value: c.inspection_count,
+            })),
           },
-          {
-            id: 'categories',
-            labelKey: 'categoriesCovered',
-            value: kpis.categories_covered_pct,
-            format: 'percent' as const,
-            trend: 2.1,
+          paymentMethods: {
+            items: paymentMethod.map((pm) => ({
+              id: String(pm.id),
+              name: getLocalizedText(pm.name, lang),
+              count: pm.count,
+              icon: pm.icon_key || 'eva:credit-card-fill',
+              color: 'primary' as const,
+            })),
           },
-          {
-            id: 'clients',
-            labelKey: 'clientsServed',
-            value: kpis.clients_served,
-            format: 'number' as const,
-            trend: 8.4,
-          },
-        ],
-        byCategory: {
-          items: byCategory.map((c) => ({
-            name: getLocalizedText(c.name, lang),
-            value: c.inspection_count,
+          latestInspections: list.data.map((item) => ({
+            id: String(item.product_id),
+            product: getLocalizedText(item.product_name, lang),
+            imageUrl: item.product_image || undefined,
+            description: `${item.bidders_count} bidders`,
+            category: getLocalizedText(item.category, lang),
+            categoryIcon: 'eva:pricetags-fill',
+            successful: item.inspections_count,
+            totalEarning: item.total_earning,
+            currency: 'EGP',
+            trend: 0,
+            trendColor: 'success' as const,
           })),
-        },
-        paymentMethods: {
-          items: paymentMethod.map((pm) => ({
-            id: String(pm.id),
-            name: getLocalizedText(pm.name, lang),
-            count: pm.count,
-            icon: pm.icon_key || 'eva:credit-card-fill',
-            color: 'primary' as const,
-          })),
-        },
-        latestInspections: list.data.map((item) => ({
-          id: String(item.product_id),
-          product: getLocalizedText(item.product_name, lang),
-          imageUrl: item.product_image || undefined,
-          description: `${item.bidders_count} bidders`,
-          category: getLocalizedText(item.category, lang),
-          categoryIcon: 'eva:pricetags-fill',
-          successful: item.inspections_count,
-          totalEarning: item.total_earning,
-          currency: 'EGP',
-          trend: 0,
-          trendColor: 'success' as const,
-        })),
-      }
-    : null;
+        }
+      : null;
 
   return {
     data,
@@ -838,76 +838,77 @@ export function useGetSalesDashboardData(filters: DashboardFilters, lang: string
   const topMerchants = topMerchantsQuery.data;
   const topSuccess = topSuccessQuery.data;
 
-  const data = kpis && updates && newMerchants && topMerchants && topSuccess
-    ? {
-        stats: [
-          {
-            id: 'calls',
-            labelKey: 'salesCalls',
-            value: kpis.calls_count,
-            unitKey: 'calls',
-            icon: 'eva:phone-call-fill',
+  const data =
+    kpis && updates && newMerchants && topMerchants && topSuccess
+      ? {
+          stats: [
+            {
+              id: 'calls',
+              labelKey: 'salesCalls',
+              value: kpis.calls_count,
+              unitKey: 'calls',
+              icon: 'eva:phone-call-fill',
+            },
+            {
+              id: 'products',
+              labelKey: 'productsReceived',
+              value: kpis.products_count,
+              unitKey: 'products',
+              action: true,
+            },
+            {
+              id: 'auctions',
+              labelKey: 'salesAuctions',
+              value: kpis.auctions_count,
+              unitKey: 'auctions',
+              action: true,
+            },
+          ],
+          newMerchants: {
+            total: newMerchants.total,
+            items: newMerchants.data.map((m) => ({
+              id: String(m.id),
+              name: getLocalizedText(m.name, lang),
+              avatarUrl: m.image || undefined,
+              joinedAt: m.joined_at,
+            })),
           },
-          {
-            id: 'products',
-            labelKey: 'productsReceived',
-            value: kpis.products_count,
-            unitKey: 'products',
-            action: true,
-          },
-          {
-            id: 'auctions',
-            labelKey: 'salesAuctions',
-            value: kpis.auctions_count,
-            unitKey: 'auctions',
-            action: true,
-          },
-        ],
-        newMerchants: {
-          total: newMerchants.total,
-          items: newMerchants.data.map((m) => ({
+          merchantsUpdates: [
+            {
+              id: 'reactivated',
+              labelKey: 'reactivatedMerchants',
+              value: updates.reactivated_count,
+              color: 'success' as const,
+            },
+            {
+              id: 'paid',
+              labelKey: 'paidInsuranceDeposit',
+              value: updates.paid_insurance_count,
+              color: 'info' as const,
+            },
+            {
+              id: 'average',
+              labelKey: 'averagePerAuction',
+              value: updates.avg_per_auction,
+              color: 'warning' as const,
+            },
+          ],
+          topSuccess: topSuccess.map((s) => ({
+            id: String(s.id),
+            name: getLocalizedText(s.name, lang),
+            value: s.gmv,
+            percent: s.auction_count > 0 ? Math.min(100, s.auction_count * 10) : 0,
+            color: 'primary' as const,
+          })),
+          topMerchants: topMerchants.map((m) => ({
             id: String(m.id),
             name: getLocalizedText(m.name, lang),
             avatarUrl: m.image || undefined,
+            category: getLocalizedText(m.category, lang),
             joinedAt: m.joined_at,
           })),
-        },
-        merchantsUpdates: [
-          {
-            id: 'reactivated',
-            labelKey: 'reactivatedMerchants',
-            value: updates.reactivated_count,
-            color: 'success' as const,
-          },
-          {
-            id: 'paid',
-            labelKey: 'paidInsuranceDeposit',
-            value: updates.paid_insurance_count,
-            color: 'info' as const,
-          },
-          {
-            id: 'average',
-            labelKey: 'averagePerAuction',
-            value: updates.avg_per_auction,
-            color: 'warning' as const,
-          },
-        ],
-        topSuccess: topSuccess.map((s) => ({
-          id: String(s.id),
-          name: getLocalizedText(s.name, lang),
-          value: s.gmv,
-          percent: s.auction_count > 0 ? Math.min(100, s.auction_count * 10) : 0,
-          color: 'primary' as const,
-        })),
-        topMerchants: topMerchants.map((m) => ({
-          id: String(m.id),
-          name: getLocalizedText(m.name, lang),
-          avatarUrl: m.image || undefined,
-          category: getLocalizedText(m.category, lang),
-          joinedAt: m.joined_at,
-        })),
-      }
-    : null;
+        }
+      : null;
 
   return {
     data,
@@ -1025,5 +1026,3 @@ export function useGetOperationsDashboardData(filters: DashboardFilters) {
     refetch: kpisQuery.refetch,
   };
 }
-
-

@@ -1,10 +1,10 @@
 import type { TagAnalyticsAuction } from 'src/api/tag-analytics';
 
-import Box from '@mui/material/Box';
+import { useMemo, useState } from 'react';
+
 import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { useState, useMemo } from 'react';
+import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -60,12 +60,26 @@ export function TagAnalyticsTable({ auctions, loading, currency }: Props) {
         ),
         start_price: (
           <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 600 }}>
-            {fNumber(auction.start_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled', fontWeight: 400 }}>{currency}</Typography>
+            {fNumber(auction.start_price)}{' '}
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{ color: 'text.disabled', fontWeight: 400 }}
+            >
+              {currency}
+            </Typography>
           </Typography>
         ),
         highest_price: (
           <Typography variant="subtitle2" sx={{ color: '#BF8654', fontWeight: 700 }}>
-            {fNumber(auction.highest_price)} <Typography component="span" variant="caption" sx={{ color: 'text.disabled', fontWeight: 400 }}>{currency}</Typography>
+            {fNumber(auction.highest_price)}{' '}
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{ color: 'text.disabled', fontWeight: 400 }}
+            >
+              {currency}
+            </Typography>
           </Typography>
         ),
       },

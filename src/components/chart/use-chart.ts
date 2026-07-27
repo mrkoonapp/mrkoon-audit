@@ -132,8 +132,10 @@ const baseChartOptions = (theme: Theme): ChartOptions => {
           }
           const sign = val < 0 ? '-' : '';
           const absVal = Math.abs(val);
-          if (absVal >= 1_000_000_000) return `${sign}${(absVal / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`;
-          if (absVal >= 1_000_000) return `${sign}${(absVal / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+          if (absVal >= 1_000_000_000)
+            return `${sign}${(absVal / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`;
+          if (absVal >= 1_000_000)
+            return `${sign}${(absVal / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
           if (absVal >= 1_000) return `${sign}${(absVal / 1_000).toFixed(1).replace(/\.0$/, '')}k`;
           return `${sign}${absVal}`;
         },
