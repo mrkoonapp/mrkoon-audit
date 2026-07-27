@@ -127,6 +127,9 @@ const baseChartOptions = (theme: Theme): ChartOptions => {
       tickAmount: 5,
       labels: {
         formatter: (val: number) => {
+          if (typeof val !== 'number' || Number.isNaN(val)) {
+            return String(val ?? '');
+          }
           const sign = val < 0 ? '-' : '';
           const absVal = Math.abs(val);
           if (absVal >= 1_000_000_000) return `${sign}${(absVal / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`;

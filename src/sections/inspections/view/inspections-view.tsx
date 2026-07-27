@@ -13,6 +13,7 @@ import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
 import { fNumber, fPercent } from 'src/utils/format-number';
 
+import { getLocalizedText } from 'src/utils/format-string';
 import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -31,6 +32,7 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
+import { useGetInspectionsDashboardData } from 'src/api/audit';
 import { inspectionsMockData } from '../data';
 
 import type { InspectionStat } from '../data';
@@ -44,15 +46,16 @@ function formatStatValue(stat: InspectionStat) {
 // ----------------------------------------------------------------------
 
 export function InspectionsView() {
-  const { t } = useTranslate('dashboard');
-
-  const data = inspectionsMockData;
+  const { t, currentLang } = useTranslate('dashboard');
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const { filters, setFiltersHandler, clearFilters } =
     useCustomFilter<DashboardFilters>(defaultDashboardFilters);
+
+  const { data: apiData } = useGetInspectionsDashboardData(filters, currentLang.value);
+  const data = apiData ?? inspectionsMockData;
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
@@ -75,7 +78,7 @@ export function InspectionsView() {
 
   const paymentItems = data.paymentMethods.items.map((method) => ({
     id: method.id,
-    primary: method.name,
+    primary: getLocalizedText(method.name, currentLang.value),
     avatar: (
       <Box
         sx={{
@@ -89,7 +92,7 @@ export function InspectionsView() {
           bgcolor: (theme) => varAlpha(theme.vars.palette[method.color].mainChannel, 0.16),
         }}
       >
-        <Iconify icon={method.icon} width={22} />
+        <Iconify icon={method.icon as any} width={22} />
       </Box>
     ),
     badge: (
@@ -136,7 +139,7 @@ export function InspectionsView() {
           </Box>
         </Box>
       ),
-      category: <TagChip icon={<Iconify icon={row.categoryIcon} />} label={row.category} />,
+      category: <TagChip icon={<Iconify icon={row.categoryIcon as any} />} label={row.category} />,
       successful: fNumber(row.successful),
       totalEarning: formatAmount(row.totalEarning, row.currency),
       inspections: renderTrend(row.trend, row.trendColor),

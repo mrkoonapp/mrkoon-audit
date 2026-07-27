@@ -86,7 +86,8 @@
       "stats": {
         "totalInspections": "إجمالي المعاينات",
         "categoriesCovered": "الفئات المشمولة",
-        "clientServed": "العملاء الذين تم خدمتهم"
+        "clientServed": "العملاء الذين تم خدمتهم",
+        "clientsServed": "العملاء الذين تم خدمتهم"
       },
       "table": {
         "product": "المنتج",
@@ -106,17 +107,26 @@
       "stats": {
         "noOfCalls": "عدد المكالمات",
         "noOfProducts": "عدد المنتجات",
-        "noOfAuctions": "عدد المزادات"
+        "noOfAuctions": "عدد المزادات",
+        "salesCalls": "عدد المكالمات",
+        "productsReceived": "عدد المنتجات",
+        "salesAuctions": "عدد المزادات"
       },
       "units": {
         "call": "مكالمة",
         "product": "منتج",
-        "auction": "مزاد"
+        "auction": "مزاد",
+        "calls": "مكالمة",
+        "products": "منتج",
+        "auctions": "مزاد"
       },
       "updates": {
         "reactivated": "أعيد تفعيلهم",
         "paidInsurance": "دفعوا التأمين",
-        "avgMerchantsPerAuction": "متوسط الشركات لكل مزاد"
+        "avgMerchantsPerAuction": "متوسط الشركات لكل مزاد",
+        "reactivatedMerchants": "أعيد تفعيلهم",
+        "paidInsuranceDeposit": "دفعوا التأمين",
+        "averagePerAuction": "متوسط الشركات لكل مزاد"
       }
     },
     "operations": {
@@ -125,17 +135,24 @@
         "transactionCompletionRate": "معدل إتمام المعاملات",
         "slaCompliance": "الالتزام باتفاقية مستوى الخدمة",
         "totalInspections": "إجمالي المعاينات",
-        "inspectionsPerAuction": "المعاينات لكل مزاد"
+        "inspectionsPerAuction": "المعاينات لكل مزاد",
+        "completionRate": "معدل إتمام المعاملات",
+        "inspectionsCompleted": "إجمالي المعاينات",
+        "avgPerAuction": "المعاينات لكل مزاد"
       },
       "subtitles": {
         "completionRatio": "11/90 مزاد",
         "daysAfterAcceptance": "3 أيام بعد القبول",
         "paidInspection": "فحص مدفوع",
-        "average": "المتوسط"
+        "average": "المتوسط",
+        "fromPreviousPeriod": "مقارنة بالفترة السابقة"
       },
       "sla": {
         "successfulAuctions": "المزادات الناجحة",
-        "completedTransactions": "المعاملات المكتملة"
+        "completedTransactions": "الماملات المكتملة",
+        "inspectionOnTime": "معاينات في الوقت المحدد",
+        "delayedInspections": "معاينات متأخرة",
+        "failedInspections": "معاينات غير مكتملة"
       }
     },
     "table": {

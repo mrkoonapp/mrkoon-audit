@@ -25,10 +25,11 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
+import { useGetAuctionsList } from 'src/api/audit';
 import { auctionsListMockData } from '../data';
 import { applyAuctionFilter, getAuctionStatusColor } from '../utils';
 
-import type { AuctionListItem } from '../data';
+import type { AuctionListItem, AuctionListStatus } from '../data';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,13 @@ export function AuctionsListView() {
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
+  const { data: apiRes } = useGetAuctionsList(
+    filters,
+    table.page + 1,
+    table.rowsPerPage,
+    search
+  );
+
   const filtered = useMemo(
     () =>
       applyAuctionFilter({ data: auctionsListMockData, search, filters }).sort(
@@ -53,8 +61,24 @@ export function AuctionsListView() {
     [search, filters, table.order, table.orderBy]
   );
 
-  const pageRows = rowInPage(filtered, table.page, table.rowsPerPage);
-  const notFound = filtered.length === 0;
+  const realRows = useMemo(() => {
+    if (!apiRes) return null;
+    return apiRes.data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      image: item.image || '',
+      start_price: item.start_price,
+      high_price: item.highest_price,
+      currency: ' EGP',
+      status: (item.status === 'active' ? 'running' : item.status) as AuctionListStatus,
+      bidders: item.bidders_count,
+      created_at: item.created_at,
+    }));
+  }, [apiRes]);
+
+  const pageRows = realRows ?? rowInPage(filtered, table.page, table.rowsPerPage);
+  const totalRows = apiRes ? apiRes.total : filtered.length;
+  const notFound = pageRows.length === 0;
 
   const columns: DataListColumn<AuctionListItem>[] = useMemo(
     () => [
@@ -151,7 +175,7 @@ export function AuctionsListView() {
       <DataListTable
         columns={columns}
         rows={pageRows}
-        totalRows={filtered.length}
+        totalRows={totalRows}
         table={table}
         getRowId={(row) => String(row.id)}
         onViewRow={() => {}}

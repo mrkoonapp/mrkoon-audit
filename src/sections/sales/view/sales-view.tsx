@@ -32,27 +32,29 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
+import { useGetSalesDashboardData } from 'src/api/audit';
 import { salesMockData } from '../data';
 
 // ----------------------------------------------------------------------
 
 export function SalesView() {
-  const { t } = useTranslate('dashboard');
+  const { t, currentLang } = useTranslate('dashboard');
 
   const router = useRouter();
 
-  const data = salesMockData;
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const { filters, setFiltersHandler, clearFilters } =
+    useCustomFilter<DashboardFilters>(defaultDashboardFilters);
+
+  const { data: apiData } = useGetSalesDashboardData(filters, currentLang.value);
+  const data = apiData ?? salesMockData;
 
   // Maps a KPI card to the listing page it opens (undefined → not clickable).
   const statHref: Record<string, string | undefined> = {
     products: paths.dashboard.products,
     auctions: paths.dashboard.auctionsList,
   };
-
-  const [filtersOpen, setFiltersOpen] = useState(false);
-
-  const { filters, setFiltersHandler, clearFilters } =
-    useCustomFilter<DashboardFilters>(defaultDashboardFilters);
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
@@ -129,7 +131,7 @@ export function SalesView() {
                 stat.action ? (
                   <CircleArrowButton />
                 ) : (
-                  stat.icon && <Iconify icon={stat.icon} width={28} />
+                  stat.icon && <Iconify icon={stat.icon as any} width={28} />
                 )
               }
             />

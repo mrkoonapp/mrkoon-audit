@@ -70,6 +70,7 @@ export interface TagAnalyticsReportResponse {
 
 export interface TagAnalyticsFilters {
   tag_mode: 'tag' | 'tags_group';
+  group_by?: 'tag' | 'tags_group' | string;
   tag_id?: number | string;
   tags_group_id?: number | string;
   period?: string;

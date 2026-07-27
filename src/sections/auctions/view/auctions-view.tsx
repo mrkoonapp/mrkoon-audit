@@ -30,6 +30,7 @@ import {
   defaultDashboardFilters,
 } from 'src/components/dashboard';
 
+import { useGetAuctionsDashboardData } from 'src/api/audit';
 import { auctionsMockData } from '../data';
 import { AuctionsSummaryCard } from '../components';
 
@@ -46,22 +47,23 @@ function formatStatValue(stat: AuctionStat) {
 // ----------------------------------------------------------------------
 
 export function AuctionsView() {
-  const { t } = useTranslate('dashboard');
+  const { t, currentLang } = useTranslate('dashboard');
 
   const router = useRouter();
-
-  const data = auctionsMockData;
-
-  // Maps a KPI card to the listing page it opens (undefined → not clickable).
-  const statHref: Record<string, string | undefined> = {
-    done: paths.dashboard.auctionsList,
-  };
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const { filters, setFiltersHandler, clearFilters } =
     useCustomFilter<DashboardFilters>(defaultDashboardFilters);
+
+  const { data: apiData } = useGetAuctionsDashboardData(filters, currentLang.value);
+  const data = apiData ?? auctionsMockData;
+
+  // Maps a KPI card to the listing page it opens (undefined → not clickable).
+  const statHref: Record<string, string | undefined> = {
+    done: paths.dashboard.auctionsList,
+  };
 
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
@@ -73,7 +75,7 @@ export function AuctionsView() {
     avatarUrl: client.avatarUrl,
     primary: client.name,
     secondary: client.category,
-    center: <TagChip icon={<Iconify icon={client.chipIcon} />} label={client.chipLabel} />,
+    center: <TagChip icon={<Iconify icon={client.chipIcon as any} />} label={client.chipLabel} />,
     trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
   }));
 

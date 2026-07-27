@@ -18,15 +18,25 @@ export function getLocalizedText(
   let parsedValue: any = value;
   if (typeof value === 'string') {
     const trimmed = value.trim();
-    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    if (trimmed.includes('{') && trimmed.includes('}')) {
       try {
-        parsedValue = JSON.parse(trimmed);
+        const jsonStart = trimmed.indexOf('{');
+        const jsonEnd = trimmed.lastIndexOf('}') + 1;
+        parsedValue = JSON.parse(trimmed.slice(jsonStart, jsonEnd));
       } catch {
-        // Return original string if JSON parsing fails
+        if (lang.startsWith('ar')) {
+          const arMatch = trimmed.match(/"(?:ar|ar-EG|ar-SA|ar-eg|ar-sa)"\s*:\s*"([^"]+)"/i);
+          if (arMatch && arMatch[1]) return arMatch[1];
+        }
+        const enMatch = trimmed.match(/"en"\s*:\s*"([^"]+)"/i);
+        if (enMatch && enMatch[1]) return enMatch[1];
+
+        const anyMatch = trimmed.match(/"[^"]+"\s*:\s*"([^"]+)"/);
+        if (anyMatch && anyMatch[1]) return anyMatch[1];
+
         return value;
       }
     } else {
-      // It's a plain string, return it directly
       return value;
     }
   }
