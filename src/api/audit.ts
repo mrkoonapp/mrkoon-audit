@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
 
+import { useTranslate } from 'src/locales';
 import { getLocalizedText } from 'src/utils/format-string';
 import axiosInstance from 'src/lib/axios';
 
@@ -36,10 +37,19 @@ export interface HomeKpiResponse {
   }[];
 }
 
+export interface TransactionsChartItem {
+  period_key: string;
+  title_ar: string;
+  title_en: string;
+  amount: number;
+  count: number;
+}
+
 export interface TransactionsChartResponse {
   labels: string[];
   amounts: number[];
   counts: number[];
+  breakdown?: TransactionsChartItem[];
 }
 
 export interface TransactionTotalsResponse {
@@ -100,6 +110,7 @@ export function buildQueryParams(filters: DashboardFilters) {
 // ----------------------------------------------------------------------
 
 export function useGetHomeDashboardData(filters: DashboardFilters) {
+  const { currentLang } = useTranslate();
   const queryParams = buildQueryParams(filters);
 
   // 1. Fetch KPIs
@@ -247,7 +258,9 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             rate: successRate.rate,
           },
           transactions: {
-            categories: chart.labels,
+            categories: chart.breakdown
+              ? chart.breakdown.map((item) => (currentLang.value === 'ar' ? item.title_ar : item.title_en))
+              : chart.labels,
             series: chart.amounts,
             totalAmount: totals.total_money,
             totalCount: totals.total_count,
