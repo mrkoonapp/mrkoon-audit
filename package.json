@@ -26,7 +26,11 @@
     "re:build-npm": "npm run clean && npm install && npm run build",
     "tsc:dev": "bun dev & bun tsc:watch",
     "tsc:watch": "tsc --noEmit --watch",
-    "tsc:print": "npx tsc --showConfig"
+    "tsc:print": "npx tsc --showConfig",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:all": "playwright test",
+    "test:e2e:ui": "playwright test --ui --project=chromium",
+    "test:e2e:report": "playwright show-report"
   },
   "engines": {
     "node": ">=20"
@@ -127,6 +131,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
+    "@playwright/test": "^1.62.0",
     "@types/autosuggest-highlight": "^3.2.3",
     "@types/node": "^22.13.14",
     "@types/nprogress": "^0.2.3",
