@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
+import { DATE_PERIODS } from 'src/utils/constants';
 import { getLocalizedText } from 'src/utils/format-string';
 
-import { DATE_PERIODS } from 'src/utils/constants';
 import axiosInstance from 'src/lib/axios';
 import { useTranslate } from 'src/locales';
 

@@ -17,7 +17,6 @@ import {
 } from 'src/api/tag-analytics';
 
 import {
-  getPeriodRange,
   countActiveFilters,
   defaultDashboardFilters,
 } from 'src/components/dashboard';

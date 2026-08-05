@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
-
 import { DATE_PERIODS } from 'src/utils/constants';
+
 import axiosInstance from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
