@@ -45,15 +45,14 @@ export function getPeriodRange(period: DatePeriod): {
 
   switch (period) {
     case DATE_PERIODS.WEEKLY:
-      return { startDate: now.startOf('week'), endDate: now.endOf('week') };
+      return { startDate: now.subtract(6, 'day').startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.MONTHLY:
-      return { startDate: now.startOf('month'), endDate: now.endOf('month') };
+      return { startDate: now.subtract(29, 'day').startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.QUARTERLY: {
-      const quarterStart = now.month(Math.floor(now.month() / 3) * 3).startOf('month');
-      return { startDate: quarterStart, endDate: quarterStart.add(2, 'month').endOf('month') };
+      return { startDate: now.subtract(2, 'month').startOf('month'), endDate: now.endOf('month') };
     }
     case DATE_PERIODS.YEARLY:
-      return { startDate: now.startOf('year'), endDate: now.endOf('year') };
+      return { startDate: now.subtract(11, 'month').startOf('month'), endDate: now.endOf('month') };
     default:
       return { startDate: null, endDate: null };
   }

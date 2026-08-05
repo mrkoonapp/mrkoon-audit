@@ -14,10 +14,10 @@
         "title": "Filters",
         "date": "Date",
         "period": "Period",
-        "periodWeekly": "Current week",
-        "periodMonthly": "Current month",
-        "periodQuarterly": "Current quarter",
-        "periodYearly": "Current year",
+        "periodWeekly": "Last week",
+        "periodMonthly": "Last month",
+        "periodQuarterly": "Last quarter",
+        "periodYearly": "Last year",
         "periodCustom": "Custom",
         "startDate": "Start date",
         "endDate": "End date",
@@ -86,7 +86,8 @@
       "stats": {
         "totalInspections": "Total Inspections",
         "categoriesCovered": "Categories Covered",
-        "clientServed": "Client served"
+        "clientServed": "Client served",
+        "clientsServed": "Client served"
       },
       "table": {
         "product": "Product",
@@ -106,17 +107,26 @@
       "stats": {
         "noOfCalls": "No. of calls",
         "noOfProducts": "No. of products",
-        "noOfAuctions": "No. of Auctions"
+        "noOfAuctions": "No. of Auctions",
+        "salesCalls": "No. of calls",
+        "productsReceived": "No. of products",
+        "salesAuctions": "No. of Auctions"
       },
       "units": {
         "call": "Call",
         "product": "product",
-        "auction": "Auction"
+        "auction": "Auction",
+        "calls": "Calls",
+        "products": "products",
+        "auctions": "Auctions"
       },
       "updates": {
         "reactivated": "Reactivated",
         "paidInsurance": "Paid Insurance",
-        "avgMerchantsPerAuction": "Avg companies/auction"
+        "avgMerchantsPerAuction": "Avg companies/auction",
+        "reactivatedMerchants": "Reactivated",
+        "paidInsuranceDeposit": "Paid Insurance",
+        "averagePerAuction": "Avg companies/auction"
       }
     },
     "operations": {
@@ -125,17 +135,24 @@
         "transactionCompletionRate": "Transaction completion rate",
         "slaCompliance": "SLA compliance",
         "totalInspections": "Total Inspections",
-        "inspectionsPerAuction": "Inspections per auction"
+        "inspectionsPerAuction": "Inspections per auction",
+        "completionRate": "Transaction completion rate",
+        "inspectionsCompleted": "Total Inspections",
+        "avgPerAuction": "Inspections per auction"
       },
       "subtitles": {
         "completionRatio": "11/90 Auctions",
         "daysAfterAcceptance": "3 days after acceptance",
         "paidInspection": "Paid inspection",
-        "average": "Average"
+        "average": "Average",
+        "fromPreviousPeriod": "from previous period"
       },
       "sla": {
         "successfulAuctions": "Successful auctions",
-        "completedTransactions": "Completed transactions"
+        "completedTransactions": "Completed transactions",
+        "inspectionOnTime": "Inspections on time",
+        "delayedInspections": "Delayed inspections",
+        "failedInspections": "Failed inspections"
       }
     },
     "table": {

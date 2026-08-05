@@ -46,6 +46,8 @@ export function DataRoomView() {
     saudiSeries,
     performanceTabs,
     chartType,
+    chartMode,
+    setChartMode,
     onViewAll,
   } = useDataRoom();
 
@@ -81,8 +83,8 @@ export function DataRoomView() {
         activeFilterCount={activeFilterCount}
       />
 
-      {/* Row 1 — KPI Stat Cards */}
-      <Grid container spacing={3} sx={{ mb: 4, mt: 1 }}>
+      {/* Row 1 — 4 Main KPI Cards */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
         {activeData.kpis.map((kpi) => (
           <Grid key={kpi.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <DataRoomKpiCard kpi={kpi} />
@@ -91,7 +93,13 @@ export function DataRoomView() {
       </Grid>
 
       {/* Performance Analytics Header */}
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3, mt: 5 }}>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        justifyContent="space-between"
+        gap={2}
+        sx={{ mb: 3, mt: 5 }}
+      >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Box sx={{ width: 4, height: 24, borderRadius: '4px', bgcolor: '#BF8654' }} />
           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
@@ -99,93 +107,175 @@ export function DataRoomView() {
           </Typography>
         </Stack>
 
-        <ToggleButtonGroup
-          size="small"
-          value={filters.group_by || 'date'}
-          exclusive
-          onChange={(event, newValue) => {
-            if (newValue !== null) {
-              setFiltersHandler({ ...filters, group_by: newValue });
-            }
-          }}
-          sx={{
-            bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
-            p: 0.5,
-            borderRadius: '8px',
-            border: 'none',
-            '& .MuiToggleButtonGroup-grouped': {
-              margin: 0,
-              border: 0,
-              '&.Mui-disabled': {
+        <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap">
+          {/* Chart Style Toggle (Bar BI Chart, Pie/Donut Chart, Line/Area Chart) */}
+          <ToggleButtonGroup
+            size="small"
+            value={chartMode}
+            exclusive
+            onChange={(_e, val) => val && setChartMode(val)}
+            sx={{
+              bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
+              p: 0.5,
+              borderRadius: '8px',
+              border: 'none',
+              '& .MuiToggleButtonGroup-grouped': {
+                margin: 0,
                 border: 0,
+                '&.Mui-disabled': { border: 0 },
+                '&:not(:first-of-type)': { borderRadius: '6px' },
+                '&:first-of-type': { borderRadius: '6px' },
               },
-              '&:not(:first-of-type)': {
-                borderRadius: '6px',
-              },
-              '&:first-of-type': {
-                borderRadius: '6px',
-              },
-            },
-          }}
-        >
-          <ToggleButton
-            value="date"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
+            }}
+          >
+            <ToggleButton
+              value="bar"
+              sx={{
+                px: 1.75,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                '&.Mui-selected': {
                   bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': { bgcolor: 'background.paper' },
+                },
+              }}
+            >
+              <Iconify icon={'solar:chart-2-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
+              Bar
+            </ToggleButton>
+            <ToggleButton
+              value="pie"
+              sx={{
+                px: 1.75,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                '&.Mui-selected': {
+                  bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': { bgcolor: 'background.paper' },
+                },
+              }}
+            >
+              <Iconify icon={'solar:pie-chart-3-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
+              Pie
+            </ToggleButton>
+            <ToggleButton
+              value="area"
+              sx={{
+                px: 1.75,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                '&.Mui-selected': {
+                  bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': { bgcolor: 'background.paper' },
+                },
+              }}
+            >
+              <Iconify icon={'solar:graph-up-bold-duotone' as any} width={14} sx={{ mr: 0.5 }} />
+              Line
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          {/* Group By Selector Toggle */}
+          <ToggleButtonGroup
+            size="small"
+            value={filters.group_by || 'date'}
+            exclusive
+            onChange={(event, newValue) => {
+              if (newValue !== null) {
+                setFiltersHandler({ ...filters, group_by: newValue });
+              }
+            }}
+            sx={{
+              bgcolor: theme.palette.mode === 'dark' ? '#161D26' : '#F4F6F8',
+              p: 0.5,
+              borderRadius: '8px',
+              border: 'none',
+              '& .MuiToggleButtonGroup-grouped': {
+                margin: 0,
+                border: 0,
+                '&.Mui-disabled': {
+                  border: 0,
+                },
+                '&:not(:first-of-type)': {
+                  borderRadius: '6px',
+                },
+                '&:first-of-type': {
+                  borderRadius: '6px',
                 },
               },
             }}
           >
-            Date
-          </ToggleButton>
-          <ToggleButton
-            value="tags_group"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
+            <ToggleButton
+              value="date"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
                   bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
                 },
-              },
-            }}
-          >
-            Tag Groups
-          </ToggleButton>
-          <ToggleButton
-            value="tag"
-            sx={{
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 'bold',
-              '&.Mui-selected': {
-                bgcolor: 'background.paper',
-                color: 'text.primary',
-                boxShadow: theme.customShadows?.z4,
-                '&:hover': {
+              }}
+            >
+              Date
+            </ToggleButton>
+            <ToggleButton
+              value="tags_group"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
                   bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
                 },
-              },
-            }}
-          >
-            Tags
-          </ToggleButton>
-        </ToggleButtonGroup>
+              }}
+            >
+              Tag Groups
+            </ToggleButton>
+            <ToggleButton
+              value="tag"
+              sx={{
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&.Mui-selected': {
+                  bgcolor: 'background.paper',
+                  color: 'text.primary',
+                  boxShadow: theme.customShadows?.z4,
+                  '&:hover': {
+                    bgcolor: 'background.paper',
+                  },
+                },
+              }}
+            >
+              Tags
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
       </Stack>
 
       {/* Pill Tab Selector */}

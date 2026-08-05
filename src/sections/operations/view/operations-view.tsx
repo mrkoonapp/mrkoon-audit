@@ -3,6 +3,7 @@ import type { DashboardFilters } from 'src/components/dashboard';
 import { useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
@@ -10,6 +11,7 @@ import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetOperationsDashboardData } from 'src/api/audit';
 
 import { Iconify } from 'src/components/iconify';
 import {
@@ -23,20 +25,17 @@ import {
 
 import { operationsMockData } from '../data';
 
-import type { OperationStat } from '../data';
-
 // ----------------------------------------------------------------------
 
-function formatStatValue(stat: OperationStat) {
+function formatStatValue(stat: any) {
   return stat.format === 'percent' ? `${stat.value}%` : fNumber(stat.value);
 }
 
 // ----------------------------------------------------------------------
 
 export function OperationsView() {
+  const theme = useTheme();
   const { t } = useTranslate('dashboard');
-
-  const data = operationsMockData;
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -44,10 +43,19 @@ export function OperationsView() {
   const { filters, setFiltersHandler, clearFilters } =
     useCustomFilter<DashboardFilters>(defaultDashboardFilters);
 
+  const { data: apiData } = useGetOperationsDashboardData(filters);
+  const data = apiData ?? operationsMockData;
+
   const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
   const emptyTitle = t('dashboard.shared.empty.title');
   const emptyDescription = t('dashboard.shared.empty.description');
+
+  const slaColors = [
+    theme.palette.success.main,
+    theme.palette.warning.main,
+    theme.palette.error.main,
+  ];
 
   return (
     <DashboardContent maxWidth="xl">
@@ -69,7 +77,7 @@ export function OperationsView() {
               value={formatStatValue(stat)}
               trend={stat.trend}
               subtitle={t(`dashboard.operations.subtitles.${stat.subtitleKey}`)}
-              icon={<Iconify icon={stat.icon} />}
+              icon={<Iconify icon={stat.icon as any} />}
               iconColor={stat.iconColor}
             />
           </Grid>
@@ -85,7 +93,7 @@ export function OperationsView() {
               t(`dashboard.operations.sla.${item.labelKey}`)
             )}
             series={data.slaBreakdown.map((item) => item.value)}
-            colors={data.slaBreakdown.map((item) => item.color)}
+            colors={slaColors}
             seriesName={t('dashboard.operations.slaBreakdown')}
             emptyTitle={emptyTitle}
             emptyDescription={emptyDescription}

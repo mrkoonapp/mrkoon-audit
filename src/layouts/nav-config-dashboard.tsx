@@ -20,6 +20,7 @@ const ICONS = {
   sales: icon('ic-analytics'),
   operations: icon('ic-settings'),
   dataRoom: icon('ic-lock'),
+  tagAnalytics: icon('ic-label'),
   blank: icon('ic-blank'),
 };
 
@@ -43,6 +44,7 @@ export function navData(t: TFunction<any, any>): NavSectionProps['data'] {
         { title: t('sales'), path: paths.dashboard.sales, icon: ICONS.sales },
         { title: t('operations'), path: paths.dashboard.operations, icon: ICONS.operations },
         { title: t('dataRoom'), path: paths.dashboard.dataRoom, icon: ICONS.dataRoom },
+        { title: t('tagAnalytics'), path: paths.dashboard.tagAnalytics, icon: ICONS.tagAnalytics },
       ],
     },
   ];

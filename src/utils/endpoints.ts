@@ -44,6 +44,8 @@ export const endpoints = {
       byCategory: 'audit/auctions/by-category',
       participatedClients: 'audit/auctions/participated-clients',
       list: 'audit/auctions/list',
+      reportByTag: 'audit/auctions/report-by-tag',
+      tagsSuccessRate: 'audit/auctions/tags-success-rate',
     },
     inspections: {
       kpis: 'audit/inspections/kpis',
@@ -65,5 +67,7 @@ export const endpoints = {
     onboarding: {
       kpis: 'audit/onboarding/kpis',
     },
+    tags: 'audit/tags',
+    tagGroups: 'audit/tag-groups',
   },
 };

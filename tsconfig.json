@@ -25,7 +25,7 @@
     "noEmit": true,
     "strictNullChecks": true
   },
-  "include": ["src"],
+  "include": ["src", "e2e"],
   "exclude": ["node_modules"],
   "references": [
     {
