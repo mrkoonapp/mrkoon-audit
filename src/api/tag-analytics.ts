@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
 
+import { DATE_PERIODS } from 'src/utils/constants';
 import axiosInstance from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
@@ -99,7 +100,9 @@ export function buildTagAnalyticsParams(filters: TagAnalyticsFilters) {
     params.group_by = filters.tag_mode;
   }
 
-  if (filters.period && filters.period !== 'custom') {
+  if (filters.period === DATE_PERIODS.ALL_TIME) {
+    params.period = 'custom';
+  } else if (filters.period && filters.period !== 'custom') {
     params.period = filters.period;
   }
   if (filters.date_from) params.date_from = filters.date_from;

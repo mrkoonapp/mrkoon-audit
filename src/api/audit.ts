@@ -7,6 +7,7 @@ import { endpoints } from 'src/utils/endpoints';
 import { queryKeys } from 'src/utils/query-keys';
 import { getLocalizedText } from 'src/utils/format-string';
 
+import { DATE_PERIODS } from 'src/utils/constants';
 import axiosInstance from 'src/lib/axios';
 import { useTranslate } from 'src/locales';
 
@@ -87,7 +88,9 @@ export interface SuccessRateResponse {
 export function buildQueryParams(filters: DashboardFilters) {
   const params: Record<string, any> = {};
 
-  if (filters.period && filters.period !== 'custom') {
+  if (filters.period === DATE_PERIODS.ALL_TIME) {
+    params.period = 'custom';
+  } else if (filters.period && filters.period !== 'custom') {
     params.period = filters.period;
   }
 

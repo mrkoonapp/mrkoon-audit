@@ -3,6 +3,7 @@ import type { DashboardFilters } from 'src/components/dashboard';
 import dayjs from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
 
+import { DATE_PERIODS } from 'src/utils/constants';
 import axiosInstance from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
@@ -33,7 +34,9 @@ export function useGetCompareData(filters: DashboardFilters & { type: string; gr
     group_by: filters.group_by,
   };
 
-  if (filters.period && filters.period !== 'custom') {
+  if (filters.period === DATE_PERIODS.ALL_TIME) {
+    params.period = 'custom';
+  } else if (filters.period && filters.period !== 'custom') {
     params.period = filters.period;
   }
 
