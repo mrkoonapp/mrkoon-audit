@@ -17,7 +17,6 @@ import {
 } from 'src/api/tag-analytics';
 
 import {
-  getPeriodRange,
   countActiveFilters,
   defaultDashboardFilters,
 } from 'src/components/dashboard';
@@ -26,11 +25,9 @@ import {
 
 export type TagMode = 'tag' | 'tags_group';
 
-// Default filters: quarterly period selected out of the box
+// Default filters: all time period selected out of the box
 const initialTagAnalyticsFilters: DashboardFilters = {
   ...defaultDashboardFilters,
-  period: DATE_PERIODS.QUARTERLY,
-  ...getPeriodRange(DATE_PERIODS.QUARTERLY),
 };
 
 export function useTagAnalytics() {
@@ -100,7 +97,7 @@ export function useTagAnalytics() {
       tag_mode: tagMode,
       tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
       tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
-      period: filters.period || 'quarterly',
+      period: filters.period || DATE_PERIODS.ALL_TIME,
       date_from: baseParams.date_from,
       date_to: baseParams.date_to,
       country_id: baseParams.country_id,
@@ -118,7 +115,7 @@ export function useTagAnalytics() {
       group_by: tagMode,
       tag_id: tagMode === 'tag' ? (selectedTagId ?? undefined) : undefined,
       tags_group_id: tagMode === 'tags_group' ? (selectedTagGroupId ?? undefined) : undefined,
-      period: filters.period || 'quarterly',
+      period: filters.period || DATE_PERIODS.ALL_TIME,
       date_from: baseParams.date_from,
       date_to: baseParams.date_to,
       country_id: baseParams.country_id,

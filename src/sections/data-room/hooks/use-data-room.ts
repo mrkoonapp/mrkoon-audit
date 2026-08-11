@@ -69,7 +69,6 @@ export function useDataRoom() {
     () => ({
       ...buildQueryParams(filters),
       type: selectedTabType,
-      period: filters.period || 'monthly',
       group_by: filters.group_by || 'date',
     }),
     [filters, selectedTabType]

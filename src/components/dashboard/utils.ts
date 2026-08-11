@@ -15,10 +15,8 @@ import type { DashboardFilters } from './types';
 
 /** Empty filter state used to seed and reset the shared filters drawer. */
 export const defaultDashboardFilters: DashboardFilters = {
-  // Empty period = no date filter selected.
-  period: '',
-  startDate: null,
-  endDate: null,
+  period: DATE_PERIODS.ALL_TIME,
+  ...getPeriodRange(DATE_PERIODS.ALL_TIME),
   // Empty country id = the "All countries" option (unfiltered).
   country: '',
 };
@@ -44,6 +42,8 @@ export function getPeriodRange(period: DatePeriod): {
   const now = dayjs();
 
   switch (period) {
+    case DATE_PERIODS.ALL_TIME:
+      return { startDate: dayjs('2020-01-01').startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.WEEKLY:
       return { startDate: now.subtract(6, 'day').startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.MONTHLY:

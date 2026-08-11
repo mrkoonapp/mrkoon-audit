@@ -119,6 +119,7 @@ export function OperationsView() {
           reset: t('dashboard.shared.filters.reset'),
           dateError: t('dashboard.shared.filters.dateError'),
           period: t('dashboard.shared.filters.period'),
+          periodAllTime: t('dashboard.shared.filters.periodAllTime'),
           periodWeekly: t('dashboard.shared.filters.periodWeekly'),
           periodMonthly: t('dashboard.shared.filters.periodMonthly'),
           periodQuarterly: t('dashboard.shared.filters.periodQuarterly'),

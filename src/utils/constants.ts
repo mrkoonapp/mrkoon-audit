@@ -139,6 +139,7 @@ export const INSPECTION_STATUS = (t: (key: string) => string) => [
  * concrete date range via `getPeriodRange` (see `src/components/dashboard/utils.ts`).
  */
 export const DATE_PERIODS = {
+  ALL_TIME: 'all_time',
   WEEKLY: 'weekly',
   MONTHLY: 'monthly',
   QUARTERLY: 'quarterly',

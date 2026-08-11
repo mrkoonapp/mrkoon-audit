@@ -437,6 +437,7 @@ export type DashboardFiltersDrawerProps = {
     date?: string;
     /** Label for the period selector (e.g. "Period"). */
     period?: string;
+    periodAllTime?: string;
     periodWeekly?: string;
     periodMonthly?: string;
     periodQuarterly?: string;
