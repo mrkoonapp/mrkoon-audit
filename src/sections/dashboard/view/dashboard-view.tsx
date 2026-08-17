@@ -116,65 +116,69 @@ export function DashboardView() {
 
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat cards */}
-        {statsList.map((stat) => {
-          let subMetrics: { label: string; value: React.ReactNode }[] | undefined;
+        <Grid size={{ xs: 12 }}>
+          <Grid container spacing={3} columns={{ xs: 1, sm: 2, md: 5 }}>
+            {statsList.map((stat) => {
+              let subMetrics: { label: string; value: React.ReactNode }[] | undefined;
 
-          if (stat.id === 'products' && stat.auctionsValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.auctions'),
-                value: isLoading ? '-' : fNumber(stat.auctionsValue),
-              },
-            ];
-          } else if (stat.id === 'sellers' && stat.activeValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.active'),
-                value: isLoading ? '-' : fNumber(stat.activeValue),
-              },
-            ];
-          } else if (stat.id === 'buyers' && stat.activeValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.active'),
-                value: isLoading ? '-' : fNumber(stat.activeValue),
-              },
-            ];
-          } else if (stat.id === 'bids' && stat.biddersValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.totalBidders'),
-                value: isLoading ? '-' : fNumber(stat.biddersValue),
-              },
-            ];
-          } else if (
-            stat.id === 'inspections' &&
-            stat.offlineValue !== undefined &&
-            stat.onlineValue !== undefined
-          ) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.offline'),
-                value: isLoading ? '-' : fNumber(stat.offlineValue),
-              },
-              {
-                label: t('dashboard.dashboard.stats.online'),
-                value: isLoading ? '-' : fNumber(stat.onlineValue),
-              },
-            ];
-          }
+              if (stat.id === 'products' && stat.auctionsValue !== undefined) {
+                subMetrics = [
+                  {
+                    label: t('dashboard.dashboard.stats.auctions'),
+                    value: isLoading ? '-' : fNumber(stat.auctionsValue),
+                  },
+                ];
+              } else if (stat.id === 'sellers' && stat.activeValue !== undefined) {
+                subMetrics = [
+                  {
+                    label: t('dashboard.dashboard.stats.active'),
+                    value: isLoading ? '-' : fNumber(stat.activeValue),
+                  },
+                ];
+              } else if (stat.id === 'buyers' && stat.activeValue !== undefined) {
+                subMetrics = [
+                  {
+                    label: t('dashboard.dashboard.stats.active'),
+                    value: isLoading ? '-' : fNumber(stat.activeValue),
+                  },
+                ];
+              } else if (stat.id === 'bids' && stat.biddersValue !== undefined) {
+                subMetrics = [
+                  {
+                    label: t('dashboard.dashboard.stats.totalBidders'),
+                    value: isLoading ? '-' : fNumber(stat.biddersValue),
+                  },
+                ];
+              } else if (
+                stat.id === 'inspections' &&
+                stat.offlineValue !== undefined &&
+                stat.onlineValue !== undefined
+              ) {
+                subMetrics = [
+                  {
+                    label: t('dashboard.dashboard.stats.offline'),
+                    value: isLoading ? '-' : fNumber(stat.offlineValue),
+                  },
+                  {
+                    label: t('dashboard.dashboard.stats.online'),
+                    value: isLoading ? '-' : fNumber(stat.onlineValue),
+                  },
+                ];
+              }
 
-          return (
-            <Grid key={stat.id} size={{ xs: 12, sm: 6, md: 3 }}>
-              <StatCard
-                label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
-                value={isLoading ? '-' : fNumber(stat.value)}
-                totalLabel={subMetrics ? t('dashboard.dashboard.stats.total') : undefined}
-                subMetrics={subMetrics}
-              />
-            </Grid>
-          );
-        })}
+              return (
+                <Grid key={stat.id} size={1}>
+                  <StatCard
+                    label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
+                    value={isLoading ? '-' : fNumber(stat.value)}
+                    totalLabel={subMetrics ? t('dashboard.dashboard.stats.total') : undefined}
+                    subMetrics={subMetrics}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
 
         {/* Row 2 — success rate donut + new clients list */}
         <Grid size={{ xs: 12, md: 5 }}>
