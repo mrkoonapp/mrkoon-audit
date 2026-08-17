@@ -33,6 +33,8 @@ export const mockHomeKpiData: { data: HomeKpiResponse } = {
     active_buyers: 46,
     total_products: 158,
     total_auctions: 32,
+    total_bids: 50,
+    total_bidders: 20,
     all_clients_count: 3,
     new_clients: [
       {

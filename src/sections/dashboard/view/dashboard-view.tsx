@@ -63,6 +63,7 @@ export function DashboardView() {
     { id: 'sellers', labelKey: 'totalSellers', value: 0, activeValue: 0 },
     { id: 'inspections', labelKey: 'totalInspections', value: 0, offlineValue: 0, onlineValue: 0 },
     { id: 'buyers', labelKey: 'totalBuyers', value: 0, activeValue: 0 },
+    { id: 'bids', labelKey: 'totalBids', value: 0, biddersValue: 0 },
   ];
 
   const newClientsItems = (data?.newClients?.items || []).map((client) => ({
@@ -137,6 +138,13 @@ export function DashboardView() {
               {
                 label: t('dashboard.dashboard.stats.active'),
                 value: isLoading ? '-' : fNumber(stat.activeValue),
+              },
+            ];
+          } else if (stat.id === 'bids' && stat.biddersValue !== undefined) {
+            subMetrics = [
+              {
+                label: t('dashboard.dashboard.stats.totalBidders'),
+                value: isLoading ? '-' : fNumber(stat.biddersValue),
               },
             ];
           } else if (

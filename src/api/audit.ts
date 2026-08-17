@@ -28,6 +28,8 @@ export interface HomeKpiResponse {
   active_buyers: number;
   total_products: number;
   total_auctions: number;
+  total_bids: number;
+  total_bidders: number;
   all_clients_count?: number;
   new_clients: {
     id: number;
@@ -253,6 +255,12 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
               labelKey: 'totalBuyers',
               value: kpis.total_buyers,
               activeValue: kpis.active_buyers,
+            },
+            {
+              id: 'bids',
+              labelKey: 'totalBids',
+              value: kpis.total_bids,
+              biddersValue: kpis.total_bidders,
             },
           ],
           successRate: {

@@ -42,7 +42,9 @@
         "offline": "Offline",
         "online": "Online",
         "totalProducts": "Total Products",
-        "auctions": "Auctions"
+        "auctions": "Auctions",
+        "totalBids": "Total Bids",
+        "totalBidders": "Total Bidders"
       },
       "successRate": {
         "title": "Success rate",

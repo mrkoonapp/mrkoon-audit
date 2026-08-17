@@ -42,7 +42,9 @@
         "offline": "حضوري",
         "online": "إلكتروني",
         "totalProducts": "إجمالي المنتجات",
-        "auctions": "المزادات"
+        "auctions": "المزادات",
+        "totalBids": "إجمالي المزايدات",
+        "totalBidders": "إجمالي المزايدين"
       },
       "successRate": {
         "title": "معدل النجاح",
