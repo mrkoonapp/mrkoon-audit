@@ -10,6 +10,7 @@ import {
   TableHead,
   Typography,
   TableContainer,
+  Tooltip,
 } from '@mui/material';
 
 import { fNumber } from 'src/utils/format-number';
@@ -141,8 +142,8 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     {
       kpiName: 'Auctions',
       definition: 'end-date',
-      total: rawKpis.total_auctions ?? 0,
-      countryValues: getCountryValuesObj([], 'total'), // no breakdown available usually
+      total: rawKpis.advanced_auctions?.total ?? rawKpis.total_auctions ?? 0,
+      countryValues: getCountryValuesObj(rawKpis.advanced_auctions?.country_breakdown || [], 'total_count'),
     },
     {
       kpiName: 'Auctions Done',
@@ -277,7 +278,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
       sx={{
         mb: 4,
         borderRadius: 2,
-        overflow: 'hidden',
+        overflow: 'visible', // allow sticky to work with window scroll
         boxShadow: (theme) => theme.customShadows?.z4 || 1,
       }}
     >
@@ -285,7 +286,6 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
         <TableHead>
           <TableRow sx={{ bgcolor: 'background.neutral' }}>
             <TableCell sx={{ fontWeight: 'bold' }}>KPI Name</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Definition</TableCell>
             <TableCell sx={{ fontWeight: 'bold' }}>Total</TableCell>
             {showBreakdown &&
               countries.map((c) => (
@@ -301,9 +301,18 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
               return (
                 <TableRow
                   key={`group-${index}`}
-                  sx={{ bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#1D2734' : '#F4F6F8') }}
                 >
-                  <TableCell colSpan={3 + (showBreakdown ? countries.length : 0)} sx={{ py: 2 }}>
+                  <TableCell 
+                    colSpan={2 + (showBreakdown ? countries.length : 0)} 
+                    sx={{ 
+                      py: 2,
+                      position: 'sticky',
+                      top: 64, // accounting for global header height (e.g., 64px)
+                      zIndex: 10,
+                      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#1D2734' : '#F4F6F8'),
+                      boxShadow: (theme) => `0 2px 4px -2px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)'}`
+                    }}
+                  >
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'primary.main', textTransform: 'uppercase' }}>
                       {row.label}
                     </Typography>
@@ -312,17 +321,34 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
               );
             }
 
+            const displayName = row.kpiName || row.definition;
+
             return (
               <TableRow key={`row-${index}`} hover>
-                <TableCell sx={{ fontWeight: 'medium' }}>{row.kpiName}</TableCell>
-                <TableCell sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>
-                  {row.definition}
+                <TableCell sx={{ fontWeight: 'medium' }}>
+                  <Tooltip title={row.definition} placement="top" arrow>
+                    <span style={{ cursor: 'help', borderBottom: '1px dotted #888' }}>
+                      {displayName}
+                    </span>
+                  </Tooltip>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>{formatCell(row.total)}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>
+                  <Tooltip title={row.definition} placement="top" arrow>
+                    <span style={{ cursor: 'help' }}>
+                      {formatCell(row.total)}
+                    </span>
+                  </Tooltip>
+                </TableCell>
                 
                 {showBreakdown &&
                   countries.map((c) => (
-                    <TableCell key={c.id}>{formatCell(row.countryValues?.[c.id])}</TableCell>
+                    <TableCell key={c.id}>
+                      <Tooltip title={row.definition} placement="top" arrow>
+                        <span style={{ cursor: 'help' }}>
+                          {formatCell(row.countryValues?.[c.id])}
+                        </span>
+                      </Tooltip>
+                    </TableCell>
                   ))}
               </TableRow>
             );

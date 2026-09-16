@@ -417,11 +417,13 @@ export type DashboardToolbarProps = {
   /** Search value — when omitted (no `onSearchChange`), the search field is hidden. */
   searchValue?: string;
   onSearchChange?: (value: string) => void;
-  onOpenFilters: () => void;
+  onOpenFilters?: () => void;
   searchPlaceholder?: string;
   filterLabel?: string;
   /** Number of active filters — renders a badge on the filter button. */
   activeFilterCount?: number;
+  hideFilterButton?: boolean;
+  children?: ReactNode;
   sx?: SxProps<Theme>;
 };
 
