@@ -33,7 +33,47 @@ export interface HomeKpiResponse {
   total_auctions: number;
   auctions_done?: number;
   total_money?: number;
-  top_tags_gmv?: { name: string; gmv: number }[];
+  
+  top_tags_gmv?: {
+    tag_id: number;
+    name_ar: string | null;
+    name_en: string | null;
+    gmv: number;
+    transactions_count: number;
+    products_count: number;
+  }[];
+
+  advanced_sellers?: {
+    total: number;
+    active: number;
+    registered_in_period: number;
+    active_new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_buyers?: {
+    total: number;
+    active: number;
+    registered_in_period: number;
+    active_new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_products?: {
+    total: number;
+    new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_auctions?: {
+    outcomes: {
+      outcome: string;
+      products_count: number;
+      country_id: number;
+      country_code: string;
+      country_name: any;
+    }[];
+  };
 
   total_inspections: {
     total: number;

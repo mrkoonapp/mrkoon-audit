@@ -747,5 +747,6 @@ export function useDataRoom() {
     chartMode,
     setChartMode,
     onViewAll: handleViewAll,
+    rawKpis: homeDataQuery.data?.rawKpis,
   };
 }

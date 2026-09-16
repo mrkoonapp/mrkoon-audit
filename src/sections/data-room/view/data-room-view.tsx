@@ -18,7 +18,7 @@ import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboard';
 
 import { useDataRoom } from '../hooks/use-data-room';
-import { DataRoomKpiCard, DataRoomChartCard } from '../components';
+import { DataRoomKpiCard, DataRoomChartCard, DataRoomKpiTable } from '../components';
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +49,7 @@ export function DataRoomView() {
     chartMode,
     setChartMode,
     onViewAll,
+    rawKpis,
   } = useDataRoom();
 
   return (
@@ -83,14 +84,8 @@ export function DataRoomView() {
         activeFilterCount={activeFilterCount}
       />
 
-      {/* Row 1 — 4 Main KPI Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {activeData.kpis.map((kpi) => (
-          <Grid key={kpi.id} size={{ xs: 12, sm: 6, md: 3 }}>
-            <DataRoomKpiCard kpi={kpi} />
-          </Grid>
-        ))}
-      </Grid>
+      {/* Main KPI Table */}
+      <DataRoomKpiTable rawKpis={rawKpis} />
 
       {/* Performance Analytics Header */}
       <Stack
