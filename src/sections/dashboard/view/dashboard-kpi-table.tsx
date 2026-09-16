@@ -171,7 +171,7 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     {
       kpiName: 'Total money',
       definition: 'GMV transactions and mrkoon plus transactions',
-      total: rawKpis.total_money ?? 0,
+      total: rawKpis.gmv ?? rawKpis.total_money ?? 0,
       countryValues: getCountryValuesObj([], 'total'),
     },
     {
