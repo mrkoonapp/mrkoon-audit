@@ -105,17 +105,17 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     return { total, countryValues };
   };
 
-  const soldStats = getOutcomeStats(text => text.includes('22') || (text.includes('sold') && !text.includes('not sold')));
-  const acceptedStats = getOutcomeStats(text => text.includes('18') || text.includes('accepted'));
-  const endedStats = getOutcomeStats(text => text.includes('68') || text.includes('ended'));
+  const backInPreviewStats = getOutcomeStats(text => text.includes('22') || text.includes('back in preview'));
+  const endedStats = getOutcomeStats(text => text.includes('18') || text.includes('ended'));
+  const acceptedStats = getOutcomeStats(text => text.includes('68') || text.includes('accepted'));
 
-  const auctionsDoneTotal = soldStats.total + acceptedStats.total + endedStats.total;
+  const auctionsDoneTotal = backInPreviewStats.total + acceptedStats.total + endedStats.total;
   const auctionsDoneCountryValues: Record<number, any> = {};
   countries.forEach(c => {
-    const s = soldStats.countryValues[c.id] !== '-' ? soldStats.countryValues[c.id] : 0;
+    const b = backInPreviewStats.countryValues[c.id] !== '-' ? backInPreviewStats.countryValues[c.id] : 0;
     const a = acceptedStats.countryValues[c.id] !== '-' ? acceptedStats.countryValues[c.id] : 0;
     const e = endedStats.countryValues[c.id] !== '-' ? endedStats.countryValues[c.id] : 0;
-    const sum = s + a + e;
+    const sum = b + a + e;
     auctionsDoneCountryValues[c.id] = sum > 0 ? sum : '-';
   });
 
@@ -148,21 +148,21 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     },
     {
       kpiName: '',
-      definition: '↳ Sold (22)',
-      total: soldStats.total,
-      countryValues: soldStats.countryValues,
+      definition: '↳ Back in Preview (22)',
+      total: backInPreviewStats.total,
+      countryValues: backInPreviewStats.countryValues,
     },
     {
       kpiName: '',
-      definition: '↳ Accepted (18)',
-      total: acceptedStats.total,
-      countryValues: acceptedStats.countryValues,
-    },
-    {
-      kpiName: '',
-      definition: '↳ Ended (68)',
+      definition: '↳ Ended (18)',
       total: endedStats.total,
       countryValues: endedStats.countryValues,
+    },
+    {
+      kpiName: '',
+      definition: '↳ Accepted (68)',
+      total: acceptedStats.total,
+      countryValues: acceptedStats.countryValues,
     },
     {
       kpiName: 'Total money',
