@@ -142,11 +142,7 @@ export interface SuccessRateResponse {
 export function buildQueryParams(filters: DashboardFilters) {
   const params: Record<string, any> = {};
 
-  if (filters.period === DATE_PERIODS.ALL_TIME) {
-    params.period = 'custom';
-  } else if (filters.period && filters.period !== 'custom') {
-    params.period = filters.period;
-  }
+  // Only pass date_from and date_to (no period)
 
   if (filters.startDate) {
     params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');

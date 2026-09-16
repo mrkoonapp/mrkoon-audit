@@ -15,8 +15,8 @@ import type { DashboardFilters } from './types';
 
 /** Empty filter state used to seed and reset the shared filters drawer. */
 export const defaultDashboardFilters: DashboardFilters = {
-  period: DATE_PERIODS.ALL_TIME,
-  ...getPeriodRange(DATE_PERIODS.ALL_TIME),
+  period: DATE_PERIODS.MONTHLY,
+  ...getPeriodRange(DATE_PERIODS.MONTHLY),
   // Empty country id = the "All countries" option (unfiltered).
   country: '',
 };
