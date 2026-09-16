@@ -2,44 +2,26 @@ import type { DashboardFilters } from 'src/components/dashboard';
 
 import { useMemo, useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import Table from '@mui/material/Table';
+import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import CardHeader from '@mui/material/CardHeader';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-
-import { paths } from 'src/routes/paths';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
-import { getLocalizedText } from 'src/utils/format-string';
-import { fNumber, fShortenNumber } from 'src/utils/format-number';
+import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 import { useGetHomeDashboardData } from 'src/api/audit';
 import { DashboardContent } from 'src/layouts/dashboard';
-import usdPattern from 'src/assets/pattern/usd-pattern.svg';
-import { highlightCardColors } from 'src/theme/theme-config';
-import transactionPattern from 'src/assets/pattern/transaction-pattern.svg';
 
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
 import {
-  StatCard,
   DonutCard,
-  ViewAllLink,
-  formatAmount,
-  AreaChartCard,
-  MetricListCard,
-  ListWidgetCard,
-  formatJoinedAt,
   DashboardToolbar,
-  ProgressListCard,
-  HighlightStatCard,
   countActiveFilters,
   DashboardFiltersDrawer,
   defaultDashboardFilters,
@@ -48,7 +30,7 @@ import {
 // ----------------------------------------------------------------------
 
 export function DashboardView() {
-  const { t, currentLang } = useTranslate('dashboard');
+  const { t } = useTranslate('dashboard');
 
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -63,52 +45,6 @@ export function DashboardView() {
   // Section labels — resolved here so widgets stay translation-free.
   const emptyTitle = t('dashboard.shared.empty.title');
   const emptyDescription = t('dashboard.shared.empty.description');
-
-  const statsList = data?.stats || [
-    // { id: 'gmv', labelKey: 'gmv', value: 0 },
-    { id: 'products', labelKey: 'totalProducts', value: 0, auctionsValue: 0 },
-    { id: 'sellers', labelKey: 'totalSellers', value: 0, activeValue: 0 },
-    { id: 'inspections', labelKey: 'totalInspections', value: 0, offlineValue: 0, onlineValue: 0 },
-    { id: 'buyers', labelKey: 'totalBuyers', value: 0, activeValue: 0 },
-    { id: 'bids', labelKey: 'totalBids', value: 0, biddersValue: 0 },
-  ];
-
-  const newClientsItems = (data?.newClients?.items || []).map((client) => ({
-    id: client.id,
-    avatarUrl: client.avatarUrl,
-    primary: client.name,
-    secondary: client.phone || '',
-    trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
-  }));
-
-  const topSellersItems = (data?.topSellers || []).map((seller) => ({
-    id: seller.id,
-    avatarUrl: seller.avatarUrl,
-    primary: seller.name,
-    secondary: getLocalizedText(seller.category, currentLang.value),
-    metrics: [
-      { value: formatAmount(seller.amount, seller.currency) },
-      {
-        icon: <Iconify icon="solar:round-transfer-horizontal-bold" />,
-        value: fNumber(seller.quantity),
-      },
-    ],
-  }));
-
-  const viewAllAction = (
-    <ViewAllLink
-      href={`${paths.dashboard.clients}?tab=company`}
-      label={t('dashboard.shared.viewAll')}
-    />
-  );
-
-  const topCategoriesItems = (data?.topCategories || []).map((category, index) => ({
-    id: category.id,
-    label: getLocalizedText(category.name, currentLang.value),
-    value: fNumber(category.value),
-    percent: category.percent,
-    color: (['primary', 'success', 'warning', 'info', 'error'] as const)[index % 5],
-  }));
 
   return (
     <DashboardContent maxWidth="xl">
@@ -213,7 +149,7 @@ export function DashboardView() {
                       <TableRow>
                         <TableCell>{t('dashboard.dashboard.stats.topTags', { defaultValue: 'Top 3 tags with GMV' })}</TableCell>
                         <TableCell align="right">
-                          {isLoading ? '-' : data?.rawKpis?.top_tags_gmv?.map((t) => `${t.name}: ${fNumber(t.gmv)}`).join(', ') || '-'}
+                          {isLoading ? '-' : data?.rawKpis?.top_tags_gmv?.map((tag) => `${tag.name}: ${fNumber(tag.gmv)}`).join(', ') || '-'}
                         </TableCell>
                       </TableRow>
                     </TableBody>
