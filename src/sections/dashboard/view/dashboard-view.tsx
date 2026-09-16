@@ -55,7 +55,7 @@ export function DashboardView() {
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat tables */}
         <Grid size={{ xs: 12 }}>
-          <DashboardKpiTable rawKpis={data?.rawKpis} />
+          <DashboardKpiTable rawKpis={data?.rawKpis} filters={filters} />
         </Grid>
 
         {/* Row 2 — success rate donut + new clients list */}

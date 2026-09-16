@@ -18,7 +18,7 @@ import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboard';
 
 import { useDataRoom } from '../hooks/use-data-room';
-import { DataRoomChartCard, DataRoomKpiCard } from '../components';
+import { DataRoomKpiCard, DataRoomChartCard } from '../components';
 
 // ----------------------------------------------------------------------
 
