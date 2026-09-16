@@ -13,9 +13,17 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import {
   DashboardToolbar,
   countActiveFilters,
-  DashboardFiltersDrawer,
   defaultDashboardFilters,
 } from 'src/components/dashboard';
+
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { CountrySelectRemote } from 'src/components/country-select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { fIsAfter } from 'src/utils/format-time';
+import { DATE_PERIODS } from 'src/utils/constants';
+import type { DatePeriod } from 'src/utils/constants';
+import { getPeriodRange } from 'src/components/dashboard/utils';
 
 import { DashboardKpiTable } from './dashboard-kpi-table';
 
@@ -38,16 +46,78 @@ export function DashboardView() {
   const emptyTitle = t('dashboard.shared.empty.title');
   const emptyDescription = t('dashboard.shared.empty.description');
 
+  const isCustomPeriod = filters.period === DATE_PERIODS.CUSTOM;
+  const dateError = isCustomPeriod && fIsAfter(filters.startDate, filters.endDate);
+
+  const handlePeriodChange = (value: DatePeriod) => {
+    if (value === DATE_PERIODS.CUSTOM || value === '') {
+      setFiltersHandler({ period: value });
+      return;
+    }
+    const { startDate, endDate } = getPeriodRange(value);
+    setFiltersHandler({ period: value, startDate, endDate });
+  };
+
+  const periodOptions: { value: DatePeriod; label: string }[] = [
+    { value: DATE_PERIODS.ALL_TIME, label: t('dashboard.shared.filters.periodAllTime') },
+    { value: DATE_PERIODS.WEEKLY, label: t('dashboard.shared.filters.periodWeekly') },
+    { value: DATE_PERIODS.MONTHLY, label: t('dashboard.shared.filters.periodMonthly') },
+    { value: DATE_PERIODS.QUARTERLY, label: t('dashboard.shared.filters.periodQuarterly') },
+    { value: DATE_PERIODS.YEARLY, label: t('dashboard.shared.filters.periodYearly') },
+    { value: DATE_PERIODS.CUSTOM, label: t('dashboard.shared.filters.periodCustom') },
+  ];
+
   return (
     <DashboardContent maxWidth="xl">
       <DashboardToolbar
         searchValue={search}
         onSearchChange={setSearch}
-        onOpenFilters={() => setFiltersOpen(true)}
         searchPlaceholder={t('dashboard.shared.search')}
-        filterLabel={t('dashboard.shared.filter')}
-        activeFilterCount={activeFilterCount}
-      />
+        hideFilterButton
+      >
+        <TextField
+          select
+          size="small"
+          label={t('dashboard.shared.filters.period')}
+          value={filters.period}
+          onChange={(event) => handlePeriodChange(event.target.value as DatePeriod)}
+          sx={{ minWidth: 160 }}
+        >
+          {periodOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {isCustomPeriod && (
+          <>
+            <DatePicker
+              label={t('dashboard.shared.filters.startDate')}
+              value={filters.startDate}
+              onChange={(newValue) => setFiltersHandler({ startDate: newValue })}
+              slotProps={{ textField: { size: 'small', sx: { minWidth: 140 } } }}
+            />
+            <DatePicker
+              label={t('dashboard.shared.filters.endDate')}
+              value={filters.endDate}
+              minDate={filters.startDate ?? undefined}
+              onChange={(newValue) => setFiltersHandler({ endDate: newValue })}
+              slotProps={{ textField: { size: 'small', error: dateError, sx: { minWidth: 140 } } }}
+            />
+          </>
+        )}
+
+        <CountrySelectRemote
+          id="dashboard-inline-filter-country"
+          placeholder={t('dashboard.shared.filters.countryPlaceholder')}
+          allLabel={t('dashboard.shared.filters.allCountries')}
+          value={filters.country}
+          onChange={(newValue) => setFiltersHandler({ country: newValue })}
+          sx={{ minWidth: 200 }}
+          size="small"
+        />
+      </DashboardToolbar>
 
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat tables */}
@@ -161,32 +231,6 @@ export function DashboardView() {
         </Grid> */}
       </Grid>
 
-      <DashboardFiltersDrawer
-        open={filtersOpen}
-        onClose={() => setFiltersOpen(false)}
-        filters={filters}
-        onApply={(next) => setFiltersHandler(next)}
-        onReset={clearFilters}
-        labels={{
-          title: t('dashboard.shared.filters.title'),
-          date: t('dashboard.shared.filters.date'),
-          startDate: t('dashboard.shared.filters.startDate'),
-          endDate: t('dashboard.shared.filters.endDate'),
-          country: t('dashboard.shared.filters.country'),
-          countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
-          allCountries: t('dashboard.shared.filters.allCountries'),
-          apply: t('dashboard.shared.filters.apply'),
-          reset: t('dashboard.shared.filters.reset'),
-          dateError: t('dashboard.shared.filters.dateError'),
-          period: t('dashboard.shared.filters.period'),
-          periodAllTime: t('dashboard.shared.filters.periodAllTime'),
-          periodWeekly: t('dashboard.shared.filters.periodWeekly'),
-          periodMonthly: t('dashboard.shared.filters.periodMonthly'),
-          periodQuarterly: t('dashboard.shared.filters.periodQuarterly'),
-          periodYearly: t('dashboard.shared.filters.periodYearly'),
-          periodCustom: t('dashboard.shared.filters.periodCustom'),
-        }}
-      />
     </DashboardContent>
   );
 }
