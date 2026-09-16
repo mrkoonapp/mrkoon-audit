@@ -17,17 +17,69 @@ import { useTranslate } from 'src/locales';
 
 export interface HomeKpiResponse {
   gmv: number;
+  
   total_sellers: number;
   active_sellers: number;
+  registered_sellers?: number;
+  active_new_sellers?: number;
+
+  total_buyers: number;
+  active_buyers: number;
+  registered_buyers?: number;
+  active_new_buyers?: number;
+
+  total_products: number;
+  new_products?: number;
+  total_auctions: number;
+  auctions_done?: number;
+  total_money?: number;
+  
+  top_tags_gmv?: {
+    tag_id: number;
+    name_ar: string | null;
+    name_en: string | null;
+    gmv: number;
+    transactions_count: number;
+    products_count: number;
+  }[];
+
+  advanced_sellers?: {
+    total: number;
+    active: number;
+    registered_in_period: number;
+    active_new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_buyers?: {
+    total: number;
+    active: number;
+    registered_in_period: number;
+    active_new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_products?: {
+    total: number;
+    new_in_period: number;
+    country_breakdown: any[];
+  };
+
+  advanced_auctions?: {
+    outcomes: {
+      outcome: string;
+      products_count: number;
+      country_id: number;
+      country_code: string;
+      country_name: any;
+    }[];
+  };
+
   total_inspections: {
     total: number;
     offline: number;
     online: number;
   };
-  total_buyers: number;
-  active_buyers: number;
-  total_products: number;
-  total_auctions: number;
   total_bids: number;
   total_bidders: number;
   all_clients_count?: number;
@@ -90,11 +142,7 @@ export interface SuccessRateResponse {
 export function buildQueryParams(filters: DashboardFilters) {
   const params: Record<string, any> = {};
 
-  if (filters.period === DATE_PERIODS.ALL_TIME) {
-    params.period = 'custom';
-  } else if (filters.period && filters.period !== 'custom') {
-    params.period = filters.period;
-  }
+  // Only pass date_from and date_to (no period)
 
   if (filters.startDate) {
     params.date_from = dayjs(filters.startDate).format('YYYY-MM-DD');
@@ -305,6 +353,7 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             value: c.product_count,
             percent: c.bar_percent,
           })),
+          rawKpis: kpis,
         }
       : null;
 
