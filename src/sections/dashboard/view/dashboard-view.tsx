@@ -202,7 +202,7 @@ export function DashboardView() {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 7 }}>
+        {/* <Grid size={{ xs: 12, md: 7 }}>
           <ListWidgetCard
             title={t('dashboard.dashboard.newClients.title')}
             countBadge={
@@ -218,10 +218,10 @@ export function DashboardView() {
             emptyDescription={emptyDescription}
             loading={isLoading}
           />
-        </Grid>
+        </Grid> */}
 
         {/* Row 3 — transactions area chart + highlight tiles */}
-        <Grid size={{ xs: 12, md: 8 }}>
+        {/* <Grid size={{ xs: 12, md: 8 }}>
           <AreaChartCard
             title={t('dashboard.dashboard.transactions.title')}
             categories={data?.transactions?.categories || []}
@@ -261,10 +261,10 @@ export function DashboardView() {
               sx={{ flex: 1 }}
             />
           </Box>
-        </Grid>
+        </Grid> */}
 
         {/* Row 4 — top sellers + top categories */}
-        <Grid size={{ xs: 12, md: 6 }}>
+        {/* <Grid size={{ xs: 12, md: 6 }}>
           <MetricListCard
             title={t('dashboard.dashboard.topSellers.title')}
             action={viewAllAction}
@@ -283,7 +283,7 @@ export function DashboardView() {
             emptyDescription={emptyDescription}
             loading={isLoading}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
 
       <DashboardFiltersDrawer
