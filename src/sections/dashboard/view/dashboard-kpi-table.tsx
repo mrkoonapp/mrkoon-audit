@@ -171,8 +171,8 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     {
       kpiName: 'Total money',
       definition: 'GMV transactions and mrkoon plus transactions',
-      total: rawKpis.gmv ?? rawKpis.total_money ?? 0,
-      countryValues: getCountryValuesObj([], 'total'),
+      total: rawKpis.advanced_total_money?.total ?? rawKpis.gmv ?? rawKpis.total_money ?? 0,
+      countryValues: getCountryValuesObj(rawKpis.advanced_total_money?.country_breakdown, 'total_gmv'),
     },
     {
       kpiName: 'Top 3 tags with GMV',
