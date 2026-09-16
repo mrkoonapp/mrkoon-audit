@@ -1,15 +1,18 @@
 import React from 'react';
+
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Typography,
 } from '@mui/material';
+
 import { fNumber } from 'src/utils/format-number';
+
 
 export function DataRoomKpiTable({ rawKpis }: { rawKpis: any }) {
   if (!rawKpis) return null;
