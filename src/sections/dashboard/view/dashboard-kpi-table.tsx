@@ -91,6 +91,34 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     return result;
   };
 
+  // Helper for Outcomes breakdown
+  const getOutcomeStats = (matcher: (text: string) => boolean) => {
+    const outcomes = rawKpis?.advanced_auctions?.outcomes || [];
+    const matched = outcomes.filter((o: any) => matcher((o.outcome || '').toLowerCase()));
+    
+    const total = matched.reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
+    const countryValues: Record<number, any> = {};
+    countries.forEach(c => {
+      const cTotal = matched.filter((o: any) => o.country_id === c.id).reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
+      countryValues[c.id] = cTotal > 0 ? cTotal : '-';
+    });
+    return { total, countryValues };
+  };
+
+  const soldStats = getOutcomeStats(text => text.includes('22') || (text.includes('sold') && !text.includes('not sold')));
+  const acceptedStats = getOutcomeStats(text => text.includes('18') || text.includes('accepted'));
+  const endedStats = getOutcomeStats(text => text.includes('68') || text.includes('ended'));
+
+  const auctionsDoneTotal = soldStats.total + acceptedStats.total + endedStats.total;
+  const auctionsDoneCountryValues: Record<number, any> = {};
+  countries.forEach(c => {
+    const s = soldStats.countryValues[c.id] !== '-' ? soldStats.countryValues[c.id] : 0;
+    const a = acceptedStats.countryValues[c.id] !== '-' ? acceptedStats.countryValues[c.id] : 0;
+    const e = endedStats.countryValues[c.id] !== '-' ? endedStats.countryValues[c.id] : 0;
+    const sum = s + a + e;
+    auctionsDoneCountryValues[c.id] = sum > 0 ? sum : '-';
+  });
+
   const rows = [
     // Group: Products
     { isGroup: true, label: `PRODUCTS KPIS ${periodLabel}`.trim() },
@@ -113,10 +141,28 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
       countryValues: getCountryValuesObj([], 'total'), // no breakdown available usually
     },
     {
-      kpiName: 'Done',
+      kpiName: 'Auctions Done',
       definition: 'end-date (status 22 18 68)',
-      total: rawKpis.auctions_done ?? 0,
-      countryValues: getCountryValuesObj([], 'total'),
+      total: auctionsDoneTotal,
+      countryValues: auctionsDoneCountryValues,
+    },
+    {
+      kpiName: '',
+      definition: '↳ Sold (22)',
+      total: soldStats.total,
+      countryValues: soldStats.countryValues,
+    },
+    {
+      kpiName: '',
+      definition: '↳ Accepted (18)',
+      total: acceptedStats.total,
+      countryValues: acceptedStats.countryValues,
+    },
+    {
+      kpiName: '',
+      definition: '↳ Ended (68)',
+      total: endedStats.total,
+      countryValues: endedStats.countryValues,
     },
     {
       kpiName: 'Total money',
