@@ -6,14 +6,11 @@ import Grid from '@mui/material/Grid';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
-import { fNumber } from 'src/utils/format-number';
-
 import { useTranslate } from 'src/locales';
 import { useGetHomeDashboardData } from 'src/api/audit';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import {
-  DonutCard,
   DashboardToolbar,
   countActiveFilters,
   DashboardFiltersDrawer,
@@ -59,7 +56,7 @@ export function DashboardView() {
         </Grid>
 
         {/* Row 2 — success rate donut + new clients list */}
-        <Grid size={{ xs: 12, md: 5 }}>
+        {/* <Grid size={{ xs: 12, md: 5 }}>
           <DonutCard
             title={t('dashboard.dashboard.successRate.title')}
             series={data?.successRate ? [data.successRate.successful, data.successRate.failed] : []}
@@ -78,7 +75,7 @@ export function DashboardView() {
             emptyDescription={emptyDescription}
             loading={isLoading}
           />
-        </Grid>
+        </Grid> */}
 
         {/* <Grid size={{ xs: 12, md: 7 }}>
           <ListWidgetCard
