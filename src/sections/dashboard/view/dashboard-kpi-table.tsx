@@ -130,55 +130,55 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     { isGroup: true, label: `PRODUCTS KPIS ${periodLabel}`.trim() },
     {
       kpiName: 'Total products',
-      definition: 'The total number of products currently in the system',
+      tooltip: 'The total number of products currently in the system',
       total: rawKpis.advanced_products?.total ?? rawKpis.total_products ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'New products',
-      definition: 'Number of new products added during the selected period',
+      tooltip: 'Number of new products added during the selected period',
       total: rawKpis.advanced_products?.new_in_period ?? rawKpis.new_products ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Auctions',
-      definition: 'end-date',
+      tooltip: 'All Auctions',
       total: allAuctionsStats.total || rawKpis.total_auctions || 0,
       countryValues: allAuctionsStats.countryValues,
     },
     {
       kpiName: 'Auctions Done',
-      definition: 'end-date (status 22 18 68)',
+      tooltip: 'end-date (status 22 18 68)',
       total: auctionsDoneTotal,
       countryValues: auctionsDoneCountryValues,
     },
     {
-      kpiName: '',
-      definition: '↳ Sold (68)',
+      kpiName: '↳ Sold (68)',
+      tooltip: 'finished and has transactions created on it',
       total: soldStats.total,
       countryValues: soldStats.countryValues,
     },
     {
-      kpiName: '',
-      definition: '↳ Ended (18)',
+      kpiName: '↳ Ended (18)',
+      tooltip: 'auction date ended without any action',
       total: endedStats.total,
       countryValues: endedStats.countryValues,
     },
     {
-      kpiName: '',
-      definition: '↳ Pending activation (22)',
+      kpiName: '↳ Pending activation (22)',
+      tooltip: 'still in the pipeline',
       total: acceptedStats.total,
       countryValues: acceptedStats.countryValues,
     },
     {
-      kpiName: 'Total money',
-      definition: 'GMV transactions and mrkoon plus transactions',
+      kpiName: 'GMV',
+      tooltip: 'total money gained from mrkoon and mrkoon plus',
       total: rawKpis.advanced_total_money?.total ?? rawKpis.gmv ?? rawKpis.total_money ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_total_money?.country_breakdown, 'total_gmv'),
     },
     {
       kpiName: 'Top 3 tags with GMV',
-      definition: 'Top 3 tags driving the most GMV',
+      tooltip: 'Top 3 tags driving the most GMV',
       total: getTopTagsValue(rawKpis.top_tags_gmv),
       countryValues: getCountryValuesObj([], 'total'),
     },
@@ -187,25 +187,25 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     { isGroup: true, label: `Traders (Buyers) ${periodLabel}`.trim() },
     {
       kpiName: 'Total buyers',
-      definition: 'Total registered buyers in the system',
+      tooltip: 'Total registered buyers in the system',
       total: rawKpis.advanced_buyers?.total ?? rawKpis.total_buyers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'Active buyers',
-      definition: 'who made pay-requests this months',
+      tooltip: 'Active buyers who made pay-requests this period',
       total: rawKpis.advanced_buyers?.active ?? rawKpis.active_buyers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active_count'),
     },
     {
       kpiName: 'Registred buyers',
-      definition: 'which created at with this month',
+      tooltip: 'Registered buyers who created an account this period',
       total: rawKpis.advanced_buyers?.registered_in_period ?? rawKpis.registered_buyers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Active new buyers',
-      definition: 'who made pay-request and registered this month',
+      tooltip: 'Active new buyers who made pay-request and registered this period',
       total: rawKpis.advanced_buyers?.active_new_in_period ?? rawKpis.active_new_buyers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active_new_count'),
     },
@@ -214,25 +214,25 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     { isGroup: true, label: `Suppliers (Sellers) ${periodLabel}`.trim() },
     {
       kpiName: 'Total sellers',
-      definition: 'Total registered sellers in the system',
+      tooltip: 'Total registered sellers in the system',
       total: rawKpis.advanced_sellers?.total ?? rawKpis.total_sellers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'Active sellers',
-      definition: 'who listed one product',
+      tooltip: 'Active sellers who listed one product this period',
       total: rawKpis.advanced_sellers?.active ?? rawKpis.active_sellers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active_count'),
     },
     {
       kpiName: 'Registred sellers',
-      definition: 'which created at with this month',
+      tooltip: 'Registered sellers who created an account this period',
       total: rawKpis.advanced_sellers?.registered_in_period ?? rawKpis.registered_sellers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Active new sellers',
-      definition: 'who listed one product and registered this month',
+      tooltip: 'Active new sellers who listed one product and registered this period',
       total: rawKpis.advanced_sellers?.active_new_in_period ?? rawKpis.active_new_sellers ?? 0,
       countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active_new_count'),
     },
@@ -252,7 +252,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     const matchedRows = rows.filter(r => {
       if (r.isGroup) return false;
       const matchName = String(r.kpiName || '').toLowerCase().includes(q);
-      const matchDef = String(r.definition || '').toLowerCase().includes(q);
+      const matchDef = String(r.tooltip || '').toLowerCase().includes(q);
       return matchName || matchDef;
     });
 
@@ -322,19 +322,19 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
               );
             }
 
-            const displayName = row.kpiName || row.definition;
+            const displayName = row.kpiName;
 
             return (
               <TableRow key={`row-${index}`} hover>
                 <TableCell sx={{ fontWeight: 'medium' }}>
-                  <Tooltip title={row.definition} placement="top" arrow>
+                  <Tooltip title={row.tooltip} placement="top" arrow>
                     <span style={{ cursor: 'help', borderBottom: '1px dotted #888' }}>
                       {displayName}
                     </span>
                   </Tooltip>
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>
-                  <Tooltip title={row.definition} placement="top" arrow>
+                  <Tooltip title={row.tooltip} placement="top" arrow>
                     <span style={{ cursor: 'help' }}>
                       {formatCell(row.total)}
                     </span>
@@ -344,7 +344,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
                 {showBreakdown &&
                   countries.map((c) => (
                     <TableCell key={c.id}>
-                      <Tooltip title={row.definition} placement="top" arrow>
+                      <Tooltip title={row.tooltip} placement="top" arrow>
                         <span style={{ cursor: 'help' }}>
                           {formatCell(row.countryValues?.[c.id])}
                         </span>
