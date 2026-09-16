@@ -98,13 +98,13 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
       kpiName: 'Total products',
       definition: 'The total number of products currently in the system',
       total: rawKpis.advanced_products?.total ?? rawKpis.total_products ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'total'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'New products',
       definition: 'Number of new products added during the selected period',
       total: rawKpis.advanced_products?.new_in_period ?? rawKpis.new_products ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'new_in_period'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_products?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Auctions',
@@ -137,25 +137,25 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
       kpiName: 'Total buyers',
       definition: 'Total registered buyers in the system',
       total: rawKpis.advanced_buyers?.total ?? rawKpis.total_buyers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'total'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'Active buyers',
       definition: 'who made pay-requests this months',
       total: rawKpis.advanced_buyers?.active ?? rawKpis.active_buyers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active_count'),
     },
     {
       kpiName: 'Registred buyers',
       definition: 'which created at with this month',
       total: rawKpis.advanced_buyers?.registered_in_period ?? rawKpis.registered_buyers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'registered_in_period'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Active new buyers',
       definition: 'who made pay-request and registered this month',
       total: rawKpis.advanced_buyers?.active_new_in_period ?? rawKpis.active_new_buyers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active_new_in_period'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_buyers?.country_breakdown, 'active_new_count'),
     },
 
     // Group: Suppliers (Sellers)
@@ -164,31 +164,33 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
       kpiName: 'Total sellers',
       definition: 'Total registered sellers in the system',
       total: rawKpis.advanced_sellers?.total ?? rawKpis.total_sellers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'total'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'total_count'),
     },
     {
       kpiName: 'Active sellers',
       definition: 'who listed one product',
       total: rawKpis.advanced_sellers?.active ?? rawKpis.active_sellers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active_count'),
     },
     {
       kpiName: 'Registred sellers',
       definition: 'which created at with this month',
       total: rawKpis.advanced_sellers?.registered_in_period ?? rawKpis.registered_sellers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'registered_in_period'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'new_count'),
     },
     {
       kpiName: 'Active new sellers',
       definition: 'who listed one product and registered this month',
       total: rawKpis.advanced_sellers?.active_new_in_period ?? rawKpis.active_new_sellers ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active_new_in_period'),
+      countryValues: getCountryValuesObj(rawKpis.advanced_sellers?.country_breakdown, 'active_new_count'),
     },
   ];
 
   const formatCell = (val: any) => {
-    if (val === '-' || typeof val === 'string' || React.isValidElement(val)) return val;
-    return fNumber(val);
+    if (val === '-' || React.isValidElement(val)) return val;
+    const num = Number(val);
+    if (!isNaN(num) && typeof val !== 'boolean' && val !== '') return fNumber(num);
+    return val;
   };
 
   return (
