@@ -166,7 +166,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     },
     {
       kpiName: '',
-      definition: '↳ Accepted (22)',
+      definition: '↳ Pending activation (22)',
       total: acceptedStats.total,
       countryValues: acceptedStats.countryValues,
     },
