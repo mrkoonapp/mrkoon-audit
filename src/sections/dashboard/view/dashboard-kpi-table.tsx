@@ -14,7 +14,7 @@ import {
 import { fNumber } from 'src/utils/format-number';
 
 
-export function DataRoomKpiTable({ rawKpis }: { rawKpis: any }) {
+export function DashboardKpiTable({ rawKpis }: { rawKpis: any }) {
   if (!rawKpis) return null;
 
   // Country ID 6 = Egypt, 26 = Saudi Arabia
