@@ -92,9 +92,9 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
   };
 
   // Helper for Outcomes breakdown
-  const getOutcomeStats = (matcher: (text: string) => boolean) => {
+  const getOutcomeStats = (matcher: (o: any) => boolean) => {
     const outcomes = rawKpis?.advanced_auctions?.outcomes || [];
-    const matched = outcomes.filter((o: any) => matcher((o.outcome || '').toLowerCase()));
+    const matched = outcomes.filter((o: any) => matcher(o));
     
     const total = matched.reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
     const countryValues: Record<number, any> = {};
@@ -105,9 +105,13 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     return { total, countryValues };
   };
 
-  const soldStats = getOutcomeStats(text => text.includes('68') || (text.includes('sold') && !text.includes('not sold')));
-  const endedStats = getOutcomeStats(text => text.includes('18') || text.includes('ended'));
-  const acceptedStats = getOutcomeStats(text => text.includes('22') || text.includes('accepted'));
+  const isSold = (o: any) => o.status_id === 68 || o.status === 68 || String(o.outcome || '').includes('68') || (String(o.outcome || '').toLowerCase().includes('sold') && !String(o.outcome || '').toLowerCase().includes('not sold'));
+  const isEnded = (o: any) => o.status_id === 18 || o.status === 18 || String(o.outcome || '').includes('18') || String(o.outcome || '').toLowerCase().includes('ended');
+  const isAccepted = (o: any) => o.status_id === 22 || o.status === 22 || String(o.outcome || '').includes('22') || String(o.outcome || '').toLowerCase().includes('accepted');
+
+  const soldStats = getOutcomeStats(isSold);
+  const endedStats = getOutcomeStats(isEnded);
+  const acceptedStats = getOutcomeStats(isAccepted);
 
   const auctionsDoneTotal = soldStats.total + acceptedStats.total + endedStats.total;
   const auctionsDoneCountryValues: Record<number, any> = {};
