@@ -14,7 +14,7 @@ import {
 
 import { fNumber } from 'src/utils/format-number';
 
-export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?: any }) {
+export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; filters?: any; search?: string }) {
   if (!rawKpis) return null;
 
   // Dynamically extract unique countries from all available breakdowns
@@ -243,6 +243,34 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
     return val;
   };
 
+  let displayRows = rows;
+  if (search) {
+    const q = search.toLowerCase();
+    
+    const matchedRows = rows.filter(r => {
+      if (r.isGroup) return false;
+      const matchName = String(r.kpiName || '').toLowerCase().includes(q);
+      const matchDef = String(r.definition || '').toLowerCase().includes(q);
+      return matchName || matchDef;
+    });
+
+    displayRows = [];
+    let currentGroup: any = null;
+    rows.forEach(r => {
+      if (r.isGroup) {
+        currentGroup = r;
+      } else {
+        if (matchedRows.includes(r)) {
+          if (currentGroup) {
+            displayRows.push(currentGroup);
+            currentGroup = null;
+          }
+          displayRows.push(r);
+        }
+      }
+    });
+  }
+
   return (
     <TableContainer
       component={Paper}
@@ -268,7 +296,7 @@ export function DashboardKpiTable({ rawKpis, filters }: { rawKpis: any; filters?
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
+          {displayRows.map((row, index) => {
             if (row.isGroup) {
               return (
                 <TableRow
