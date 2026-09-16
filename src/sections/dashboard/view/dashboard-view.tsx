@@ -1,29 +1,29 @@
+import type { DatePeriod } from 'src/utils/constants';
 import type { DashboardFilters } from 'src/components/dashboard';
 
 import { useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
+
+import { fIsAfter } from 'src/utils/format-time';
+import { DATE_PERIODS } from 'src/utils/constants';
 
 import { useTranslate } from 'src/locales';
 import { useGetHomeDashboardData } from 'src/api/audit';
 import { DashboardContent } from 'src/layouts/dashboard';
 
+import { getPeriodRange } from 'src/components/dashboard/utils';
+import { CountrySelectRemote } from 'src/components/country-select';
 import {
   DashboardToolbar,
   countActiveFilters,
   defaultDashboardFilters,
 } from 'src/components/dashboard';
-
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { CountrySelectRemote } from 'src/components/country-select';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import { fIsAfter } from 'src/utils/format-time';
-import { DATE_PERIODS } from 'src/utils/constants';
-import type { DatePeriod } from 'src/utils/constants';
-import { getPeriodRange } from 'src/components/dashboard/utils';
 
 import { DashboardKpiTable } from './dashboard-kpi-table';
 
@@ -35,7 +35,7 @@ export function DashboardView() {
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { filters, setFiltersHandler, clearFilters } =
+  const { filters, setFilterHandler, clearFilters } =
     useCustomFilter<DashboardFilters>(defaultDashboardFilters);
 
   const { data, isLoading } = useGetHomeDashboardData(filters);
@@ -51,11 +51,11 @@ export function DashboardView() {
 
   const handlePeriodChange = (value: DatePeriod) => {
     if (value === DATE_PERIODS.CUSTOM || value === '') {
-      setFiltersHandler({ period: value });
+      setFilterHandler({ period: value });
       return;
     }
     const { startDate, endDate } = getPeriodRange(value);
-    setFiltersHandler({ period: value, startDate, endDate });
+    setFilterHandler({ period: value, startDate, endDate });
   };
 
   const periodOptions: { value: DatePeriod; label: string }[] = [
@@ -95,14 +95,14 @@ export function DashboardView() {
             <DatePicker
               label={t('dashboard.shared.filters.startDate')}
               value={filters.startDate}
-              onChange={(newValue) => setFiltersHandler({ startDate: newValue })}
+              onChange={(newValue) => setFilterHandler({ startDate: newValue })}
               slotProps={{ textField: { size: 'small', sx: { minWidth: 140 } } }}
             />
             <DatePicker
               label={t('dashboard.shared.filters.endDate')}
               value={filters.endDate}
               minDate={filters.startDate ?? undefined}
-              onChange={(newValue) => setFiltersHandler({ endDate: newValue })}
+              onChange={(newValue) => setFilterHandler({ endDate: newValue })}
               slotProps={{ textField: { size: 'small', error: dateError, sx: { minWidth: 140 } } }}
             />
           </>
@@ -113,7 +113,7 @@ export function DashboardView() {
           placeholder={t('dashboard.shared.filters.countryPlaceholder')}
           allLabel={t('dashboard.shared.filters.allCountries')}
           value={filters.country}
-          onChange={(newValue) => setFiltersHandler({ country: newValue })}
+          onChange={(newValue) => setFilterHandler({ country: newValue })}
           sx={{ minWidth: 200 }}
           size="small"
         />

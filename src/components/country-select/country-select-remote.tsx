@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { Theme, SxProps } from '@mui/material/styles';
 
 import { useMemo } from 'react';
 
@@ -37,6 +38,8 @@ export type CountrySelectRemoteProps = {
   fullWidth?: boolean;
   error?: boolean;
   helperText?: ReactNode;
+  size?: 'small' | 'medium';
+  sx?: SxProps<Theme>;
 };
 
 /**
@@ -54,6 +57,8 @@ export function CountrySelectRemote({
   fullWidth,
   error,
   helperText,
+  size,
+  sx,
 }: CountrySelectRemoteProps) {
   const { currentLang } = useTranslate();
   const { data: countries, isLoading } = useGetCountries();
@@ -82,6 +87,7 @@ export function CountrySelectRemote({
       isOptionEqualToValue={(option, val) => option.value === val.value}
       getOptionLabel={(option) => option.label}
       onChange={(_event, newValue) => onChange(newValue?.value ?? ALL_COUNTRIES_VALUE)}
+      sx={sx}
       renderOption={(props, option) => (
         <Box component="li" {...props} key={option.value}>
           {option.icon ? (
@@ -98,6 +104,7 @@ export function CountrySelectRemote({
       renderInput={(params) => (
         <TextField
           {...params}
+          size={size}
           placeholder={placeholder}
           error={error}
           helperText={helperText}
