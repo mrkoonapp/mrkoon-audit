@@ -110,6 +110,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
   const isEnded = (o: any) => o.status_id === 18 || o.status === 18 || String(o.outcome || '').includes('18') || String(o.outcome || '').toLowerCase().includes('ended');
   const isAccepted = (o: any) => o.status_id === 22 || o.status === 22 || String(o.outcome || '').includes('22') || String(o.outcome || '').toLowerCase().includes('accepted');
 
+  const allAuctionsStats = getOutcomeStats(() => true);
   const soldStats = getOutcomeStats(isSold);
   const endedStats = getOutcomeStats(isEnded);
   const acceptedStats = getOutcomeStats(isAccepted);
@@ -142,8 +143,8 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     {
       kpiName: 'Auctions',
       definition: 'end-date',
-      total: rawKpis.advanced_auctions?.total ?? rawKpis.total_auctions ?? 0,
-      countryValues: getCountryValuesObj(rawKpis.advanced_auctions?.country_breakdown || [], 'total_count'),
+      total: allAuctionsStats.total || rawKpis.total_auctions || 0,
+      countryValues: allAuctionsStats.countryValues,
     },
     {
       kpiName: 'Auctions Done',
