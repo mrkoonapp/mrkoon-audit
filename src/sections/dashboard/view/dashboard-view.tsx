@@ -6,9 +6,9 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import CardHeader from '@mui/material/CardHeader';
 import TableContainer from '@mui/material/TableContainer';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
@@ -60,104 +60,94 @@ export function DashboardView() {
       <Grid container spacing={3}>
         {/* Row 1 — KPI stat tables */}
         <Grid size={{ xs: 12 }}>
-          <Grid container spacing={3}>
-            {/* Buyers Table */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card>
-                <CardHeader title={t('dashboard.dashboard.stats.buyersGroup', { defaultValue: 'Buyers' })} />
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.totalBuyers', { defaultValue: 'Total buyers' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_buyers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.activeBuyers', { defaultValue: 'Active buyers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_buyers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.registeredBuyers', { defaultValue: 'Registered buyers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_buyers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.activeNewBuyers', { defaultValue: 'Active new buyers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_buyers || 0)}</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Card>
-            </Grid>
-
-            {/* Sellers Table */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card>
-                <CardHeader title={t('dashboard.dashboard.stats.sellersGroup', { defaultValue: 'Sellers' })} />
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.totalSellers', { defaultValue: 'Total sellers' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_sellers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.activeSellers', { defaultValue: 'Active sellers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_sellers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.registeredSellers', { defaultValue: 'Registered sellers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_sellers || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.activeNewSellers', { defaultValue: 'Active new sellers (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_sellers || 0)}</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Card>
-            </Grid>
-
-            {/* Products & Transactions Table */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card>
-                <CardHeader title={t('dashboard.dashboard.stats.productsGroup', { defaultValue: 'Products & Transactions' })} />
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.totalProducts', { defaultValue: 'Total products' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_products || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.newProducts', { defaultValue: 'New products (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.new_products || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.auctionsMonthly', { defaultValue: 'Auctions (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_auctions || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.doneMonthly', { defaultValue: 'Done (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.auctions_done || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.totalMoney', { defaultValue: 'Total money (monthly)' })}</TableCell>
-                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_money || 0)}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>{t('dashboard.dashboard.stats.topTags', { defaultValue: 'Top 3 tags with GMV' })}</TableCell>
-                        <TableCell align="right">
-                          {isLoading ? '-' : data?.rawKpis?.top_tags_gmv?.map((tag) => `${tag.name}: ${fNumber(tag.gmv)}`).join(', ') || '-'}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Card>
-            </Grid>
-          </Grid>
+          <Card>
+            <TableContainer>
+              <Table>
+                {/* Table Header for Group Titles */}
+                <TableHead>
+                  <TableRow sx={{ bgcolor: 'background.neutral' }}>
+                    <TableCell colSpan={2} sx={{ typography: 'subtitle2' }}>
+                      {t('dashboard.dashboard.stats.buyersGroup', { defaultValue: 'Buyers' })}
+                    </TableCell>
+                    <TableCell colSpan={2} sx={{ typography: 'subtitle2' }}>
+                      {t('dashboard.dashboard.stats.sellersGroup', { defaultValue: 'Sellers' })}
+                    </TableCell>
+                    <TableCell colSpan={2} sx={{ typography: 'subtitle2' }}>
+                      {t('dashboard.dashboard.stats.productsGroup', { defaultValue: 'Products & Transactions' })}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                
+                <TableBody>
+                  {/* Row 1 */}
+                  <TableRow>
+                    <TableCell>{t('dashboard.dashboard.stats.totalBuyers', { defaultValue: 'Total buyers' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_buyers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.totalSellers', { defaultValue: 'Total sellers' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_sellers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.totalProducts', { defaultValue: 'Total products' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_products || 0)}</TableCell>
+                  </TableRow>
+                  
+                  {/* Row 2 */}
+                  <TableRow>
+                    <TableCell>{t('dashboard.dashboard.stats.activeBuyers', { defaultValue: 'Active buyers (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_buyers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.activeSellers', { defaultValue: 'Active sellers (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_sellers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.newProducts', { defaultValue: 'New products (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.new_products || 0)}</TableCell>
+                  </TableRow>
+                  
+                  {/* Row 3 */}
+                  <TableRow>
+                    <TableCell>{t('dashboard.dashboard.stats.registeredBuyers', { defaultValue: 'Registered buyers (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_buyers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.registeredSellers', { defaultValue: 'Registered sellers (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_sellers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.auctionsMonthly', { defaultValue: 'Auctions (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_auctions || 0)}</TableCell>
+                  </TableRow>
+                  
+                  {/* Row 4 */}
+                  <TableRow>
+                    <TableCell sx={{ borderBottom: 'none' }}>{t('dashboard.dashboard.stats.activeNewBuyers', { defaultValue: 'Active new buyers (monthly)' })}</TableCell>
+                    <TableCell align="right" sx={{ borderBottom: 'none' }}>{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_buyers || 0)}</TableCell>
+                    
+                    <TableCell sx={{ borderBottom: 'none' }}>{t('dashboard.dashboard.stats.activeNewSellers', { defaultValue: 'Active new sellers (monthly)' })}</TableCell>
+                    <TableCell align="right" sx={{ borderBottom: 'none' }}>{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_sellers || 0)}</TableCell>
+                    
+                    <TableCell>{t('dashboard.dashboard.stats.doneMonthly', { defaultValue: 'Done (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.auctions_done || 0)}</TableCell>
+                  </TableRow>
+                  
+                  {/* Row 5 */}
+                  <TableRow>
+                    <TableCell colSpan={2} sx={{ borderBottom: 'none' }} />
+                    <TableCell colSpan={2} sx={{ borderBottom: 'none' }} />
+                    <TableCell>{t('dashboard.dashboard.stats.totalMoney', { defaultValue: 'Total money (monthly)' })}</TableCell>
+                    <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_money || 0)}</TableCell>
+                  </TableRow>
+                  
+                  {/* Row 6 */}
+                  <TableRow>
+                    <TableCell colSpan={2} sx={{ borderBottom: 'none' }} />
+                    <TableCell colSpan={2} sx={{ borderBottom: 'none' }} />
+                    <TableCell sx={{ borderBottom: 'none' }}>{t('dashboard.dashboard.stats.topTags', { defaultValue: 'Top 3 tags with GMV' })}</TableCell>
+                    <TableCell align="right" sx={{ borderBottom: 'none' }}>
+                      {isLoading ? '-' : data?.rawKpis?.top_tags_gmv?.map((tag) => `${tag.name}: ${fNumber(tag.gmv)}`).join(', ') || '-'}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
         </Grid>
 
         {/* Row 2 — success rate donut + new clients list */}
