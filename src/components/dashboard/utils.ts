@@ -45,14 +45,15 @@ export function getPeriodRange(period: DatePeriod): {
     case DATE_PERIODS.ALL_TIME:
       return { startDate: dayjs('2020-01-01').startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.WEEKLY:
-      return { startDate: now.subtract(6, 'day').startOf('day'), endDate: now.endOf('day') };
+      return { startDate: now.startOf('week'), endDate: now.endOf('day') };
     case DATE_PERIODS.MONTHLY:
-      return { startDate: now.subtract(29, 'day').startOf('day'), endDate: now.endOf('day') };
+      return { startDate: now.startOf('month'), endDate: now.endOf('day') };
     case DATE_PERIODS.QUARTERLY: {
-      return { startDate: now.subtract(2, 'month').startOf('month'), endDate: now.endOf('month') };
+      const quarterStartMonth = Math.floor(now.month() / 3) * 3;
+      return { startDate: now.month(quarterStartMonth).startOf('month'), endDate: now.endOf('day') };
     }
     case DATE_PERIODS.YEARLY:
-      return { startDate: now.subtract(11, 'month').startOf('month'), endDate: now.endOf('month') };
+      return { startDate: now.startOf('year'), endDate: now.endOf('day') };
     default:
       return { startDate: null, endDate: null };
   }
