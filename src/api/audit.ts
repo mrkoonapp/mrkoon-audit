@@ -17,17 +17,29 @@ import { useTranslate } from 'src/locales';
 
 export interface HomeKpiResponse {
   gmv: number;
+  
   total_sellers: number;
   active_sellers: number;
+  registered_sellers?: number;
+  active_new_sellers?: number;
+
+  total_buyers: number;
+  active_buyers: number;
+  registered_buyers?: number;
+  active_new_buyers?: number;
+
+  total_products: number;
+  new_products?: number;
+  total_auctions: number;
+  auctions_done?: number;
+  total_money?: number;
+  top_tags_gmv?: { name: string; gmv: number }[];
+
   total_inspections: {
     total: number;
     offline: number;
     online: number;
   };
-  total_buyers: number;
-  active_buyers: number;
-  total_products: number;
-  total_auctions: number;
   total_bids: number;
   total_bidders: number;
   all_clients_count?: number;
@@ -305,6 +317,7 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             value: c.product_count,
             percent: c.bar_percent,
           })),
+          rawKpis: kpis,
         }
       : null;
 

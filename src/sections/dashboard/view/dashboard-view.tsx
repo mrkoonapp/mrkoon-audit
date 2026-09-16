@@ -4,6 +4,13 @@ import { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
 
 import { paths } from 'src/routes/paths';
 
@@ -115,68 +122,105 @@ export function DashboardView() {
       />
 
       <Grid container spacing={3}>
-        {/* Row 1 — KPI stat cards */}
+        {/* Row 1 — KPI stat tables */}
         <Grid size={{ xs: 12 }}>
-          <Grid container spacing={3} columns={{ xs: 1, sm: 2, md: 5 }}>
-            {statsList.map((stat) => {
-              let subMetrics: { label: string; value: React.ReactNode }[] | undefined;
+          <Grid container spacing={3}>
+            {/* Buyers Table */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Card>
+                <CardHeader title={t('dashboard.dashboard.stats.buyersGroup', { defaultValue: 'Buyers' })} />
+                <TableContainer>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.totalBuyers', { defaultValue: 'Total buyers' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_buyers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.activeBuyers', { defaultValue: 'Active buyers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_buyers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.registeredBuyers', { defaultValue: 'Registered buyers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_buyers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.activeNewBuyers', { defaultValue: 'Active new buyers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_buyers || 0)}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Grid>
 
-              if (stat.id === 'products' && stat.auctionsValue !== undefined) {
-                subMetrics = [
-                  {
-                    label: t('dashboard.dashboard.stats.auctions'),
-                    value: isLoading ? '-' : fNumber(stat.auctionsValue),
-                  },
-                ];
-              } else if (stat.id === 'sellers' && stat.activeValue !== undefined) {
-                subMetrics = [
-                  {
-                    label: t('dashboard.dashboard.stats.active'),
-                    value: isLoading ? '-' : fNumber(stat.activeValue),
-                  },
-                ];
-              } else if (stat.id === 'buyers' && stat.activeValue !== undefined) {
-                subMetrics = [
-                  {
-                    label: t('dashboard.dashboard.stats.active'),
-                    value: isLoading ? '-' : fNumber(stat.activeValue),
-                  },
-                ];
-              } else if (stat.id === 'bids' && stat.biddersValue !== undefined) {
-                subMetrics = [
-                  {
-                    label: t('dashboard.dashboard.stats.totalBidders'),
-                    value: isLoading ? '-' : fNumber(stat.biddersValue),
-                  },
-                ];
-              } else if (
-                stat.id === 'inspections' &&
-                stat.offlineValue !== undefined &&
-                stat.onlineValue !== undefined
-              ) {
-                subMetrics = [
-                  {
-                    label: t('dashboard.dashboard.stats.offline'),
-                    value: isLoading ? '-' : fNumber(stat.offlineValue),
-                  },
-                  {
-                    label: t('dashboard.dashboard.stats.online'),
-                    value: isLoading ? '-' : fNumber(stat.onlineValue),
-                  },
-                ];
-              }
+            {/* Sellers Table */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Card>
+                <CardHeader title={t('dashboard.dashboard.stats.sellersGroup', { defaultValue: 'Sellers' })} />
+                <TableContainer>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.totalSellers', { defaultValue: 'Total sellers' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_sellers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.activeSellers', { defaultValue: 'Active sellers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_sellers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.registeredSellers', { defaultValue: 'Registered sellers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.registered_sellers || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.activeNewSellers', { defaultValue: 'Active new sellers (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.active_new_sellers || 0)}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Grid>
 
-              return (
-                <Grid key={stat.id} size={1}>
-                  <StatCard
-                    label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
-                    value={isLoading ? '-' : fNumber(stat.value)}
-                    totalLabel={subMetrics ? t('dashboard.dashboard.stats.total') : undefined}
-                    subMetrics={subMetrics}
-                  />
-                </Grid>
-              );
-            })}
+            {/* Products & Transactions Table */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Card>
+                <CardHeader title={t('dashboard.dashboard.stats.productsGroup', { defaultValue: 'Products & Transactions' })} />
+                <TableContainer>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.totalProducts', { defaultValue: 'Total products' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_products || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.newProducts', { defaultValue: 'New products (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.new_products || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.auctionsMonthly', { defaultValue: 'Auctions (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_auctions || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.doneMonthly', { defaultValue: 'Done (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.auctions_done || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.totalMoney', { defaultValue: 'Total money (monthly)' })}</TableCell>
+                        <TableCell align="right">{isLoading ? '-' : fNumber(data?.rawKpis?.total_money || 0)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>{t('dashboard.dashboard.stats.topTags', { defaultValue: 'Top 3 tags with GMV' })}</TableCell>
+                        <TableCell align="right">
+                          {isLoading ? '-' : data?.rawKpis?.top_tags_gmv?.map((t) => `${t.name}: ${fNumber(t.gmv)}`).join(', ') || '-'}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Grid>
           </Grid>
         </Grid>
 
