@@ -148,7 +148,7 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     },
     {
       kpiName: 'Auctions Done',
-      tooltip: 'end-date (status 22 18 68)',
+      tooltip: 'all auctions started and finished, whether has action or not',
       total: auctionsDoneTotal,
       countryValues: auctionsDoneCountryValues,
     },
