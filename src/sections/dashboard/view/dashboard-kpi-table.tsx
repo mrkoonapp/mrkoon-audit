@@ -153,19 +153,19 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
       countryValues: auctionsDoneCountryValues,
     },
     {
-      kpiName: '↳ Sold (68)',
+      kpiName: '↳ Sold',
       tooltip: 'finished and has transactions created on it',
       total: soldStats.total,
       countryValues: soldStats.countryValues,
     },
     {
-      kpiName: '↳ Ended (18)',
+      kpiName: '↳ Ended',
       tooltip: 'auction date ended without any action',
       total: endedStats.total,
       countryValues: endedStats.countryValues,
     },
     {
-      kpiName: '↳ Pending activation (22)',
+      kpiName: '↳ Pending activation',
       tooltip: 'still in the pipeline',
       total: acceptedStats.total,
       countryValues: acceptedStats.countryValues,
