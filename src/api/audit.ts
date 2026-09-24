@@ -165,14 +165,24 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   const { currentLang } = useTranslate();
   const queryParams = buildQueryParams(filters);
 
+  // Map the dynamic country_id to static country_code for Home KPIs only
+  const kpiQueryParams = { ...queryParams };
+  if (kpiQueryParams.country_id) {
+    if (String(kpiQueryParams.country_id) === '6') kpiQueryParams.country_code = 3;
+    else if (String(kpiQueryParams.country_id) === '26') kpiQueryParams.country_code = 4;
+    else kpiQueryParams.country_code = kpiQueryParams.country_id;
+    
+    delete kpiQueryParams.country_id;
+  }
+
   // 1. Fetch KPIs
   const kpisQuery = useQuery({
-    queryKey: queryKeys.audit.home.kpis(queryParams),
+    queryKey: queryKeys.audit.home.kpis(kpiQueryParams),
     queryFn: async () => {
       const response = await axiosInstance.get<{ data: HomeKpiResponse }>(
         endpoints.audit.home.kpis,
         {
-          params: queryParams,
+          params: kpiQueryParams,
         }
       );
       return response.data.data;
