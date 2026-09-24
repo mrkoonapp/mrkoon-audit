@@ -29,23 +29,24 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     
     const countriesMap = new Map();
     allBreakdowns.forEach((c) => {
-      if (c.country_id) {
+      const idKey = c.country_code || c.country_id;
+      if (idKey) {
         let name = 'Unknown';
         if (typeof c.country_name === 'object' && c.country_name !== null) {
-          name = c.country_name.en || c.country_name.ar || c.country_code || String(c.country_id);
+          name = c.country_name.en || c.country_name.ar || c.country_code || String(idKey);
         } else if (c.country_name) {
           name = c.country_name;
         } else if (c.country_code) {
-          name = c.country_code;
+          name = String(c.country_code);
         } else {
-          name = `Country ${c.country_id}`;
+          name = `Country ${idKey}`;
         }
         
         // Let's ensure standard names if available
-        if (c.country_id === 6 && name.toLowerCase().includes('country 6')) name = 'Egypt';
-        if (c.country_id === 26 && name.toLowerCase().includes('country 26')) name = 'Saudi Arabia';
+        if (idKey === 6 || idKey === 3 || name.toLowerCase().includes('country 6') || name.toLowerCase().includes('country 3')) name = 'Egypt';
+        if (idKey === 26 || idKey === 4 || name.toLowerCase().includes('country 26') || name.toLowerCase().includes('country 4')) name = 'Saudi Arabia';
         
-        countriesMap.set(c.country_id, name);
+        countriesMap.set(idKey, name);
       }
     });
     
@@ -55,9 +56,9 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
   const countries = getUniqueCountries();
   const showBreakdown = countries.length > 1;
 
-  const getCountryValue = (breakdown: any[], countryId: number, fieldName: string) => {
+  const getCountryValue = (breakdown: any[], countryIdKey: number | string, fieldName: string) => {
     if (!breakdown || !Array.isArray(breakdown)) return '-';
-    const country = breakdown.find((c) => c.country_id === countryId);
+    const country = breakdown.find((c) => (c.country_code || c.country_id) === countryIdKey);
     return country && country[fieldName] !== undefined ? country[fieldName] : '-';
   };
 
@@ -98,17 +99,17 @@ export function DashboardKpiTable({ rawKpis, filters, search }: { rawKpis: any; 
     const matched = outcomes.filter((o: any) => matcher(o));
     
     const total = matched.reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
-    const countryValues: Record<number, any> = {};
+    const countryValues: Record<number | string, any> = {};
     countries.forEach(c => {
-      const cTotal = matched.filter((o: any) => o.country_id === c.id).reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
+      const cTotal = matched.filter((o: any) => (o.country_code || o.country_id) === c.id).reduce((sum: number, o: any) => sum + (o.products_count || 0), 0);
       countryValues[c.id] = cTotal > 0 ? cTotal : '-';
     });
     return { total, countryValues };
   };
 
-  const isSold = (o: any) => o.status_id === 68 || o.status === 68 || String(o.outcome || '').includes('68') || (String(o.outcome || '').toLowerCase().includes('sold') && !String(o.outcome || '').toLowerCase().includes('not sold'));
-  const isEnded = (o: any) => o.status_id === 18 || o.status === 18 || String(o.outcome || '').includes('18') || String(o.outcome || '').toLowerCase().includes('ended');
-  const isAccepted = (o: any) => o.status_id === 22 || o.status === 22 || String(o.outcome || '').includes('22') || String(o.outcome || '').toLowerCase().includes('accepted');
+  const isSold = (o: any) => o.status_id === 68 || o.status === 68;
+  const isEnded = (o: any) => o.status_id === 18 || o.status === 18;
+  const isAccepted = (o: any) => o.status_id === 22 || o.status === 22;
 
   const allAuctionsStats = getOutcomeStats(() => true);
   const soldStats = getOutcomeStats(isSold);
