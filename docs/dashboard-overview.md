@@ -1,5 +1,10 @@
 # Dashboard Overview Page & Generic Widget Library
 
+> **Update:** `/dashboard` now follows the Figma redesign — see
+> [`dashboard-overview-design.md`](./dashboard-overview-design.md). The widget library
+> below is still used by the other audit pages; `src/sections/dashboard/data.ts` now
+> holds the redesign's dummy data instead of `dashboardMockData`.
+
 ## What was added
 
 The main dashboard (`/dashboard`) now renders a full overview page instead of the

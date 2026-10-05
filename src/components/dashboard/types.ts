@@ -39,6 +39,19 @@ export type WidgetCardProps = {
   sx?: SxProps<Theme>;
   /** Extra styles applied to the body wrapper below the header. */
   bodySx?: SxProps<Theme>;
+  /** Extra styles for the empty state (e.g. a compact version in short cards). */
+  emptySx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// AccentTitle
+// ----------------------------------------------------------------------
+
+export type AccentTitleProps = {
+  title: ReactNode;
+  /** CSS color of the pill on the left of the title. */
+  accent: string;
+  sx?: SxProps<Theme>;
 };
 
 // ----------------------------------------------------------------------

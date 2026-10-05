@@ -10,6 +10,8 @@ export * from './donut-card';
 
 export * from './widget-card';
 
+export * from './accent-title';
+
 export * from './icon-stat-row';
 
 export * from './view-all-link';

@@ -149,3 +149,22 @@ export const DATE_PERIODS = {
 
 /** A selected date period, or `''` for "no date filter". */
 export type DatePeriod = (typeof DATE_PERIODS)[keyof typeof DATE_PERIODS] | '';
+
+// ----------------------------------------------------------------------
+// Country Constants (dashboard overview)
+// ----------------------------------------------------------------------
+
+/** Backend country ids (`home/get_countries`) used by the country filter. */
+export const COUNTRY_IDS = {
+  EGYPT: '6',
+  SAUDI_ARABIA: '26',
+} as const;
+
+/**
+ * `audit/home/kpis` filters by a separate static `country_code` instead of the
+ * country id, and reports breakdown rows by either one of them.
+ */
+export const HOME_KPI_COUNTRY_CODES: Record<string, number> = {
+  [COUNTRY_IDS.EGYPT]: 3,
+  [COUNTRY_IDS.SAUDI_ARABIA]: 4,
+};

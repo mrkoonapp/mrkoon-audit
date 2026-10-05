@@ -26,6 +26,7 @@ export function WidgetCard({
   emptyDescription,
   sx,
   bodySx,
+  emptySx,
 }: WidgetCardProps) {
   const renderBody = () => {
     if (loading) {
@@ -49,7 +50,7 @@ export function WidgetCard({
         <EmptyContent
           title={emptyTitle}
           description={emptyDescription}
-          sx={{ py: 5, minHeight: 160 }}
+          sx={[{ py: 5, minHeight: 160 }, ...(Array.isArray(emptySx) ? emptySx : [emptySx])]}
         />
       );
     }

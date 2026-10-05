@@ -65,6 +65,84 @@
       },
       "topCategories": {
         "title": "Top 5 Categories"
+      },
+      "overview": {
+        "title": "Dashboard",
+        "subtitle": "Overview",
+        "currency": "EGP",
+        "egypt": "Egypt",
+        "saudiArabia": "Saudi Arabia",
+        "countryCodes": {
+          "EG": "EG",
+          "SA": "SA"
+        },
+        "countries": {
+          "all": "All",
+          "egypt": "Egypt",
+          "ksa": "KSA"
+        },
+        "period": {
+          "week": "Week",
+          "month": "Month",
+          "quarter": "Quarter",
+          "year": "Year",
+          "select": "Select period"
+        },
+        "summary": {
+          "gmv": "GMV",
+          "totalProducts": "Total products",
+          "totalBuyers": "Total buyers",
+          "totalSellers": "Total sellers",
+          "active": "(Active: {{value}})"
+        },
+        "productsKpis": {
+          "title": "Products KPIs",
+          "totalProducts": "Total products",
+          "newProducts": "New products",
+          "auctionsCreated": "Auctions created",
+          "auctionsCompleted": "Auctions completed"
+        },
+        "topCategories": {
+          "title": "Top 3 Categories"
+        },
+        "buyers": {
+          "title": "Buyers"
+        },
+        "sellers": {
+          "title": "Sellers"
+        },
+        "users": {
+          "active": "Active",
+          "registered": "Registered",
+          "new": "New"
+        },
+        "auctions": {
+          "title": "Auctions",
+          "done": "Done",
+          "ended": "Ended",
+          "sold": "Sold",
+          "pendingActivation": "Pending activation"
+        },
+        "payRequests": {
+          "title": "Pay Requests",
+          "createdByBuyers": "Created by buyers",
+          "createdByAdmins": "Created by admins"
+        },
+        "transactions": {
+          "title": "Transaction",
+          "sellers": "Sellers",
+          "buyers": "Buyers",
+          "requests": "Request"
+        },
+        "noResults": {
+          "title": "No matching widgets",
+          "description": "Try a different search term."
+        },
+        "error": {
+          "title": "Could not load the dashboard",
+          "description": "Something went wrong while fetching the KPIs.",
+          "retry": "Retry"
+        }
       }
     },
     "auctions": {
