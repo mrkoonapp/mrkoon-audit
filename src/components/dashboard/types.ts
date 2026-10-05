@@ -39,6 +39,58 @@ export type WidgetCardProps = {
   sx?: SxProps<Theme>;
   /** Extra styles applied to the body wrapper below the header. */
   bodySx?: SxProps<Theme>;
+  /** Extra styles for the empty state (e.g. a compact version in short cards). */
+  emptySx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// AccentTitle
+// ----------------------------------------------------------------------
+
+export type AccentTitleProps = {
+  title: ReactNode;
+  /** CSS color of the pill on the left of the title. */
+  accent: string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// Pie3dChart
+// ----------------------------------------------------------------------
+
+export type Pie3dSlice = {
+  label: string;
+  value: number;
+  /** Any CSS color; the side walls are shaded automatically. */
+  color: string;
+};
+
+export type Pie3dChartProps = {
+  slices: Pie3dSlice[];
+  /** Rendered size in px (the drawing keeps the design's 136×120 ratio). */
+  width?: number;
+  /** Formats the value shown in each slice's hover tooltip. */
+  formatValue?: (value: number) => string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// RoundedDonutChart
+// ----------------------------------------------------------------------
+
+export type RoundedDonutSlice = {
+  label: string;
+  value: number;
+  color: string;
+};
+
+export type RoundedDonutChartProps = {
+  slices: RoundedDonutSlice[];
+  /** Formats the count under each percentage callout (defaults to `String`). */
+  formatValue?: (value: number) => string;
+  /** Formats the percentage callout (receives 0–100). */
+  formatPercent?: (percent: number) => string;
+  sx?: SxProps<Theme>;
 };
 
 // ----------------------------------------------------------------------

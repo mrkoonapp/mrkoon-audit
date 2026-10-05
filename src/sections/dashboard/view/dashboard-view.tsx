@@ -1,236 +1,278 @@
-import type { DatePeriod } from 'src/utils/constants';
 import type { DashboardFilters } from 'src/components/dashboard';
 
 import { useMemo, useState } from 'react';
 
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
-import { fIsAfter } from 'src/utils/format-time';
-import { DATE_PERIODS } from 'src/utils/constants';
+import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
-import { useGetHomeDashboardData } from 'src/api/audit';
+import { useGetHomeKpis } from 'src/api/home-kpis';
 import { DashboardContent } from 'src/layouts/dashboard';
 
-import { getPeriodRange } from 'src/components/dashboard/utils';
-import { CountrySelectRemote } from 'src/components/country-select';
-import {
-  DashboardToolbar,
-  countActiveFilters,
-  defaultDashboardFilters,
-} from 'src/components/dashboard';
+import { Iconify } from 'src/components/iconify';
+import { EmptyContent } from 'src/components/empty-content';
 
-import { DashboardKpiTable } from './dashboard-kpi-table';
+import { DUMMY_SUMMARY_TRENDS } from '../data';
+import { OVERVIEW_ACCENTS } from '../constants';
+import { matchesSearch, buildDashboardOverview, getOverviewDefaultFilters } from '../utils';
+import {
+  SellersBarsIcon,
+  BuyersRadialIcon,
+  OverviewUsersCard,
+  OverviewCountryTabs,
+  OverviewSummaryCard,
+  OverviewPeriodFilter,
+  OverviewAuctionsCard,
+  OverviewTopCategories,
+  OverviewProductsChart,
+  OverviewPayRequestsCard,
+  OverviewTransactionsCard,
+} from '../components';
 
 // ----------------------------------------------------------------------
 
 export function DashboardView() {
-  const { t } = useTranslate('dashboard');
+  const { t, currentLang } = useTranslate('dashboard');
 
   const [search, setSearch] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { filters, setFilterHandler, clearFilters } =
-    useCustomFilter<DashboardFilters>(defaultDashboardFilters);
+  const { filters, setFilterHandler } = useCustomFilter<DashboardFilters>(
+    getOverviewDefaultFilters()
+  );
 
-  const { data, isLoading } = useGetHomeDashboardData(filters);
+  const { data: kpis, isLoading, isError, refetch } = useGetHomeKpis(filters);
 
-  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
+  const overview = useMemo(
+    () => (kpis ? buildDashboardOverview(kpis, currentLang.value) : undefined),
+    [kpis, currentLang.value]
+  );
 
-  // Section labels — resolved here so widgets stay translation-free.
-  const emptyTitle = t('dashboard.shared.empty.title');
-  const emptyDescription = t('dashboard.shared.empty.description');
+  const label = (key: string) => t(`dashboard.dashboard.overview.${key}`);
+  const visible = (title: string) => matchesSearch(title, search);
 
-  const isCustomPeriod = filters.period === DATE_PERIODS.CUSTOM;
-  const dateError = isCustomPeriod && fIsAfter(filters.startDate, filters.endDate);
+  const summary = overview?.summary;
 
-  const handlePeriodChange = (value: DatePeriod) => {
-    if (value === DATE_PERIODS.CUSTOM || value === '') {
-      setFilterHandler({ period: value });
-      return;
+  const summaryCards = [
+    {
+      id: 'gmv',
+      label: label('summary.gmv'),
+      stat: summary?.gmv,
+      suffix: label('currency'),
+      trend: DUMMY_SUMMARY_TRENDS.gmv,
+    },
+    {
+      id: 'products',
+      label: label('summary.totalProducts'),
+      stat: summary?.products,
+      trend: DUMMY_SUMMARY_TRENDS.products,
+    },
+    {
+      id: 'buyers',
+      label: label('summary.totalBuyers'),
+      stat: summary?.buyers,
+      trend: DUMMY_SUMMARY_TRENDS.buyers,
+    },
+    {
+      id: 'sellers',
+      label: label('summary.totalSellers'),
+      stat: summary?.sellers,
+      trend: DUMMY_SUMMARY_TRENDS.sellers,
+    },
+  ].filter((card) => visible(card.label));
+
+  const widgets = [
+    {
+      id: 'products',
+      title: label('productsKpis.title'),
+      size: { xs: 12, md: 7, lg: 8 },
+      node: <OverviewProductsChart data={overview?.productsChart} loading={isLoading} />,
+    },
+    {
+      id: 'categories',
+      title: label('topCategories.title'),
+      size: { xs: 12, md: 5, lg: 4 },
+      node: (
+        <OverviewTopCategories categories={overview?.topCategories ?? []} loading={isLoading} />
+      ),
+    },
+    {
+      id: 'buyers',
+      title: label('buyers.title'),
+      size: { xs: 12, sm: 6, md: 4 },
+      node: (
+        <OverviewUsersCard
+          title={label('buyers.title')}
+          accent={OVERVIEW_ACCENTS.buyers}
+          icon={<BuyersRadialIcon />}
+          users={overview?.buyers}
+          loading={isLoading}
+        />
+      ),
+    },
+    {
+      id: 'sellers',
+      title: label('sellers.title'),
+      size: { xs: 12, sm: 6, md: 4 },
+      node: (
+        <OverviewUsersCard
+          title={label('sellers.title')}
+          accent={OVERVIEW_ACCENTS.sellers}
+          icon={<SellersBarsIcon />}
+          users={overview?.sellers}
+          loading={isLoading}
+        />
+      ),
+    },
+    {
+      id: 'auctions',
+      title: label('auctions.title'),
+      size: { xs: 12, md: 4 },
+      node: <OverviewAuctionsCard auctions={overview?.auctions} loading={isLoading} />,
+    },
+    {
+      id: 'payRequests',
+      title: label('payRequests.title'),
+      size: { xs: 12, md: 4 },
+      node: <OverviewPayRequestsCard />,
+    },
+    {
+      id: 'transactions',
+      title: label('transactions.title'),
+      size: { xs: 12, md: 8 },
+      node: <OverviewTransactionsCard />,
+    },
+  ].filter((widget) => visible(widget.title));
+
+  const renderContent = () => {
+    if (isError) {
+      return (
+        <EmptyContent
+          filled
+          title={label('error.title')}
+          description={label('error.description')}
+          action={
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={() => refetch()}
+              startIcon={<Iconify icon="solar:restart-bold" />}
+              sx={{ mt: 2 }}
+            >
+              {label('error.retry')}
+            </Button>
+          }
+          sx={{ py: 10 }}
+        />
+      );
     }
-    const { startDate, endDate } = getPeriodRange(value);
-    setFilterHandler({ period: value, startDate, endDate });
-  };
 
-  const periodOptions: { value: DatePeriod; label: string }[] = [
-    { value: DATE_PERIODS.ALL_TIME, label: t('dashboard.shared.filters.periodAllTime') },
-    { value: DATE_PERIODS.WEEKLY, label: t('dashboard.shared.filters.periodWeekly') },
-    { value: DATE_PERIODS.MONTHLY, label: t('dashboard.shared.filters.periodMonthly') },
-    { value: DATE_PERIODS.QUARTERLY, label: t('dashboard.shared.filters.periodQuarterly') },
-    { value: DATE_PERIODS.YEARLY, label: t('dashboard.shared.filters.periodYearly') },
-    { value: DATE_PERIODS.CUSTOM, label: t('dashboard.shared.filters.periodCustom') },
-  ];
+    if (!summaryCards.length && !widgets.length) {
+      return (
+        <EmptyContent
+          filled
+          title={label('noResults.title')}
+          description={label('noResults.description')}
+          sx={{ py: 10 }}
+        />
+      );
+    }
+
+    return (
+      <Grid container spacing={3}>
+        {summaryCards.map((card) => (
+          <Grid key={card.id} size={{ xs: 12, sm: 6, md: 3 }}>
+            <OverviewSummaryCard
+              label={card.label}
+              total={card.stat?.total ?? 0}
+              suffix={
+                card.suffix ??
+                (card.stat?.active !== undefined
+                  ? t('dashboard.dashboard.overview.summary.active', {
+                      value: fNumber(card.stat.active),
+                    })
+                  : undefined)
+              }
+              split={card.stat?.split ?? { EG: 0, SA: 0 }}
+              trend={card.trend}
+              loading={isLoading}
+            />
+          </Grid>
+        ))}
+
+        {widgets.map((widget) => (
+          <Grid key={widget.id} size={widget.size}>
+            {widget.node}
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
 
   return (
     <DashboardContent maxWidth="xl">
-      <DashboardToolbar
-        searchValue={search}
-        onSearchChange={setSearch}
-        searchPlaceholder={t('dashboard.shared.search')}
-        hideFilterButton
+      {/* Header — title + country tabs */}
+      <Box
+        sx={{
+          mb: 3,
+          gap: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box>
+          <Typography variant="h5">{label('title')}</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {label('subtitle')}
+          </Typography>
+        </Box>
+
+        <OverviewCountryTabs
+          value={filters.country}
+          onChange={(country) => setFilterHandler({ country })}
+        />
+      </Box>
+
+      {/* Toolbar — search + period */}
+      <Box
+        sx={{
+          mb: 3,
+          gap: 2,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'stretch', sm: 'center' },
+          justifyContent: 'space-between',
+        }}
       >
         <TextField
-          select
-          size="small"
-          label={t('dashboard.shared.filters.period')}
-          value={filters.period}
-          onChange={(event) => handlePeriodChange(event.target.value as DatePeriod)}
-          sx={{ minWidth: 160 }}
-        >
-          {periodOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        {isCustomPeriod && (
-          <>
-            <DatePicker
-              label={t('dashboard.shared.filters.startDate')}
-              value={filters.startDate}
-              onChange={(newValue) => setFilterHandler({ startDate: newValue })}
-              slotProps={{ textField: { size: 'small', sx: { minWidth: 140 } } }}
-            />
-            <DatePicker
-              label={t('dashboard.shared.filters.endDate')}
-              value={filters.endDate}
-              minDate={filters.startDate ?? undefined}
-              onChange={(newValue) => setFilterHandler({ endDate: newValue })}
-              slotProps={{ textField: { size: 'small', error: dateError, sx: { minWidth: 140 } } }}
-            />
-          </>
-        )}
-
-        <CountrySelectRemote
-          id="dashboard-inline-filter-country"
-          placeholder={t('dashboard.shared.filters.countryPlaceholder')}
-          allLabel={t('dashboard.shared.filters.allCountries')}
-          value={filters.country}
-          onChange={(newValue) => setFilterHandler({ country: newValue })}
-          sx={{ minWidth: 200 }}
-          size="small"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder={t('dashboard.shared.search')}
+          sx={{ width: { xs: 1, sm: 320 } }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                </InputAdornment>
+              ),
+            },
+          }}
         />
-      </DashboardToolbar>
 
-      <Grid container spacing={3}>
-        {/* Row 1 — KPI stat tables */}
-        <Grid size={{ xs: 12 }}>
-          <DashboardKpiTable rawKpis={data?.rawKpis} filters={filters} search={search} />
-        </Grid>
+        <OverviewPeriodFilter filters={filters} onChange={setFilterHandler} />
+      </Box>
 
-        {/* Row 2 — success rate donut + new clients list */}
-        {/* <Grid size={{ xs: 12, md: 5 }}>
-          <DonutCard
-            title={t('dashboard.dashboard.successRate.title')}
-            series={data?.successRate ? [data.successRate.successful, data.successRate.failed] : []}
-            labels={[
-              t('dashboard.dashboard.successRate.successful'),
-              t('dashboard.dashboard.successRate.failed'),
-            ]}
-            legendValues={
-              data?.successRate
-                ? [fNumber(data.successRate.successful), fNumber(data.successRate.failed)]
-                : []
-            }
-            total={data?.successRate ? `${data.successRate.rate}%` : ''}
-            totalLabel={t('dashboard.dashboard.successRate.centerLabel')}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid> */}
-
-        {/* <Grid size={{ xs: 12, md: 7 }}>
-          <ListWidgetCard
-            title={t('dashboard.dashboard.newClients.title')}
-            countBadge={
-              <Label color="success" variant="soft">
-                {isLoading ? '-' : fNumber(data?.newClients?.total || 0)}
-              </Label>
-            }
-            headerAction={
-              <ViewAllLink href={paths.dashboard.clients} label={t('dashboard.shared.viewAll')} />
-            }
-            items={newClientsItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid> */}
-
-        {/* Row 3 — transactions area chart + highlight tiles */}
-        {/* <Grid size={{ xs: 12, md: 8 }}>
-          <AreaChartCard
-            title={t('dashboard.dashboard.transactions.title')}
-            categories={data?.transactions?.categories || []}
-            series={[
-              {
-                name: t('dashboard.dashboard.transactions.title'),
-                data: data?.transactions?.series || [],
-              },
-            ]}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: 1 }}>
-            <HighlightStatCard
-              color="warning"
-              bgColor={highlightCardColors.gold.bg}
-              borderColor={highlightCardColors.gold.border}
-              label={t('dashboard.dashboard.totalTransaction', {
-                currency: data?.transactions?.currency || 'EGP',
-              })}
-              value={isLoading ? '-' : fShortenNumber(data?.transactions?.totalAmount || 0)}
-              pattern={usdPattern}
-              sx={{ flex: 1 }}
-            />
-
-            <HighlightStatCard
-              color="success"
-              bgColor={highlightCardColors.green.bg}
-              borderColor={highlightCardColors.green.border}
-              label={t('dashboard.dashboard.transactionsCount')}
-              value={isLoading ? '-' : fNumber(data?.transactions?.totalCount || 0)}
-              pattern={transactionPattern}
-              sx={{ flex: 1 }}
-            />
-          </Box>
-        </Grid> */}
-
-        {/* Row 4 — top sellers + top categories */}
-        {/* <Grid size={{ xs: 12, md: 6 }}>
-          <MetricListCard
-            title={t('dashboard.dashboard.topSellers.title')}
-            action={viewAllAction}
-            items={topSellersItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <ProgressListCard
-            title={t('dashboard.dashboard.topCategories.title')}
-            items={topCategoriesItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid> */}
-      </Grid>
-
+      {renderContent()}
     </DashboardContent>
   );
 }
