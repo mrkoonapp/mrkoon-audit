@@ -7,10 +7,10 @@ import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 
-import { Chart, useChart } from 'src/components/chart';
+import { Pie3dChart } from 'src/components/dashboard';
 
 import { OverviewCard } from './overview-card';
-import { OVERVIEW_COLORS, OVERVIEW_ACCENTS } from '../constants';
+import { OVERVIEW_COLORS, OVERVIEW_ACCENTS, AUCTIONS_PIE_SHOW_DONE_SLICE } from '../constants';
 
 // ----------------------------------------------------------------------
 
@@ -19,86 +19,88 @@ type OverviewAuctionsCardProps = {
   loading?: boolean;
 };
 
-const SLICES = [
-  { key: 'ended', color: OVERVIEW_COLORS.auctions.ended },
-  { key: 'sold', color: OVERVIEW_COLORS.auctions.sold },
-  { key: 'pendingActivation', color: OVERVIEW_COLORS.auctions.pendingActivation },
+/** Legend order of the design. `inPie` = drawn as a slice of the 3D pie. */
+const ROWS = [
+  { key: 'done', color: OVERVIEW_COLORS.auctions.done, inPie: AUCTIONS_PIE_SHOW_DONE_SLICE },
+  { key: 'ended', color: OVERVIEW_COLORS.auctions.ended, inPie: true },
+  { key: 'sold', color: OVERVIEW_COLORS.auctions.sold, inPie: true },
+  {
+    key: 'pendingActivation',
+    color: OVERVIEW_COLORS.auctions.pendingActivation,
+    inPie: true,
+  },
 ] as const;
 
-/**
- * Auction outcomes pie. "Done" is the sum of the three slices, so it is listed
- * as the total row of the legend instead of being drawn as its own slice.
- */
+/** Auction outcomes: 3D pie + legend with counts (see AUCTIONS_PIE_SHOW_DONE_SLICE). */
 export function OverviewAuctionsCard({ auctions, loading }: OverviewAuctionsCardProps) {
   const { t } = useTranslate('dashboard');
 
-  const labels = SLICES.map((slice) => t(`dashboard.dashboard.overview.auctions.${slice.key}`));
-  const series = SLICES.map((slice) => auctions?.[slice.key] ?? 0);
-
-  const chartOptions = useChart({
-    chart: { sparkline: { enabled: true } },
-    colors: SLICES.map((slice) => slice.color),
-    labels,
-    stroke: { width: 0 },
-    legend: { show: false },
-    dataLabels: { enabled: false },
-    tooltip: {
-      y: { formatter: (value: number) => fNumber(value), title: { formatter: (name) => name } },
-    },
-    plotOptions: { pie: { expandOnClick: false, donut: { labels: { show: false } } } },
-  });
-
-  const legendRow = (label: string, value: number, color?: string) => (
-    <Box
-      key={label}
-      sx={{
-        py: 0.5,
-        gap: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-    >
-      <Box sx={{ gap: 0.75, minWidth: 0, display: 'flex', alignItems: 'center' }}>
-        {color && (
-          <Box sx={{ width: 8, height: 8, flexShrink: 0, borderRadius: '50%', bgcolor: color }} />
-        )}
-        <Typography
-          variant="caption"
-          sx={{
-            color: 'text.secondary',
-            ...(!color && { fontWeight: 600, color: 'text.primary' }),
-          }}
-        >
-          {label}
-        </Typography>
-      </Box>
-      <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>
-        {fNumber(value)}
-      </Typography>
-    </Box>
-  );
+  const rows = ROWS.map((row) => ({
+    ...row,
+    label: t(`dashboard.dashboard.overview.auctions.${row.key}`),
+    value: auctions?.[row.key] ?? 0,
+  }));
 
   return (
     <OverviewCard
       title={t('dashboard.dashboard.overview.auctions.title')}
       accent={OVERVIEW_ACCENTS.auctions}
       loading={loading}
-      empty={!auctions?.done}
+      empty={!auctions}
     >
       <Box
         sx={{
           gap: 2,
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
           flexDirection: { xs: 'column', sm: 'row', md: 'column', lg: 'row' },
         }}
       >
-        <Chart type="pie" series={series} options={chartOptions} sx={{ width: 130, height: 130 }} />
+        <Pie3dChart
+          slices={rows.filter((row) => row.inPie)}
+          formatValue={(value) => fNumber(value)}
+        />
 
-        <Box sx={{ flex: 1, width: 1, minWidth: 0 }}>
-          {legendRow(t('dashboard.dashboard.overview.auctions.done'), auctions?.done ?? 0)}
-          {SLICES.map((slice, index) => legendRow(labels[index], series[index], slice.color))}
+        <Box sx={{ gap: 0.5, width: 1, maxWidth: 190, display: 'flex', flexDirection: 'column' }}>
+          {rows.map((row) => (
+            <Box
+              key={row.key}
+              sx={{
+                py: 0.5,
+                gap: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Box sx={{ gap: 0.5, minWidth: 0, display: 'flex', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    flexShrink: 0,
+                    borderRadius: '50%',
+                    bgcolor: row.color,
+                    // Done is a total, not a slice, unless the switch says otherwise.
+                    visibility: row.inPie ? 'visible' : 'hidden',
+                  }}
+                />
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.secondary',
+                    ...(!row.inPie && { fontWeight: 600, color: 'text.primary' }),
+                  }}
+                >
+                  {row.label}
+                </Typography>
+              </Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>
+                {fNumber(row.value)}
+              </Typography>
+            </Box>
+          ))}
         </Box>
       </Box>
     </OverviewCard>

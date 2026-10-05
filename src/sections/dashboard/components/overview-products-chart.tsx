@@ -28,7 +28,9 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
     ? [data.totalProducts, data.newProducts, data.auctionsCreated, data.auctionsCompleted]
     : [];
 
-  const isEmpty = !groups.some((group) => group.EG || group.SA);
+  // "No data" only when the response is missing — all-zero bars are real data.
+  const isEmpty = !data;
+  const isAllZero = !groups.some((group) => group.EG || group.SA);
 
   // Saudi first so its bar sits on the left of each pair, as in the design.
   const series = [
@@ -67,7 +69,12 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
         t('dashboard.dashboard.overview.productsKpis.auctionsCompleted'),
       ],
     },
-    yaxis: { labels: { formatter: (value: number) => fNumber(value) } },
+    yaxis: {
+      min: 0,
+      // All zeros: ApexCharts would draw a 0–2 axis with 0.5 steps; use the design's 0 / 50 / 100.
+      ...(isAllZero && { max: 100, tickAmount: 2 }),
+      labels: { formatter: (value: number) => fNumber(Math.round(value)) },
+    },
     legend: { show: false },
     tooltip: {
       shared: true,

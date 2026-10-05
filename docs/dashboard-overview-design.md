@@ -41,12 +41,20 @@ cannot tell these numbers apart from real ones until the backend fields exist.
 
 Visual differences on purpose:
 - **Top 3 Categories** use one generic box icon, because tags have no image.
-- **Auctions** is a flat pie, not the 3D pie in the design. *Done* is listed as the total row
-  instead of a slice, because Done = Sold + Ended + Pending activation and drawing it as a
-  slice would count those auctions twice.
-- **Pay Requests** shows `% · count` in the legend instead of the callout lines, which
-  ApexCharts can't draw. The design's percentages (31.76 / 68.24) don't match its own
-  counts (928 / 9,283), so the page computes the % from the counts.
+- **Auctions** uses `Pie3dChart` (`src/components/dashboard/pie-3d-chart.tsx`), a plain-SVG
+  3D pie built from the data, because ApexCharts has no 3D pie. Its geometry, separated
+  slices and glossy walls copy the design; hovering a slice lifts it and shows its value.
+  *Done* is listed as the total row, not drawn as a slice, because Done = Sold + Ended +
+  Pending activation and a Done slice would always fill half the pie. Set
+  `AUCTIONS_PIE_SHOW_DONE_SLICE = true` in `constants.ts` to draw it as the design does.
+- **Pay Requests** uses `RoundedDonutChart` (`src/components/dashboard/rounded-donut-chart.tsx`),
+  a plain-SVG donut with rounded, separated slices and percentage/count callouts with leader
+  lines, as in the design. ApexCharts can't draw rounded slices or callouts. The design's
+  own numbers disagree (928 / 9,283 labelled 31.76% / 68.24%), so the dummy data keeps its
+  9,283 and its split (admins = 4,320). Slice size always matches the real share
+  (tested at 50/50, 20/80, 99/1, 100/0 and seven-digit values); a 100% slice draws a full
+  ring, very small shares keep a minimum visible width, and all-zero data draws an empty
+  grey ring with "0" in the middle.
 - **Products KPIs** uses the standard shared tooltip (Egypt / Saudi Arabia values per
   group) instead of the custom "Auctions / Completed / Sold" tooltip shown in the design.
 
@@ -98,8 +106,11 @@ Widget mapping:
 ## States
 
 - **Loading**: skeleton values on the summary cards and a spinner inside every API-fed widget.
-- **Empty**: each widget shows the shared empty state when it has nothing to plot (no
-  tags, zero auctions, all-zero products).
+- **Empty ("No data")**: only when data is **missing** (no response yet / no fields), or
+  for Top 3 Categories when there are no tags.
+- **Zero values are real data, not "No data"**: Buyers / Sellers list their 0s, Auctions draws
+  a grey 3D disc with its 0s in the legend, Pay Requests draws an empty grey ring with "0",
+  and Products KPIs keeps its bars at 0 on a 0 / 50 / 100 axis.
 - **Error**: if the KPI request fails, a full-width error state with a **Retry** button.
 - **Search with no match**: an empty state that suggests another search term.
 

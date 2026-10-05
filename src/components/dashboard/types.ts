@@ -55,6 +55,45 @@ export type AccentTitleProps = {
 };
 
 // ----------------------------------------------------------------------
+// Pie3dChart
+// ----------------------------------------------------------------------
+
+export type Pie3dSlice = {
+  label: string;
+  value: number;
+  /** Any CSS color; the side walls are shaded automatically. */
+  color: string;
+};
+
+export type Pie3dChartProps = {
+  slices: Pie3dSlice[];
+  /** Rendered size in px (the drawing keeps the design's 136×120 ratio). */
+  width?: number;
+  /** Formats the value shown in each slice's hover tooltip. */
+  formatValue?: (value: number) => string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
+// RoundedDonutChart
+// ----------------------------------------------------------------------
+
+export type RoundedDonutSlice = {
+  label: string;
+  value: number;
+  color: string;
+};
+
+export type RoundedDonutChartProps = {
+  slices: RoundedDonutSlice[];
+  /** Formats the count under each percentage callout (defaults to `String`). */
+  formatValue?: (value: number) => string;
+  /** Formats the percentage callout (receives 0–100). */
+  formatPercent?: (percent: number) => string;
+  sx?: SxProps<Theme>;
+};
+
+// ----------------------------------------------------------------------
 // StatCard / HighlightStatCard
 // ----------------------------------------------------------------------
 

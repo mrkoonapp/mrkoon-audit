@@ -12,6 +12,8 @@ export * from './widget-card';
 
 export * from './accent-title';
 
+export * from './pie-3d-chart';
+
 export * from './icon-stat-row';
 
 export * from './view-all-link';
@@ -37,6 +39,8 @@ export * from './dashboard-toolbar';
 export * from './radial-gauge-card';
 
 export * from './progress-list-card';
+
+export * from './rounded-donut-chart';
 
 export * from './highlight-stat-card';
 

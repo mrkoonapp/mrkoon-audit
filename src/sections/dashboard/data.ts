@@ -3,7 +3,8 @@ import type { TrendDirection } from 'src/types/dashboard-overview.types';
 // ----------------------------------------------------------------------
 // ⚠️ DUMMY DATA — placeholders for parts of the design the backend does not
 // provide yet. Values are copied from the Figma "Dashboard" frame and are NOT
-// flagged in the UI. Replace each block with a real API field when one exists (see docs/dashboard-overview.md → "Dummy data").
+// flagged in the UI. Replace each block with a real API field when one exists
+// (see docs/dashboard-overview-design.md → "Dummy data").
 // ----------------------------------------------------------------------
 
 /**
@@ -20,10 +21,14 @@ export const DUMMY_SUMMARY_TRENDS: Record<
   sellers: 'up',
 };
 
-/** "Pay Requests" donut — no endpoint reports who created a pay request. */
+/**
+ * "Pay Requests" donut — no endpoint reports who created a pay request. The
+ * design's own numbers disagree (928 / 9,283 labelled 31.76% / 68.24%); these
+ * keep its 9,283 and its 31.76% / 68.24% split.
+ */
 export const DUMMY_PAY_REQUESTS = {
   createdByBuyers: 9283,
-  createdByAdmins: 928,
+  createdByAdmins: 4320,
 };
 
 /** "Transaction" tiles — no endpoint reports transaction requests per side. */

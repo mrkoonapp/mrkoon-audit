@@ -34,6 +34,13 @@ export const AUCTION_OUTCOME_STATUS = {
   PENDING_ACTIVATION: Number(PRODUCT_STATUS.PREVIEW),
 } as const;
 
+/**
+ * The design draws "Done" as its own pie slice, but Done = sold + ended +
+ * pending activation, so a Done slice would always fill half the pie and halve
+ * every other slice. `false` keeps Done as the legend's total row only.
+ */
+export const AUCTIONS_PIE_SHOW_DONE_SLICE = false;
+
 // ----------------------------------------------------------------------
 // Colors (from the Figma "Dashboard" frame)
 // ----------------------------------------------------------------------
@@ -48,6 +55,7 @@ export const OVERVIEW_COLORS = {
     SA: { from: '#B2DF8A', to: '#BFDCA5', legend: '#B2DF8A' },
   },
   auctions: {
+    done: '#B2DF8A',
     sold: '#A6CEE3',
     ended: '#FB9A99',
     pendingActivation: '#D7D494',
