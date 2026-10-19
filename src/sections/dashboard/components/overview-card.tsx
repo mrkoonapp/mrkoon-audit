@@ -10,7 +10,7 @@ import { WidgetCard, AccentTitle } from 'src/components/dashboard';
 // ----------------------------------------------------------------------
 
 type OverviewCardProps = {
-  title: string;
+  title: ReactNode;
   accent: string;
   /** Right side of the header (decorative icon, legend, …). */
   action?: ReactNode;

@@ -11,6 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
+import { COUNTRY_IDS } from 'src/utils/constants';
 import { fNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
@@ -51,8 +52,8 @@ export function DashboardView() {
   const { data: kpis, isLoading, isError, refetch } = useGetHomeKpis(filters);
 
   const overview = useMemo(
-    () => (kpis ? buildDashboardOverview(kpis, currentLang.value) : undefined),
-    [kpis, currentLang.value]
+    () => (kpis ? buildDashboardOverview(kpis, currentLang.value, filters.country) : undefined),
+    [kpis, currentLang.value, filters.country]
   );
 
   const label = (key: string) => t(`dashboard.dashboard.overview.${key}`);
@@ -65,7 +66,8 @@ export function DashboardView() {
       id: 'gmv',
       label: label('summary.gmv'),
       stat: summary?.gmv,
-      suffix: label('currency'),
+      suffix:
+        filters.country === COUNTRY_IDS.SAUDI_ARABIA ? label('currencyKsa') : label('currency'),
       trend: DUMMY_SUMMARY_TRENDS.gmv,
     },
     {

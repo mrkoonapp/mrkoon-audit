@@ -16,11 +16,15 @@ import { buildQueryParams as buildFilterParams } from './audit';
 
 /** Maps the shared dashboard filters to the params `audit/home/kpis` expects. */
 function toHomeKpiParams(filters: DashboardFilters): Record<string, unknown> {
-  const { country_id: countryId, ...params } = buildFilterParams(filters);
+  const params = buildFilterParams(filters);
 
-  if (!countryId) return params;
+  if (!params.country_id) return params;
 
-  return { ...params, country_code: HOME_KPI_COUNTRY_CODES[String(countryId)] ?? countryId };
+  return {
+    ...params,
+    country_id: params.country_id,
+    country_code: HOME_KPI_COUNTRY_CODES[String(params.country_id)] ?? params.country_id,
+  };
 }
 
 async function getHomeKpis({ queryKey }: { queryKey: readonly unknown[] }) {

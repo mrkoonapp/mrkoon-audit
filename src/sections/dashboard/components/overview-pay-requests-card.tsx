@@ -6,6 +6,7 @@ import { fNumber, fPercent } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
 
+import { Label } from 'src/components/label';
 import { ChartLegends } from 'src/components/chart';
 import { RoundedDonutChart } from 'src/components/dashboard';
 
@@ -26,6 +27,7 @@ export function OverviewPayRequestsCard({ payRequests, loading }: OverviewPayReq
 
   const createdByBuyers = payRequests?.createdByBuyers ?? DUMMY_PAY_REQUESTS.createdByBuyers;
   const createdByAdmins = payRequests?.createdByAdmins ?? DUMMY_PAY_REQUESTS.createdByAdmins;
+  const total = payRequests?.total ?? (createdByBuyers + createdByAdmins);
 
   const slices = [
     {
@@ -42,7 +44,14 @@ export function OverviewPayRequestsCard({ payRequests, loading }: OverviewPayReq
 
   return (
     <OverviewCard
-      title={t('dashboard.dashboard.overview.payRequests.title')}
+      title={
+        <Box sx={{ gap: 1, display: 'inline-flex', alignItems: 'center' }}>
+          <span>{t('dashboard.dashboard.overview.payRequests.title')}</span>
+          <Label variant="soft" color="default" sx={{ height: 22, px: 0.75, typography: 'subtitle2', fontWeight: 700 }}>
+            {fNumber(total)}
+          </Label>
+        </Box>
+      }
       accent={OVERVIEW_ACCENTS.payRequests}
       loading={loading}
     >

@@ -70,6 +70,7 @@
         "title": "لوحة التحكم",
         "subtitle": "نظرة عامة",
         "currency": "ج.م",
+        "currencyKsa": "ر.س",
         "egypt": "مصر",
         "saudiArabia": "المملكة العربية السعودية",
         "countryCodes": {

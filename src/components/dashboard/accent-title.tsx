@@ -15,7 +15,12 @@ export function AccentTitle({ title, accent, sx }: AccentTitleProps) {
       sx={[{ gap: 1.5, display: 'flex', alignItems: 'center' }, ...(Array.isArray(sx) ? sx : [sx])]}
     >
       <Box sx={{ width: 10, height: 28, flexShrink: 0, borderRadius: 1, bgcolor: accent }} />
-      <Typography variant="subtitle1" sx={{ fontWeight: 500 }} noWrap>
+      <Typography
+        variant="subtitle1"
+        component="div"
+        sx={{ fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 1 }}
+        noWrap
+      >
         {title}
       </Typography>
     </Box>

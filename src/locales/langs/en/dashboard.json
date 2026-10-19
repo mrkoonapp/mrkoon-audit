@@ -70,6 +70,7 @@
         "title": "Dashboard",
         "subtitle": "Overview",
         "currency": "EGP",
+        "currencyKsa": "SAR",
         "egypt": "Egypt",
         "saudiArabia": "Saudi Arabia",
         "countryCodes": {
