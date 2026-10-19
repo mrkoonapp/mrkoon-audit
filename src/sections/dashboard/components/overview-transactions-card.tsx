@@ -1,3 +1,5 @@
+import type { IOverviewTransactions } from 'src/types/dashboard-overview.types';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -74,16 +76,28 @@ function RequestTile({ label, caption, total, series, color }: RequestTileProps)
 
 // ----------------------------------------------------------------------
 
-/** ⚠️ Fed by `DUMMY_TRANSACTION_REQUESTS` — no endpoint reports requests per side yet. */
-export function OverviewTransactionsCard() {
+type OverviewTransactionsCardProps = {
+  transactions?: IOverviewTransactions;
+  loading?: boolean;
+};
+
+/** Transaction request tiles: sellers and buyers totals. */
+export function OverviewTransactionsCard({ transactions, loading }: OverviewTransactionsCardProps) {
   const { t } = useTranslate('dashboard');
 
   const caption = t('dashboard.dashboard.overview.transactions.requests');
+
+  const sellersTotal = transactions?.sellers.total ?? DUMMY_TRANSACTION_REQUESTS.sellers.total;
+  const sellersSeries = transactions?.sellers.series ?? DUMMY_TRANSACTION_REQUESTS.sellers.series;
+
+  const buyersTotal = transactions?.buyers.total ?? DUMMY_TRANSACTION_REQUESTS.buyers.total;
+  const buyersSeries = transactions?.buyers.series ?? DUMMY_TRANSACTION_REQUESTS.buyers.series;
 
   return (
     <OverviewCard
       title={t('dashboard.dashboard.overview.transactions.title')}
       accent={OVERVIEW_ACCENTS.transactions}
+      loading={loading}
       sx={{ overflow: 'hidden', containerType: 'inline-size' }}
       bodySx={{ display: 'flex' }}
     >
@@ -100,15 +114,15 @@ export function OverviewTransactionsCard() {
         <RequestTile
           label={t('dashboard.dashboard.overview.transactions.sellers')}
           caption={caption}
-          total={DUMMY_TRANSACTION_REQUESTS.sellers.total}
-          series={DUMMY_TRANSACTION_REQUESTS.sellers.series}
+          total={sellersTotal}
+          series={sellersSeries}
           color={OVERVIEW_COLORS.transactions.sellers}
         />
         <RequestTile
           label={t('dashboard.dashboard.overview.transactions.buyers')}
           caption={caption}
-          total={DUMMY_TRANSACTION_REQUESTS.buyers.total}
-          series={DUMMY_TRANSACTION_REQUESTS.buyers.series}
+          total={buyersTotal}
+          series={buyersSeries}
           color={OVERVIEW_COLORS.transactions.buyers}
         />
       </Box>

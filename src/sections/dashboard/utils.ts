@@ -13,6 +13,7 @@ import { DATE_PERIODS } from 'src/utils/constants';
 
 import { getPeriodOptions, defaultDashboardFilters } from 'src/components/dashboard';
 
+import { DUMMY_PAY_REQUESTS, DUMMY_TRANSACTION_REQUESTS } from './data';
 import { AUCTION_OUTCOME_STATUS, OVERVIEW_COUNTRY_MATCHERS } from './constants';
 
 // ----------------------------------------------------------------------
@@ -136,6 +137,33 @@ export function buildDashboardOverview(kpis: IHomeKpis, lang: string): IDashboar
     buyers: toUsers(kpis.advanced_buyers),
     sellers: toUsers(kpis.advanced_sellers),
     auctions: { done: sold + ended + pendingActivation, sold, ended, pendingActivation },
+    payRequests: {
+      createdByBuyers:
+        kpis.pay_requests?.created_by_user ?? DUMMY_PAY_REQUESTS.createdByBuyers,
+      createdByAdmins:
+        kpis.pay_requests?.created_by_admin ?? DUMMY_PAY_REQUESTS.createdByAdmins,
+      total:
+        kpis.pay_requests?.total ??
+        (DUMMY_PAY_REQUESTS.createdByBuyers + DUMMY_PAY_REQUESTS.createdByAdmins),
+      userPercentage: kpis.pay_requests?.user_percentage,
+      adminPercentage: kpis.pay_requests?.admin_percentage,
+    },
+    transactions: {
+      sellers: {
+        total:
+          kpis.companies_with_transactions?.total ??
+          kpis.advanced_sellers?.total_with_transactions ??
+          DUMMY_TRANSACTION_REQUESTS.sellers.total,
+        series: DUMMY_TRANSACTION_REQUESTS.sellers.series,
+      },
+      buyers: {
+        total:
+          kpis.buyers_with_transactions?.total ??
+          kpis.advanced_buyers?.total_with_transactions ??
+          DUMMY_TRANSACTION_REQUESTS.buyers.total,
+        series: DUMMY_TRANSACTION_REQUESTS.buyers.series,
+      },
+    },
   };
 }
 

@@ -38,7 +38,20 @@ export interface IHomeKpiUsers {
   active: number;
   registered_in_period: number;
   active_new_in_period: number;
+  with_transactions?: number;
+  total_with_transactions?: number;
   country_breakdown?: IHomeKpiCountryRow[];
+}
+
+export interface IHomeKpiEntityWithTransactions {
+  total?: number;
+  in_period?: number;
+  country_breakdown?: Array<{
+    country_id?: number | string | null;
+    country_code?: number | string | null;
+    country_name?: { en: string; ar: string } | string;
+    in_period_count?: number;
+  }>;
 }
 
 export interface IHomeKpiTopTag {
@@ -67,6 +80,27 @@ export interface IHomeKpis {
   advanced_buyers?: IHomeKpiUsers;
   advanced_sellers?: IHomeKpiUsers;
   advanced_auctions?: { outcomes?: IHomeKpiAuctionOutcome[] };
+  companies_with_transactions?: IHomeKpiEntityWithTransactions;
+  buyers_with_transactions?: IHomeKpiEntityWithTransactions;
+  pay_requests?: IHomeKpiPayRequests;
+}
+
+export interface IHomeKpiPayRequests {
+  total: number;
+  created_by_user: number;
+  created_by_admin: number;
+  user_percentage?: number;
+  admin_percentage?: number;
+  country_breakdown?: Array<{
+    country_id?: number | string | null;
+    country_code?: number | string | null;
+    country_name?: { en: string; ar: string } | string;
+    total_count?: number;
+    user_count?: number;
+    admin_count?: number;
+    user_percentage?: number;
+    admin_percentage?: number;
+  }>;
 }
 
 // ----------------------------------------------------------------------
@@ -100,6 +134,25 @@ export interface IOverviewCategory {
   gmv: number;
 }
 
+export interface IOverviewTransactions {
+  sellers: {
+    total: number;
+    series: number[];
+  };
+  buyers: {
+    total: number;
+    series: number[];
+  };
+}
+
+export interface IOverviewPayRequests {
+  createdByBuyers: number;
+  createdByAdmins: number;
+  total: number;
+  userPercentage?: number;
+  adminPercentage?: number;
+}
+
 export interface IDashboardOverview {
   summary: {
     gmv: IOverviewSummaryStat;
@@ -117,4 +170,6 @@ export interface IDashboardOverview {
   buyers: IOverviewUsers;
   sellers: IOverviewUsers;
   auctions: IOverviewAuctions;
+  payRequests: IOverviewPayRequests;
+  transactions: IOverviewTransactions;
 }

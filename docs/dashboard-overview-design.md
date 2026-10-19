@@ -12,7 +12,7 @@ deleted). It renders the Figma **"Dashboard"** frame
 | 1 | 4 summary cards: **GMV**, **Total products**, **Total buyers**, **Total sellers** (EG / SA split + trend badge) | API (trend = dummy) |
 | 2 | **Products KPIs** grouped bar chart (Egypt vs Saudi Arabia) · **Top 3 Categories** by GMV | API |
 | 3 | **Buyers** · **Sellers** (active / registered / new) · **Auctions** outcome pie | API |
-| 4 | **Pay Requests** donut · **Transaction** request tiles + truck artwork | **dummy** |
+| 4 | **Pay Requests** donut (API: `pay_requests.created_by_user` / `created_by_admin`) · **Transaction** request tiles (API totals: `companies_with_transactions`, `buyers_with_transactions`; sparklines = dummy) + truck artwork | mixed |
 
 All numbers that the old KPI table showed are still on the page, with the same
 definitions (e.g. *Auctions done = sold + ended + pending activation*).
@@ -36,8 +36,7 @@ cannot tell these numbers apart from real ones until the backend fields exist.
 | UI element | Constant | What the backend needs to provide |
 | --- | --- | --- |
 | Trend arrow (↑/↓) on the 4 summary cards | `DUMMY_SUMMARY_TRENDS` | previous-period values (or a delta %) for GMV, products, buyers, sellers |
-| **Pay Requests** donut (created by buyers vs admins) | `DUMMY_PAY_REQUESTS` | pay-request counts grouped by creator type |
-| **Transaction** tiles (seller / buyer request totals + sparklines) | `DUMMY_TRANSACTION_REQUESTS` | request totals per side + a short time series |
+| **Transaction** sparklines (seller / buyer) | `DUMMY_TRANSACTION_REQUESTS.*.series` | a short time series per side (totals now come from `companies_with_transactions` and `buyers_with_transactions`) |
 
 Visual differences on purpose:
 - **Top 3 Categories** use one generic box icon, because tags have no image.

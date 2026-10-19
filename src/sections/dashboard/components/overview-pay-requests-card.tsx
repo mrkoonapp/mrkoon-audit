@@ -1,3 +1,5 @@
+import type { IOverviewPayRequests } from 'src/types/dashboard-overview.types';
+
 import Box from '@mui/material/Box';
 
 import { fNumber, fPercent } from 'src/utils/format-number';
@@ -13,19 +15,27 @@ import { OVERVIEW_COLORS, OVERVIEW_ACCENTS } from '../constants';
 
 // ----------------------------------------------------------------------
 
-/** ⚠️ Fed by `DUMMY_PAY_REQUESTS` — no endpoint reports pay-request creators yet. */
-export function OverviewPayRequestsCard() {
+type OverviewPayRequestsCardProps = {
+  payRequests?: IOverviewPayRequests;
+  loading?: boolean;
+};
+
+/** Pay Requests donut: created by buyers (users) vs admins. */
+export function OverviewPayRequestsCard({ payRequests, loading }: OverviewPayRequestsCardProps) {
   const { t } = useTranslate('dashboard');
+
+  const createdByBuyers = payRequests?.createdByBuyers ?? DUMMY_PAY_REQUESTS.createdByBuyers;
+  const createdByAdmins = payRequests?.createdByAdmins ?? DUMMY_PAY_REQUESTS.createdByAdmins;
 
   const slices = [
     {
       label: t('dashboard.dashboard.overview.payRequests.createdByBuyers'),
-      value: DUMMY_PAY_REQUESTS.createdByBuyers,
+      value: createdByBuyers,
       color: OVERVIEW_COLORS.payRequests.byBuyers,
     },
     {
       label: t('dashboard.dashboard.overview.payRequests.createdByAdmins'),
-      value: DUMMY_PAY_REQUESTS.createdByAdmins,
+      value: createdByAdmins,
       color: OVERVIEW_COLORS.payRequests.byAdmins,
     },
   ];
@@ -34,6 +44,7 @@ export function OverviewPayRequestsCard() {
     <OverviewCard
       title={t('dashboard.dashboard.overview.payRequests.title')}
       accent={OVERVIEW_ACCENTS.payRequests}
+      loading={loading}
     >
       <Box
         sx={{

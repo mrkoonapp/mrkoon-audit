@@ -141,13 +141,18 @@ export function DashboardView() {
       id: 'payRequests',
       title: label('payRequests.title'),
       size: { xs: 12, md: 4 },
-      node: <OverviewPayRequestsCard />,
+      node: <OverviewPayRequestsCard payRequests={overview?.payRequests} loading={isLoading} />,
     },
     {
       id: 'transactions',
       title: label('transactions.title'),
       size: { xs: 12, md: 8 },
-      node: <OverviewTransactionsCard />,
+      node: (
+        <OverviewTransactionsCard
+          transactions={overview?.transactions}
+          loading={isLoading}
+        />
+      ),
     },
   ].filter((widget) => visible(widget.title));
 
