@@ -118,6 +118,7 @@ export interface IOverviewUsers {
   active: number;
   registered: number;
   activeNew: number;
+  madeTransactions?: number;
 }
 
 export interface IOverviewAuctions {

@@ -6,6 +6,7 @@ import type {
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Tooltip from '@mui/material/Tooltip';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
@@ -25,6 +26,8 @@ type OverviewSummaryCardProps = {
   split: CountrySplit;
   trend: TrendDirection;
   loading?: boolean;
+  tooltip?: string;
+  activeTooltip?: string;
 };
 
 const COUNTRIES: OverviewCountry[] = ['EG', 'SA'];
@@ -36,6 +39,8 @@ export function OverviewSummaryCard({
   split,
   trend,
   loading,
+  tooltip,
+  activeTooltip,
 }: OverviewSummaryCardProps) {
   const { t } = useTranslate('dashboard');
 
@@ -84,14 +89,41 @@ export function OverviewSummaryCard({
             <Skeleton variant="text" sx={{ width: 120, typography: 'h4' }} />
           ) : (
             <>
-              <Typography variant="h4" component="span">
-                {fNumber(total)}
-              </Typography>
-              {suffix && (
-                <Typography variant="caption" component="span" sx={{ color: 'text.secondary' }}>
-                  {suffix}
+              {tooltip ? (
+                <Tooltip title={tooltip} arrow placement="top">
+                  <Typography
+                    variant="h4"
+                    component="span"
+                    sx={{ cursor: 'help', borderBottom: '1px dotted rgba(255, 255, 255, 0.2)' }}
+                  >
+                    {fNumber(total)}
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography variant="h4" component="span">
+                  {fNumber(total)}
                 </Typography>
               )}
+              {suffix &&
+                (activeTooltip ? (
+                  <Tooltip title={activeTooltip} arrow placement="top">
+                    <Typography
+                      variant="caption"
+                      component="span"
+                      sx={{
+                        color: 'text.secondary',
+                        cursor: 'help',
+                        borderBottom: '1px dotted rgba(255, 255, 255, 0.2)',
+                      }}
+                    >
+                      {suffix}
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  <Typography variant="caption" component="span" sx={{ color: 'text.secondary' }}>
+                    {suffix}
+                  </Typography>
+                ))}
             </>
           )}
         </Box>

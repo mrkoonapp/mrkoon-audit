@@ -115,7 +115,32 @@
         "users": {
           "active": "Active",
           "registered": "Registered",
-          "new": "New"
+          "new": "New",
+          "madeTransactions": "Made transactions"
+        },
+        "tooltips": {
+          "gmv": "total money gained from mrkoon and mrkoon plus",
+          "totalProducts": "The total number of products currently in the system",
+          "newProducts": "Number of new products added during the selected period",
+          "totalBuyers": "Total registered buyers in the system",
+          "activeBuyers": "Active buyers who made pay-requests this period",
+          "registeredBuyers": "Registered buyers who created an account this period",
+          "activeNewBuyers": "Active new buyers who made pay-request and registered this period",
+          "buyersMadeTransactions": "Buyers who made transactions this period",
+          "totalSellers": "Total registered sellers in the system",
+          "activeSellers": "Active sellers who listed one product this period",
+          "registeredSellers": "Registered sellers who created an account this period",
+          "activeNewSellers": "Active new sellers who listed one product and registered this period",
+          "sellersMadeTransactions": "Sellers who made transactions this period",
+          "auctions": "All Auctions",
+          "auctionsDone": "all auctions started and finished, whether has action or not",
+          "auctionsSold": "finished and has transactions created on it",
+          "auctionsEnded": "auction date ended without any action",
+          "auctionsPendingActivation": "still in the pipeline",
+          "topCategories": "Top 3 tags driving the most GMV",
+          "payRequests": "Pay requests created in the selected period",
+          "payRequestsCreatedByBuyers": "Pay requests created by buyers",
+          "payRequestsCreatedByAdmins": "Pay requests created by admins"
         },
         "auctions": {
           "title": "Auctions",

@@ -76,6 +76,7 @@ export const OVERVIEW_COLORS = {
     active: 'rgba(74, 185, 105, 0.12)',
     registered: 'rgba(209, 113, 112, 0.16)',
     activeNew: 'rgba(83, 145, 179, 0.15)',
+    madeTransactions: 'rgba(245, 158, 11, 0.15)',
   },
   sellersBars: ['#B0B883', '#F0949A', '#5391B3'],
 } as const;

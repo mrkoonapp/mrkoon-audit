@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { IOverviewUsers } from 'src/types/dashboard-overview.types';
 
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
@@ -19,17 +20,64 @@ type OverviewUsersCardProps = {
   icon: ReactNode;
   users?: IOverviewUsers;
   loading?: boolean;
+  type?: 'buyers' | 'sellers';
 };
 
 const ROWS = [
   { key: 'active', labelKey: 'active', icon: OVERVIEW_ASSETS.active, iconSize: 16 },
   { key: 'registered', labelKey: 'registered', icon: OVERVIEW_ASSETS.registered, iconSize: 16 },
   { key: 'activeNew', labelKey: 'new', icon: OVERVIEW_ASSETS.sparkles, iconSize: 14 },
+  {
+    key: 'madeTransactions',
+    labelKey: 'madeTransactions',
+    icon: OVERVIEW_ASSETS.coin,
+    iconSize: 16,
+  },
 ] as const;
 
-/** Buyers / Sellers widget: active, registered (this period) and active-new counts. */
-export function OverviewUsersCard({ title, accent, icon, users, loading }: OverviewUsersCardProps) {
+/** Buyers / Sellers widget: active, registered, active-new and made-transactions counts. */
+export function OverviewUsersCard({
+  title,
+  accent,
+  icon,
+  users,
+  loading,
+  type = 'buyers',
+}: OverviewUsersCardProps) {
   const { t } = useTranslate('dashboard');
+
+  const getRowTooltip = (key: (typeof ROWS)[number]['key']) => {
+    const isSeller = type === 'sellers';
+    if (key === 'active') {
+      return t(
+        isSeller
+          ? 'dashboard.dashboard.overview.tooltips.activeSellers'
+          : 'dashboard.dashboard.overview.tooltips.activeBuyers'
+      );
+    }
+    if (key === 'registered') {
+      return t(
+        isSeller
+          ? 'dashboard.dashboard.overview.tooltips.registeredSellers'
+          : 'dashboard.dashboard.overview.tooltips.registeredBuyers'
+      );
+    }
+    if (key === 'activeNew') {
+      return t(
+        isSeller
+          ? 'dashboard.dashboard.overview.tooltips.activeNewSellers'
+          : 'dashboard.dashboard.overview.tooltips.activeNewBuyers'
+      );
+    }
+    if (key === 'madeTransactions') {
+      return t(
+        isSeller
+          ? 'dashboard.dashboard.overview.tooltips.sellersMadeTransactions'
+          : 'dashboard.dashboard.overview.tooltips.buyersMadeTransactions'
+      );
+    }
+    return '';
+  };
 
   return (
     <OverviewCard
@@ -69,9 +117,18 @@ export function OverviewUsersCard({ title, accent, icon, users, loading }: Overv
             </Typography>
           </Box>
 
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {fNumber(users?.[row.key] ?? 0)}
-          </Typography>
+          <Tooltip title={getRowTooltip(row.key)} arrow placement="top">
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                cursor: 'help',
+                borderBottom: '1px dotted rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              {fNumber(users?.[row.key] ?? 0)}
+            </Typography>
+          </Tooltip>
         </Box>
       ))}
     </OverviewCard>

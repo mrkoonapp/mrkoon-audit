@@ -37,7 +37,6 @@ import {
   OverviewTopCategories,
   OverviewProductsChart,
   OverviewPayRequestsCard,
-  OverviewTransactionsCard,
 } from '../components';
 
 // ----------------------------------------------------------------------
@@ -98,24 +97,30 @@ export function DashboardView() {
       stat: summary?.gmv,
       suffix: currencySuffix,
       trend: DUMMY_SUMMARY_TRENDS.gmv,
+      tooltip: t('dashboard.dashboard.overview.tooltips.gmv'),
     },
     {
       id: 'products',
       label: label('summary.totalProducts'),
       stat: summary?.products,
       trend: DUMMY_SUMMARY_TRENDS.products,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalProducts'),
     },
     {
       id: 'buyers',
       label: label('summary.totalBuyers'),
       stat: summary?.buyers,
       trend: DUMMY_SUMMARY_TRENDS.buyers,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalBuyers'),
+      activeTooltip: t('dashboard.dashboard.overview.tooltips.activeBuyers'),
     },
     {
       id: 'sellers',
       label: label('summary.totalSellers'),
       stat: summary?.sellers,
       trend: DUMMY_SUMMARY_TRENDS.sellers,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalSellers'),
+      activeTooltip: t('dashboard.dashboard.overview.tooltips.activeSellers'),
     },
   ].filter((card) => visible(card.label));
 
@@ -137,7 +142,7 @@ export function DashboardView() {
     {
       id: 'buyers',
       title: label('buyers.title'),
-      size: { xs: 12, sm: 6, md: 4 },
+      size: { xs: 12, sm: 6, md: 6 },
       node: (
         <OverviewUsersCard
           title={label('buyers.title')}
@@ -145,13 +150,14 @@ export function DashboardView() {
           icon={<BuyersRadialIcon />}
           users={overview?.buyers}
           loading={isLoading}
+          type="buyers"
         />
       ),
     },
     {
       id: 'sellers',
       title: label('sellers.title'),
-      size: { xs: 12, sm: 6, md: 4 },
+      size: { xs: 12, sm: 6, md: 6 },
       node: (
         <OverviewUsersCard
           title={label('sellers.title')}
@@ -159,31 +165,21 @@ export function DashboardView() {
           icon={<SellersBarsIcon />}
           users={overview?.sellers}
           loading={isLoading}
+          type="sellers"
         />
       ),
     },
     {
       id: 'auctions',
       title: label('auctions.title'),
-      size: { xs: 12, md: 4 },
+      size: { xs: 12, sm: 6, md: 6 },
       node: <OverviewAuctionsCard auctions={overview?.auctions} loading={isLoading} />,
     },
     {
       id: 'payRequests',
       title: label('payRequests.title'),
-      size: { xs: 12, md: 4 },
+      size: { xs: 12, sm: 6, md: 6 },
       node: <OverviewPayRequestsCard payRequests={overview?.payRequests} loading={isLoading} />,
-    },
-    {
-      id: 'transactions',
-      title: label('transactions.title'),
-      size: { xs: 12, md: 8 },
-      node: (
-        <OverviewTransactionsCard
-          transactions={overview?.transactions}
-          loading={isLoading}
-        />
-      ),
     },
   ].filter((widget) => visible(widget.title));
 
@@ -239,6 +235,8 @@ export function DashboardView() {
               split={card.stat?.split ?? { EG: 0, SA: 0 }}
               trend={card.trend}
               loading={isLoading}
+              tooltip={card.tooltip}
+              activeTooltip={card.activeTooltip}
             />
           </Grid>
         ))}

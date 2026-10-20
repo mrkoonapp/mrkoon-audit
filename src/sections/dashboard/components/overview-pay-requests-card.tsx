@@ -1,6 +1,7 @@
 import type { IOverviewPayRequests } from 'src/types/dashboard-overview.types';
 
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 
 import { fNumber, fPercent } from 'src/utils/format-number';
 
@@ -47,9 +48,15 @@ export function OverviewPayRequestsCard({ payRequests, loading }: OverviewPayReq
       title={
         <Box sx={{ gap: 1, display: 'inline-flex', alignItems: 'center' }}>
           <span>{t('dashboard.dashboard.overview.payRequests.title')}</span>
-          <Label variant="soft" color="default" sx={{ height: 22, px: 0.75, typography: 'subtitle2', fontWeight: 700 }}>
-            {fNumber(total)}
-          </Label>
+          <Tooltip title={t('dashboard.dashboard.overview.tooltips.payRequests')} arrow placement="top">
+            <Label
+              variant="soft"
+              color="default"
+              sx={{ height: 22, px: 0.75, typography: 'subtitle2', fontWeight: 700, cursor: 'help' }}
+            >
+              {fNumber(total)}
+            </Label>
+          </Tooltip>
         </Box>
       }
       accent={OVERVIEW_ACCENTS.payRequests}

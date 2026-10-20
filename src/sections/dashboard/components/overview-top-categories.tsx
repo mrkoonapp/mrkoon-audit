@@ -1,6 +1,7 @@
 import type { IOverviewCategory } from 'src/types/dashboard-overview.types';
 
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
@@ -70,9 +71,18 @@ export function OverviewTopCategories({ categories, loading }: OverviewTopCatego
               src={OVERVIEW_ASSETS.coin}
               sx={{ width: 'auto', height: 16 }}
             />
-            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-              {fNumber(category.gmv)} {t('dashboard.dashboard.overview.currency')}
-            </Typography>
+            <Tooltip title={t('dashboard.dashboard.overview.tooltips.topCategories')} arrow placement="top">
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 500,
+                  cursor: 'help',
+                  borderBottom: '1px dotted rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                {fNumber(category.gmv)} {t('dashboard.dashboard.overview.currency')}
+              </Typography>
+            </Tooltip>
           </Box>
         </Box>
       ))}

@@ -1,6 +1,7 @@
 import type { IOverviewAuctions } from 'src/types/dashboard-overview.types';
 
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
@@ -30,6 +31,13 @@ const ROWS = [
     inPie: true,
   },
 ] as const;
+
+const TOOLTIP_KEYS: Record<(typeof ROWS)[number]['key'], string> = {
+  done: 'auctionsDone',
+  ended: 'auctionsEnded',
+  sold: 'auctionsSold',
+  pendingActivation: 'auctionsPendingActivation',
+};
 
 /** Auction outcomes: 3D pie + legend with counts (see AUCTIONS_PIE_SHOW_DONE_SLICE). */
 export function OverviewAuctionsCard({ auctions, loading }: OverviewAuctionsCardProps) {
@@ -96,9 +104,23 @@ export function OverviewAuctionsCard({ auctions, loading }: OverviewAuctionsCard
                   {row.label}
                 </Typography>
               </Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>
-                {fNumber(row.value)}
-              </Typography>
+              <Tooltip
+                title={t(`dashboard.dashboard.overview.tooltips.${TOOLTIP_KEYS[row.key]}`)}
+                arrow
+                placement="top"
+              >
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.secondary',
+                    cursor: 'help',
+                    borderBottom: '1px dotted rgba(255, 255, 255, 0.2)',
+                  }}
+                >
+                  {fNumber(row.value)}
+                </Typography>
+              </Tooltip>
             </Box>
           ))}
         </Box>

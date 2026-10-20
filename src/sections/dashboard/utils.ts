@@ -151,6 +151,27 @@ export function buildDashboardOverview(
       ? splitActiveSellers[targetCountry]
       : (kpis.advanced_sellers?.active ?? kpis.active_sellers ?? 0);
 
+  const companyRow = targetCountry
+    ? kpis.companies_with_transactions?.country_breakdown?.find((r) => getRowCountry(r as any) === targetCountry)
+    : null;
+  const buyerRow = targetCountry
+    ? kpis.buyers_with_transactions?.country_breakdown?.find((r) => getRowCountry(r as any) === targetCountry)
+    : null;
+
+  const txSellersTotal =
+    companyRow?.in_period_count ??
+    kpis.companies_with_transactions?.in_period ??
+    kpis.companies_with_transactions?.total ??
+    kpis.advanced_sellers?.total_with_transactions ??
+    DUMMY_TRANSACTION_REQUESTS.sellers.total;
+
+  const txBuyersTotal =
+    buyerRow?.in_period_count ??
+    kpis.buyers_with_transactions?.in_period ??
+    kpis.buyers_with_transactions?.total ??
+    kpis.advanced_buyers?.total_with_transactions ??
+    DUMMY_TRANSACTION_REQUESTS.buyers.total;
+
   const buyersVm = {
     active:
       targetCountry && splitActiveBuyers[targetCountry] !== undefined && splitActiveBuyers[targetCountry] > 0
@@ -164,6 +185,7 @@ export function buildDashboardOverview(
       targetCountry && splitActiveNewBuyers[targetCountry] !== undefined && splitActiveNewBuyers[targetCountry] > 0
         ? splitActiveNewBuyers[targetCountry]
         : (kpis.advanced_buyers?.active_new_in_period ?? 0),
+    madeTransactions: txBuyersTotal,
   };
 
   const sellersVm = {
@@ -179,6 +201,7 @@ export function buildDashboardOverview(
       targetCountry && splitActiveNewSellers[targetCountry] !== undefined && splitActiveNewSellers[targetCountry] > 0
         ? splitActiveNewSellers[targetCountry]
         : (kpis.advanced_sellers?.active_new_in_period ?? 0),
+    madeTransactions: txSellersTotal,
   };
 
   const countryPayRow = targetCountry
@@ -193,25 +216,6 @@ export function buildDashboardOverview(
     countryPayRow?.total_count ??
     kpis.pay_requests?.total ??
     (payCreatedByBuyers + payCreatedByAdmins);
-
-  const companyRow = targetCountry
-    ? kpis.companies_with_transactions?.country_breakdown?.find((r) => getRowCountry(r as any) === targetCountry)
-    : null;
-  const buyerRow = targetCountry
-    ? kpis.buyers_with_transactions?.country_breakdown?.find((r) => getRowCountry(r as any) === targetCountry)
-    : null;
-
-  const txSellersTotal =
-    companyRow?.in_period_count ??
-    kpis.companies_with_transactions?.total ??
-    kpis.advanced_sellers?.total_with_transactions ??
-    DUMMY_TRANSACTION_REQUESTS.sellers.total;
-
-  const txBuyersTotal =
-    buyerRow?.in_period_count ??
-    kpis.buyers_with_transactions?.total ??
-    kpis.advanced_buyers?.total_with_transactions ??
-    DUMMY_TRANSACTION_REQUESTS.buyers.total;
 
   return {
     summary: {
