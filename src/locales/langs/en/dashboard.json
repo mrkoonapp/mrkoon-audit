@@ -113,9 +113,9 @@
           "title": "Sellers"
         },
         "users": {
-          "active": "Active",
+          "active": "Total Active",
           "registered": "Registered",
-          "new": "New",
+          "new": "New Registered and active",
           "madeTransactions": "Made transactions"
         },
         "tooltips": {
@@ -123,12 +123,12 @@
           "totalProducts": "The total number of products currently in the system",
           "newProducts": "Number of new products added during the selected period",
           "totalBuyers": "Total registered buyers in the system",
-          "activeBuyers": "Active buyers who made pay-requests this period",
+          "activeBuyers": "Total active buyers who made pay-requests (not limited to period)",
           "registeredBuyers": "Registered buyers who created an account this period",
           "activeNewBuyers": "Active new buyers who made pay-request and registered this period",
           "buyersMadeTransactions": "Buyers who made transactions this period",
           "totalSellers": "Total registered sellers in the system",
-          "activeSellers": "Active sellers who listed one product this period",
+          "activeSellers": "Total active sellers who listed products (not limited to period)",
           "registeredSellers": "Registered sellers who created an account this period",
           "activeNewSellers": "Active new sellers who listed one product and registered this period",
           "sellersMadeTransactions": "Sellers who made transactions this period",
