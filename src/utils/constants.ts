@@ -167,4 +167,5 @@ export const COUNTRY_IDS = {
 export const HOME_KPI_COUNTRY_CODES: Record<string, number> = {
   [COUNTRY_IDS.EGYPT]: 3,
   [COUNTRY_IDS.SAUDI_ARABIA]: 4,
+  '24': 4,
 };

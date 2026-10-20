@@ -13,8 +13,8 @@ import { CONFIG } from 'src/global-config';
  * sends either the static `country_code` (3 / 4) or the country id (6 / 26).
  */
 export const OVERVIEW_COUNTRY_MATCHERS: Record<OverviewCountry, string[]> = {
-  EG: ['3', COUNTRY_IDS.EGYPT, 'EG', '+2'],
-  SA: ['4', COUNTRY_IDS.SAUDI_ARABIA, 'SA', '+966'],
+  EG: ['3', COUNTRY_IDS.EGYPT, '6', 'EG', '+2'],
+  SA: ['4', COUNTRY_IDS.SAUDI_ARABIA, '24', '26', 'SA', '+966'],
 };
 
 /** Header country tabs. `''` is the "All countries" sentinel of the filter. */

@@ -1,6 +1,6 @@
 import type { DashboardFilters } from 'src/components/dashboard';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -13,9 +13,11 @@ import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
 import { COUNTRY_IDS } from 'src/utils/constants';
 import { fNumber } from 'src/utils/format-number';
+import { getLocalizedText } from 'src/utils/format-string';
 
 import { useTranslate } from 'src/locales';
 import { useGetHomeKpis } from 'src/api/home-kpis';
+import { useGetCountries } from 'src/api/countries';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
@@ -56,18 +58,45 @@ export function DashboardView() {
     [kpis, currentLang.value, filters.country]
   );
 
-  const label = (key: string) => t(`dashboard.dashboard.overview.${key}`);
+  const label = useCallback(
+    (key: string) => t(`dashboard.dashboard.overview.${key}`),
+    [t]
+  );
   const visible = (title: string) => matchesSearch(title, search);
 
   const summary = overview?.summary;
+
+  const { data: countries } = useGetCountries();
+
+  const selectedCountry = useMemo(
+    () => countries?.find((c) => String(c.id) === String(filters.country)),
+    [countries, filters.country]
+  );
+
+  const currencySuffix = useMemo(() => {
+    if (!filters.country) return label('currency');
+    if (selectedCountry?.currency_name) {
+      const name = getLocalizedText(selectedCountry.currency_name, currentLang.value);
+      if (name) return name;
+    }
+    if (
+      selectedCountry?.global_code === 'SA' ||
+      filters.country === COUNTRY_IDS.SAUDI_ARABIA ||
+      filters.country === '24' ||
+      filters.country === '26' ||
+      filters.country === '4'
+    ) {
+      return label('currencyKsa');
+    }
+    return label('currency');
+  }, [filters.country, selectedCountry, currentLang.value, label]);
 
   const summaryCards = [
     {
       id: 'gmv',
       label: label('summary.gmv'),
       stat: summary?.gmv,
-      suffix:
-        filters.country === COUNTRY_IDS.SAUDI_ARABIA ? label('currencyKsa') : label('currency'),
+      suffix: currencySuffix,
       trend: DUMMY_SUMMARY_TRENDS.gmv,
     },
     {

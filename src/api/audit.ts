@@ -169,7 +169,7 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   const kpiQueryParams = { ...queryParams };
   if (kpiQueryParams.country_id) {
     if (String(kpiQueryParams.country_id) === '6') kpiQueryParams.country_code = 3;
-    else if (String(kpiQueryParams.country_id) === '26') kpiQueryParams.country_code = 4;
+    else if (String(kpiQueryParams.country_id) === '26' || String(kpiQueryParams.country_id) === '24') kpiQueryParams.country_code = 4;
     else kpiQueryParams.country_code = kpiQueryParams.country_id;
     
     delete kpiQueryParams.country_id;

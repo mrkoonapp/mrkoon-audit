@@ -87,9 +87,12 @@ export function buildDashboardOverview(
   countryFilter?: string
 ): IDashboardOverview {
   const targetCountry: OverviewCountry | null =
-    countryFilter === COUNTRY_IDS.EGYPT
+    countryFilter === COUNTRY_IDS.EGYPT || countryFilter === '6' || countryFilter === '3'
       ? 'EG'
-      : countryFilter === COUNTRY_IDS.SAUDI_ARABIA
+      : countryFilter === COUNTRY_IDS.SAUDI_ARABIA ||
+          countryFilter === '24' ||
+          countryFilter === '26' ||
+          countryFilter === '4'
         ? 'SA'
         : null;
 
