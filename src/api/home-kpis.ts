@@ -265,12 +265,16 @@ export function useGetHomeKpis(
     productsQuery.isLoading ||
     buyersQuery.isLoading ||
     sellersQuery.isLoading;
-  const isError = queries.some((q) => q.isError);
-
   const hasAnyData = queries.some((q) => q.data !== undefined);
+  const isError = !hasAnyData && queries.some((q) => q.isError);
 
   const data = useMemo<IHomeKpis | undefined>(() => {
     if (!hasAnyData) return undefined;
+    const topTagsData: any = topTagsQuery.data;
+    const top_tags_gmv = Array.isArray(topTagsData)
+      ? topTagsData
+      : topTagsData?.top_tags_gmv;
+
     return {
       ...(generalQuery.data ?? {}),
       ...(sellersQuery.data ?? {}),
@@ -279,6 +283,7 @@ export function useGetHomeKpis(
       ...(auctionsQuery.data ?? {}),
       ...(totalMoneyQuery.data ?? {}),
       ...(topTagsQuery.data ?? {}),
+      ...(top_tags_gmv ? { top_tags_gmv } : {}),
       ...(payRequestsQuery.data ?? {}),
       ...(companiesWithTxQuery.data ?? {}),
       ...(buyersWithTxQuery.data ?? {}),

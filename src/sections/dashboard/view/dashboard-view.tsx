@@ -50,7 +50,7 @@ export function DashboardView() {
     getOverviewDefaultFilters()
   );
 
-  const { data: kpis, isLoading, isTotalsLoading, isError, refetch } = useGetHomeKpis(filters);
+  const { data: kpis, queries, isError, refetch } = useGetHomeKpis(filters);
 
   const overview = useMemo(
     () => (kpis ? buildDashboardOverview(kpis, currentLang.value, filters.country) : undefined),
@@ -98,6 +98,7 @@ export function DashboardView() {
       suffix: currencySuffix,
       trend: DUMMY_SUMMARY_TRENDS.gmv,
       tooltip: t('dashboard.dashboard.overview.tooltips.gmv'),
+      loading: queries.totalMoney.isLoading,
     },
     {
       id: 'products',
@@ -105,6 +106,7 @@ export function DashboardView() {
       stat: summary?.products,
       trend: DUMMY_SUMMARY_TRENDS.products,
       tooltip: t('dashboard.dashboard.overview.tooltips.totalProducts'),
+      loading: queries.products.isLoading,
     },
     {
       id: 'buyers',
@@ -113,6 +115,7 @@ export function DashboardView() {
       trend: DUMMY_SUMMARY_TRENDS.buyers,
       tooltip: t('dashboard.dashboard.overview.tooltips.totalBuyers'),
       activeTooltip: t('dashboard.dashboard.overview.tooltips.activeBuyers'),
+      loading: queries.buyers.isLoading,
     },
     {
       id: 'sellers',
@@ -121,6 +124,7 @@ export function DashboardView() {
       trend: DUMMY_SUMMARY_TRENDS.sellers,
       tooltip: t('dashboard.dashboard.overview.tooltips.totalSellers'),
       activeTooltip: t('dashboard.dashboard.overview.tooltips.activeSellers'),
+      loading: queries.sellers.isLoading,
     },
   ].filter((card) => visible(card.label));
 
@@ -129,14 +133,22 @@ export function DashboardView() {
       id: 'products',
       title: label('productsKpis.title'),
       size: { xs: 12, md: 7, lg: 8 },
-      node: <OverviewProductsChart data={overview?.productsChart} loading={isLoading} />,
+      node: (
+        <OverviewProductsChart
+          data={overview?.productsChart}
+          loading={queries.products.isLoading || queries.auctions.isLoading}
+        />
+      ),
     },
     {
       id: 'categories',
       title: label('topCategories.title'),
       size: { xs: 12, md: 5, lg: 4 },
       node: (
-        <OverviewTopCategories categories={overview?.topCategories ?? []} loading={isLoading} />
+        <OverviewTopCategories
+          categories={overview?.topCategories ?? []}
+          loading={queries.topTags.isLoading}
+        />
       ),
     },
     {
@@ -149,7 +161,7 @@ export function DashboardView() {
           accent={OVERVIEW_ACCENTS.buyers}
           icon={<BuyersRadialIcon />}
           users={overview?.buyers}
-          loading={isLoading}
+          loading={queries.buyers.isLoading || queries.buyersWithTransactions.isLoading}
           type="buyers"
         />
       ),
@@ -164,7 +176,7 @@ export function DashboardView() {
           accent={OVERVIEW_ACCENTS.sellers}
           icon={<SellersBarsIcon />}
           users={overview?.sellers}
-          loading={isLoading}
+          loading={queries.sellers.isLoading || queries.companiesWithTransactions.isLoading}
           type="sellers"
         />
       ),
@@ -173,13 +185,23 @@ export function DashboardView() {
       id: 'auctions',
       title: label('auctions.title'),
       size: { xs: 12, sm: 6, md: 6 },
-      node: <OverviewAuctionsCard auctions={overview?.auctions} loading={isLoading} />,
+      node: (
+        <OverviewAuctionsCard
+          auctions={overview?.auctions}
+          loading={queries.auctions.isLoading}
+        />
+      ),
     },
     {
       id: 'payRequests',
       title: label('payRequests.title'),
       size: { xs: 12, sm: 6, md: 6 },
-      node: <OverviewPayRequestsCard payRequests={overview?.payRequests} loading={isLoading} />,
+      node: (
+        <OverviewPayRequestsCard
+          payRequests={overview?.payRequests}
+          loading={queries.payRequests.isLoading}
+        />
+      ),
     },
   ].filter((widget) => visible(widget.title));
 
@@ -234,7 +256,7 @@ export function DashboardView() {
               }
               split={card.stat?.split ?? { EG: 0, SA: 0 }}
               trend={card.trend}
-              loading={isTotalsLoading}
+              loading={card.loading}
               tooltip={card.tooltip}
               activeTooltip={card.activeTooltip}
             />
