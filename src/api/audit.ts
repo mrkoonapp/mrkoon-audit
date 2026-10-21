@@ -10,6 +10,8 @@ import { getLocalizedText } from 'src/utils/format-string';
 import axiosInstance from 'src/lib/axios';
 import { useTranslate } from 'src/locales';
 
+import { useGetHomeKpis } from './home-kpis';
+
 // ----------------------------------------------------------------------
 // Types
 // ----------------------------------------------------------------------
@@ -176,18 +178,7 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   }
 
   // 1. Fetch KPIs
-  const kpisQuery = useQuery({
-    queryKey: queryKeys.audit.home.kpis(kpiQueryParams),
-    queryFn: async () => {
-      const response = await axiosInstance.get<{ data: HomeKpiResponse }>(
-        endpoints.audit.home.kpis,
-        {
-          params: kpiQueryParams,
-        }
-      );
-      return response.data.data;
-    },
-  });
+  const kpisQuery = useGetHomeKpis(filters);
 
   // 2. Fetch Transactions Chart
   const chartQuery = useQuery({
@@ -291,33 +282,33 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             {
               id: 'products',
               labelKey: 'totalProducts',
-              value: kpis.total_products,
-              auctionsValue: kpis.total_auctions,
+              value: kpis.total_products ?? kpis.advanced_products?.total ?? 0,
+              auctionsValue: kpis.total_auctions ?? 0,
             },
             {
               id: 'sellers',
               labelKey: 'totalSellers',
-              value: kpis.total_sellers,
-              activeValue: kpis.active_sellers,
+              value: kpis.total_sellers ?? kpis.advanced_sellers?.total ?? 0,
+              activeValue: kpis.active_sellers ?? kpis.advanced_sellers?.active ?? 0,
             },
             {
               id: 'inspections',
               labelKey: 'totalInspections',
-              value: kpis.total_inspections.total,
-              offlineValue: kpis.total_inspections.offline,
-              onlineValue: kpis.total_inspections.online,
+              value: kpis.total_inspections?.total ?? 0,
+              offlineValue: kpis.total_inspections?.offline ?? 0,
+              onlineValue: kpis.total_inspections?.online ?? 0,
             },
             {
               id: 'buyers',
               labelKey: 'totalBuyers',
-              value: kpis.total_buyers,
-              activeValue: kpis.active_buyers,
+              value: kpis.total_buyers ?? kpis.advanced_buyers?.total ?? 0,
+              activeValue: kpis.active_buyers ?? kpis.advanced_buyers?.active ?? 0,
             },
             {
               id: 'bids',
               labelKey: 'totalBids',
-              value: kpis.total_bids,
-              biddersValue: kpis.total_bidders,
+              value: kpis.total_bids ?? 0,
+              biddersValue: kpis.total_bidders ?? 0,
             },
           ],
           successRate: {
@@ -337,8 +328,8 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
             currency: 'EGP',
           },
           newClients: {
-            total: kpis.all_clients_count ?? kpis.new_clients.length,
-            items: kpis.new_clients.map((c) => ({
+            total: kpis.all_clients_count ?? kpis.new_clients?.length ?? 0,
+            items: (kpis.new_clients ?? []).map((c) => ({
               id: String(c.id),
               name: c.name,
               category: '', // category not present in home/kpis client object

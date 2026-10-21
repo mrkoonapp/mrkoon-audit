@@ -83,6 +83,30 @@ export interface IHomeKpis {
   companies_with_transactions?: IHomeKpiEntityWithTransactions;
   buyers_with_transactions?: IHomeKpiEntityWithTransactions;
   pay_requests?: IHomeKpiPayRequests;
+  total_inspections?: {
+    total: number;
+    offline: number;
+    online: number;
+  };
+  total_bids?: number;
+  total_bidders?: number;
+  total_auctions?: number;
+  all_clients_count?: number;
+  new_clients?: Array<{
+    id: number | string;
+    name: string;
+    image?: string | null;
+    joined_at: string;
+    phone?: string | null;
+  }>;
+  avg_time_to_start_auction?: {
+    avg_seconds?: number;
+    avg_hours?: number;
+    avg_days?: number;
+    total_auctions_measured?: number;
+    country_breakdown?: any[];
+  };
+  avg_auction_start_time_hours?: number;
 }
 
 export interface IHomeKpiPayRequests {
