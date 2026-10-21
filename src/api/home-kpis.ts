@@ -72,8 +72,11 @@ export function useGetHomeKpisGeneral(
   });
 }
 
-export function useGetHomeKpisSellers(filters: DashboardFilters) {
-  const params = toHomeKpiParams(filters);
+export function useGetHomeKpisSellers(
+  filters: DashboardFilters,
+  options?: { countryOnly?: boolean }
+) {
+  const params = options?.countryOnly ? toHomeKpiTotalsParams(filters) : toHomeKpiParams(filters);
   return useQuery({
     queryKey: queryKeys.audit.home.kpisSellers(params),
     queryFn: () =>
@@ -85,8 +88,11 @@ export function useGetHomeKpisSellers(filters: DashboardFilters) {
   });
 }
 
-export function useGetHomeKpisBuyers(filters: DashboardFilters) {
-  const params = toHomeKpiParams(filters);
+export function useGetHomeKpisBuyers(
+  filters: DashboardFilters,
+  options?: { countryOnly?: boolean }
+) {
+  const params = options?.countryOnly ? toHomeKpiTotalsParams(filters) : toHomeKpiParams(filters);
   return useQuery({
     queryKey: queryKeys.audit.home.kpisBuyers(params),
     queryFn: () =>
@@ -98,8 +104,11 @@ export function useGetHomeKpisBuyers(filters: DashboardFilters) {
   });
 }
 
-export function useGetHomeKpisProducts(filters: DashboardFilters) {
-  const params = toHomeKpiParams(filters);
+export function useGetHomeKpisProducts(
+  filters: DashboardFilters,
+  options?: { countryOnly?: boolean }
+) {
+  const params = options?.countryOnly ? toHomeKpiTotalsParams(filters) : toHomeKpiParams(filters);
   return useQuery({
     queryKey: queryKeys.audit.home.kpisProducts(params),
     queryFn: () =>
@@ -210,9 +219,9 @@ export function useGetHomeKpis(
   options?: { includeGeneral?: boolean }
 ) {
   const generalQuery = useGetHomeKpisGeneral(filters, { enabled: !!options?.includeGeneral });
-  const sellersQuery = useGetHomeKpisSellers(filters);
-  const buyersQuery = useGetHomeKpisBuyers(filters);
-  const productsQuery = useGetHomeKpisProducts(filters);
+  const sellersQuery = useGetHomeKpisSellers(filters, { countryOnly: true });
+  const buyersQuery = useGetHomeKpisBuyers(filters, { countryOnly: true });
+  const productsQuery = useGetHomeKpisProducts(filters, { countryOnly: true });
   const auctionsQuery = useGetHomeKpisAuctions(filters);
   const totalMoneyQuery = useGetHomeKpisTotalMoney(filters, { countryOnly: true });
   const topTagsQuery = useGetHomeKpisTopTags(filters);
