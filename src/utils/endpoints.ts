@@ -42,8 +42,6 @@ export const endpoints = {
         payRequests: 'audit/home/kpis/pay-requests',
         companiesWithTransactions: 'audit/home/kpis/companies-with-transactions',
         buyersWithTransactions: 'audit/home/kpis/buyers-with-transactions',
-        totals: 'audit/home/kpis/totals',
-        summary: 'audit/home/kpis/summary',
       },
       transactionsChart: 'audit/home/transactions-chart',
       transactionTotals: 'audit/home/transaction-totals',

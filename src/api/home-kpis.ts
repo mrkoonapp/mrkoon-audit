@@ -55,31 +55,6 @@ async function fetchKpiPart<T>(endpoint: string, params: Record<string, unknown>
 // Individual KPI Queries
 // ----------------------------------------------------------------------
 
-export function useGetHomeKpisTotals(filters: DashboardFilters) {
-  const params = toHomeKpiTotalsParams(filters);
-  return useQuery({
-    queryKey: queryKeys.audit.home.kpisTotals(params),
-    queryFn: () =>
-      fetchKpiPart<
-        Pick<
-          IHomeKpis,
-          | 'gmv'
-          | 'total_money'
-          | 'advanced_total_money'
-          | 'total_products'
-          | 'advanced_products'
-          | 'total_buyers'
-          | 'active_buyers'
-          | 'advanced_buyers'
-          | 'total_sellers'
-          | 'active_sellers'
-          | 'advanced_sellers'
-        >
-      >(endpoints.audit.home.kpisParts.totals, params),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
 export function useGetHomeKpisGeneral(
   filters: DashboardFilters,
   options?: { enabled?: boolean }
@@ -148,8 +123,11 @@ export function useGetHomeKpisAuctions(filters: DashboardFilters) {
   });
 }
 
-export function useGetHomeKpisTotalMoney(filters: DashboardFilters) {
-  const params = toHomeKpiParams(filters);
+export function useGetHomeKpisTotalMoney(
+  filters: DashboardFilters,
+  options?: { countryOnly?: boolean }
+) {
+  const params = options?.countryOnly ? toHomeKpiTotalsParams(filters) : toHomeKpiParams(filters);
   return useQuery({
     queryKey: queryKeys.audit.home.kpisTotalMoney(params),
     queryFn: () =>
@@ -231,13 +209,12 @@ export function useGetHomeKpis(
   filters: DashboardFilters,
   options?: { includeGeneral?: boolean }
 ) {
-  const totalsQuery = useGetHomeKpisTotals(filters);
   const generalQuery = useGetHomeKpisGeneral(filters, { enabled: !!options?.includeGeneral });
   const sellersQuery = useGetHomeKpisSellers(filters);
   const buyersQuery = useGetHomeKpisBuyers(filters);
   const productsQuery = useGetHomeKpisProducts(filters);
   const auctionsQuery = useGetHomeKpisAuctions(filters);
-  const totalMoneyQuery = useGetHomeKpisTotalMoney(filters);
+  const totalMoneyQuery = useGetHomeKpisTotalMoney(filters, { countryOnly: true });
   const topTagsQuery = useGetHomeKpisTopTags(filters);
   const payRequestsQuery = useGetHomeKpisPayRequests(filters);
   const companiesWithTxQuery = useGetHomeKpisCompaniesWithTransactions(filters);
@@ -245,7 +222,6 @@ export function useGetHomeKpis(
 
   const queries = useMemo(() => {
     const list: UseQueryResult<any, any>[] = [
-      totalsQuery,
       sellersQuery,
       buyersQuery,
       productsQuery,
@@ -261,7 +237,6 @@ export function useGetHomeKpis(
     }
     return list;
   }, [
-    totalsQuery,
     sellersQuery,
     buyersQuery,
     productsQuery,
@@ -276,7 +251,11 @@ export function useGetHomeKpis(
   ]);
 
   const isLoading = queries.some((q) => q.isLoading);
-  const isTotalsLoading = totalsQuery.isLoading;
+  const isTotalsLoading =
+    totalMoneyQuery.isLoading ||
+    productsQuery.isLoading ||
+    buyersQuery.isLoading ||
+    sellersQuery.isLoading;
   const isError = queries.some((q) => q.isError);
 
   const hasAnyData = queries.some((q) => q.data !== undefined);
@@ -284,7 +263,6 @@ export function useGetHomeKpis(
   const data = useMemo<IHomeKpis | undefined>(() => {
     if (!hasAnyData) return undefined;
     return {
-      ...(totalsQuery.data ?? {}),
       ...(generalQuery.data ?? {}),
       ...(sellersQuery.data ?? {}),
       ...(buyersQuery.data ?? {}),
@@ -298,7 +276,6 @@ export function useGetHomeKpis(
     };
   }, [
     hasAnyData,
-    totalsQuery.data,
     generalQuery.data,
     sellersQuery.data,
     buyersQuery.data,
@@ -322,7 +299,6 @@ export function useGetHomeKpis(
     isError,
     refetch,
     queries: {
-      totals: totalsQuery,
       general: generalQuery,
       sellers: sellersQuery,
       buyers: buyersQuery,
