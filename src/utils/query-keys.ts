@@ -45,6 +45,8 @@ export const queryKeys = {
         [...queryKeys.audit.all, 'home', 'kpis', 'companiesWithTransactions', filters] as const,
       kpisBuyersWithTransactions: (filters: any) =>
         [...queryKeys.audit.all, 'home', 'kpis', 'buyersWithTransactions', filters] as const,
+      kpisTotals: (filters: any) =>
+        [...queryKeys.audit.all, 'home', 'kpis', 'totals', filters] as const,
       transactionsChart: (filters: any) =>
         [...queryKeys.audit.all, 'home', 'transactionsChart', filters] as const,
       transactionTotals: (filters: any) =>

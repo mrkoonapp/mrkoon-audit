@@ -178,7 +178,7 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   }
 
   // 1. Fetch KPIs
-  const kpisQuery = useGetHomeKpis(filters);
+  const kpisQuery = useGetHomeKpis(filters, { includeGeneral: true });
 
   // 2. Fetch Transactions Chart
   const chartQuery = useQuery({

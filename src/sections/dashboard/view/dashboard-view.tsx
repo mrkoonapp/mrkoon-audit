@@ -50,7 +50,7 @@ export function DashboardView() {
     getOverviewDefaultFilters()
   );
 
-  const { data: kpis, isLoading, isError, refetch } = useGetHomeKpis(filters);
+  const { data: kpis, isLoading, isTotalsLoading, isError, refetch } = useGetHomeKpis(filters);
 
   const overview = useMemo(
     () => (kpis ? buildDashboardOverview(kpis, currentLang.value, filters.country) : undefined),
@@ -234,7 +234,7 @@ export function DashboardView() {
               }
               split={card.stat?.split ?? { EG: 0, SA: 0 }}
               trend={card.trend}
-              loading={isLoading}
+              loading={isTotalsLoading}
               tooltip={card.tooltip}
               activeTooltip={card.activeTooltip}
             />
