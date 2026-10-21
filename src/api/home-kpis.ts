@@ -2,6 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import type { DashboardFilters } from 'src/components/dashboard';
 import type { IHomeKpis } from 'src/types/dashboard-overview.types';
 
+import dayjs from 'dayjs';
 import { useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -31,11 +32,14 @@ export function toHomeKpiParams(filters: DashboardFilters): Record<string, unkno
 
 /**
  * Maps dashboard filters for all-time totals/summary metrics.
- * Intentionally ignores date_from/date_to/period so total numbers
- * aren't re-fetched when switching time frames.
+ * Explicitly sends date_from from 2020 until now so total numbers
+ * represent the system all-time and aren't re-fetched when switching time frames.
  */
 export function toHomeKpiTotalsParams(filters: DashboardFilters): Record<string, unknown> {
-  const params: Record<string, unknown> = {};
+  const params: Record<string, unknown> = {
+    date_from: '2020-01-01',
+    date_to: dayjs().format('YYYY-MM-DD'),
+  };
 
   if (filters.country) {
     params.country_id = filters.country;
