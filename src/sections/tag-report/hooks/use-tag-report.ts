@@ -6,6 +6,7 @@ import { useMemo, useState, useReducer } from 'react';
 import { useTranslate } from 'src/locales';
 import { useGetTagTrend, useGetTagScorecard } from 'src/api/tag-report';
 
+import { classifyQuadrants } from '../utils/quadrant';
 import { sumTile, TILE_METRICS } from '../utils/tiles';
 import { buildTrendParams, buildScorecardParams } from '../utils/params';
 import { reportReducer, initialReportState, DEFAULT_COUNTRY_ID } from '../utils/flow';
@@ -37,6 +38,10 @@ export function useTagReport() {
   const scorecard = useGetTagScorecard(viewParams);
 
   const topRows = useMemo(() => topScorecard.data?.data ?? [], [topScorecard.data]);
+
+  const rows = useMemo(() => scorecard.data?.data ?? [], [scorecard.data]);
+  const parentRow = parentId === null ? null : (topRows.find((r) => r.tag.id === parentId) ?? null);
+  const quadrants = useMemo(() => classifyQuadrants(topRows), [topRows]);
 
   // Until the user picks a tag, the trend follows the first Top Tag.
   const trendTagId = trend.tagId ?? topRows[0]?.tag.id ?? null;
@@ -92,6 +97,9 @@ export function useTagReport() {
     topScorecard,
     scorecard,
     topRows,
+    rows,
+    parentRow,
+    quadrants,
     tiles,
     trendTagId,
     trendQuery,

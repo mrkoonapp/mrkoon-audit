@@ -23,6 +23,7 @@ import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboa
 import { ReportTile } from '../components/report-tile';
 import { ReportError } from '../components/report-error';
 import { formatMetric, pickLocalized } from '../utils/format';
+import { ScorecardTable } from '../components/scorecard-table';
 import { useTagReport, REPORT_PERIODS } from '../hooks/use-tag-report';
 
 // ----------------------------------------------------------------------
@@ -131,6 +132,26 @@ export function TagReportView() {
               </Grid>
             ))}
           </Grid>
+
+          <Box sx={{ mt: 3 }}>
+            <ScorecardTable
+              rows={report.rows}
+              loading={scorecard.isLoading}
+              stale={scorecard.isPlaceholderData}
+              sort={state.sort}
+              onSort={(sort) => dispatch({ type: 'setSort', sort })}
+              parent={report.parentRow}
+              onBack={() => dispatch({ type: 'backToTopTags' })}
+              onOpenTopTag={(tagId) => dispatch({ type: 'openTopTag', tagId })}
+              onSelectChild={(tagId) => dispatch({ type: 'selectChild', tagId })}
+              onSelectDirect={() => dispatch({ type: 'selectDirect' })}
+              selectedTagId={report.trendTagId}
+              quadrantOf={report.quadrants.quadrantOf}
+              currency={currency}
+              lang={lang}
+              locale={numberLocale}
+            />
+          </Box>
         </Box>
       )}
 
