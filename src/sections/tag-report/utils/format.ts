@@ -1,4 +1,4 @@
-import type { MetricKey } from 'src/api/tag-report';
+import type { Localized, MetricKey } from 'src/api/tag-report';
 
 // ----------------------------------------------------------------------
 
@@ -38,4 +38,9 @@ export function formatMetric(key: MetricKey, value: number | null, locale = 'en'
     default:
       return new Intl.NumberFormat(locale).format(value);
   }
+}
+
+/** The Arabic text for any `ar-*` UI language, else English. */
+export function pickLocalized(value: Localized, lang: string): string {
+  return lang.startsWith('ar') ? value.ar || value.en : value.en;
 }

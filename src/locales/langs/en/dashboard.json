@@ -208,6 +208,86 @@
         "active": "Active",
         "inactive": "Inactive"
       }
+    },
+    "tagReport": {
+      "title": "Tag Investment Report",
+      "subtitle": "Overview • Tag Investment Report",
+      "updatedHourly": "Updated hourly",
+      "vs": "vs {{range}}",
+      "tagType": {
+        "scrap": "Scrap",
+        "stagnant": "Stagnant"
+      },
+      "periods": {
+        "daily": "Yesterday",
+        "weekly": "Last week",
+        "monthly": "Last month",
+        "quarterly": "Last quarter",
+        "yearly": "Last year"
+      },
+      "metrics": {
+        "listingsCreated": "Listings created",
+        "activeSellers": "Active sellers",
+        "interestedBuyers": "Interested buyers",
+        "buyersPerActive": "Buyers per active listing",
+        "biddersPerListing": "Bidders per listing",
+        "sellThroughPct": "Sell-through",
+        "gmv": "Deal value (GMV)",
+        "mrkoonRevenue": "Mrkoon revenue",
+        "targetReachedPct": "Target price reached"
+      },
+      "nullReasons": {
+        "listingsCreated": "Cannot be measured",
+        "activeSellers": "Cannot be measured",
+        "interestedBuyers": "Interested buyers are tracked on Top Tags only",
+        "buyersPerActive": "Tracked on Top Tags only, or no listing was open at period end",
+        "biddersPerListing": "No auction or price offer ended in the period",
+        "sellThroughPct": "No auction or price offer ended in the period",
+        "gmv": "Cannot be measured for this country",
+        "mrkoonRevenue": "Cannot be measured for this country",
+        "targetReachedPct": "No ended listing had a target price"
+      },
+      "delta": {
+        "new": "new"
+      },
+      "table": {
+        "title": "Scorecard",
+        "tag": "Tag",
+        "allTopTags": "All Top Tags",
+        "direct": "{{name}} (direct)",
+        "withCurrency": "{{label}} ({{currency}})"
+      },
+      "quadrant": {
+        "title": "Investment map",
+        "subheader": "Top Tags by buyers per active listing and sell-through",
+        "needsSellers": "Needs sellers",
+        "needsBuyers": "Needs buyers",
+        "median": "Median",
+        "tooltip": "{{buyers}} buyers ÷ {{active}} active = {{ratio}} · Sell-through {{sellThrough}}"
+      },
+      "bars": {
+        "title": "Where the money is",
+        "subheader": "Mrkoon revenue per tag"
+      },
+      "trend": {
+        "title": "Trend",
+        "metric": "Metric",
+        "bucket": "Bucket",
+        "buckets": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "quarterly": "Quarterly",
+          "yearly": "Yearly"
+        },
+        "directNote": "The trend covers the whole Top Tag. It cannot show direct listings only.",
+        "noValue": "No value"
+      },
+      "states": {
+        "empty": "No {{type}} tags yet",
+        "error": "Couldn't load the report. Try again.",
+        "retry": "Retry"
+      }
     }
   }
 }
