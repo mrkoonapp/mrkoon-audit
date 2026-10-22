@@ -45,4 +45,22 @@ describe('delta', () => {
     // A rate with no previous value has no change; it is never "new".
     expect(delta({ current: 81, previous: null, changePp: null })).toEqual({ kind: 'none' });
   });
+
+  it('shows a rise above 999% as a multiple, so it stays readable', () => {
+    expect(delta({ current: 425, previous: 0.555, changePct: 76525 })).toEqual({
+      kind: 'up',
+      text: '▲ ×766',
+    });
+    expect(delta({ current: 104, previous: 1, changePct: 10294.6 })).toEqual({
+      kind: 'up',
+      text: '▲ ×104',
+    });
+  });
+
+  it('keeps a rise of 999% or less as a percent', () => {
+    expect(delta({ current: 10, previous: 1, changePct: 900 })).toEqual({
+      kind: 'up',
+      text: '▲ 900%',
+    });
+  });
 });
