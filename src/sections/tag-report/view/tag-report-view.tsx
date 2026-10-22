@@ -20,6 +20,7 @@ import { EmptyContent } from 'src/components/empty-content';
 import { CircleArrowButton } from 'src/components/circle-arrow-button';
 import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboard';
 
+import { TrendCard } from '../components/trend-card';
 import { ReportTile } from '../components/report-tile';
 import { ReportError } from '../components/report-error';
 import { RevenueBars } from '../components/revenue-bars';
@@ -180,6 +181,26 @@ export function TagReportView() {
               />
             </Grid>
           </Grid>
+
+          <Box sx={{ mt: 3 }}>
+            <TrendCard
+              trend={report.trendQuery.data}
+              loading={
+                report.trendQuery.isLoading ||
+                (!report.trendQuery.data && report.trendTagId === null)
+              }
+              stale={report.trendQuery.isPlaceholderData}
+              metric={state.trend.metric}
+              bucket={state.trend.bucket}
+              isChild={state.trend.isChild}
+              showDirectNote={state.parentId !== null && report.trendTagId === state.parentId}
+              onMetric={(metric) => dispatch({ type: 'setTrendMetric', metric })}
+              onBucket={(bucket) => dispatch({ type: 'setBucket', bucket })}
+              currency={currency}
+              lang={lang}
+              locale={numberLocale}
+            />
+          </Box>
         </Box>
       )}
 

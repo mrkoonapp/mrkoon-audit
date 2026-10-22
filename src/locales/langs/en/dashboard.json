@@ -283,7 +283,8 @@
           "yearly": "Yearly"
         },
         "directNote": "The trend covers the whole Top Tag. It cannot show direct listings only.",
-        "noValue": "No value"
+        "noValue": "No value",
+        "empty": "No data for this tag"
       },
       "states": {
         "empty": "No {{type}} tags yet",
