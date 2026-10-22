@@ -82,7 +82,8 @@ export function TrendCard({
   const options = useChart({
     chart: { type: 'area', zoom: { enabled: false } },
     colors: [theme.palette.info.main],
-    stroke: { width: 2.5 },
+    // Straight segments: a smoothed curve suggests values between buckets.
+    stroke: { width: 2.5, curve: 'straight' },
     fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0.05 } },
     markers: { size: 3, strokeWidth: 0 },
     xaxis: { categories: points.map((p) => bucketLabel(p, bucket, lang)) },

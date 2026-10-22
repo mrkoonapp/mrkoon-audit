@@ -15,6 +15,8 @@ const escapeHtml = (text: string) => text.replace(/[&<>"']/g, (c) => `&#${c.char
 
 type Props = {
   map: QuadrantMap;
+  /** All Top Tags, plotted or not. */
+  total: number;
   loading: boolean;
   lang: string;
   locale: string;
@@ -25,7 +27,7 @@ type Props = {
  * has no log x axis, so x is plotted as log10 and the ticks are turned back.
  * Dot colors carry the quadrant; dashed lines are the medians.
  */
-export function InvestmentMap({ map, loading, lang, locale }: Props) {
+export function InvestmentMap({ map, total, loading, lang, locale }: Props) {
   const theme = useTheme();
   const { t } = useTranslate('dashboard');
   const tr = (key: string, options?: Record<string, unknown>) =>
@@ -54,6 +56,18 @@ export function InvestmentMap({ map, loading, lang, locale }: Props) {
     data: pointsByGroup[index].map((p) => ({ x: Math.log10(p.x), y: p.y })),
   }));
 
+  // Ticks on whole decades (1, 10, 100) read better than evenly spaced logs.
+  const logs = map.points.map((p) => Math.log10(p.x));
+  const minLog = logs.length ? Math.floor(Math.min(...logs)) : 0;
+  const maxLog = logs.length ? Math.max(Math.ceil(Math.max(...logs)), minLog + 1) : 1;
+  const tickLabel = (log: number) =>
+    new Intl.NumberFormat(locale, { maximumFractionDigits: log < 0 ? 1 : 0 }).format(10 ** log);
+
+  const nameOf = (seriesIndex: number, dataPointIndex: number) => {
+    const point = pointsByGroup[seriesIndex]?.[dataPointIndex];
+    return point ? pickLocalized(point.row.tag.name, lang) : '';
+  };
+
   const medianLine = { borderColor: theme.palette.text.disabled, strokeDashArray: 4 };
 
   const options = useChart({
@@ -61,13 +75,24 @@ export function InvestmentMap({ map, loading, lang, locale }: Props) {
     colors: groups.map((group) => group.color),
     markers: { size: 7, strokeWidth: 0 },
     legend: { show: true, position: 'top', horizontalAlign: 'right' },
+    dataLabels: {
+      enabled: true,
+      offsetY: -12,
+      formatter: (_value, { seriesIndex, dataPointIndex }) => nameOf(seriesIndex, dataPointIndex),
+      background: { enabled: false },
+      style: { fontSize: '11px', fontWeight: 600, colors: [theme.vars.palette.text.secondary] },
+    },
     xaxis: {
       type: 'numeric',
-      tickAmount: 5,
+      min: minLog,
+      max: maxLog,
+      tickAmount: maxLog - minLog,
       title: { text: tr('metrics.buyersPerActive') },
-      labels: { formatter: (v) => formatMetric('buyersPerActive', 10 ** Number(v), locale) },
+      labels: { formatter: (v) => tickLabel(Number(v)) },
     },
     yaxis: {
+      min: 0,
+      max: 100,
       title: { text: tr('metrics.sellThroughPct') },
       labels: { formatter: (v) => formatMetric('sellThroughPct', v, locale) },
     },
@@ -97,7 +122,10 @@ export function InvestmentMap({ map, loading, lang, locale }: Props) {
   return (
     <WidgetCard
       title={tr('quadrant.title')}
-      subheader={tr('quadrant.subheader')}
+      subheader={`${tr('quadrant.subheader')} · ${tr('quadrant.plotted', {
+        count: map.points.length,
+        total,
+      })}`}
       loading={loading}
       empty={!map.points.length}
       emptyTitle={tr('quadrant.empty')}
