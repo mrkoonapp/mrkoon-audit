@@ -65,5 +65,9 @@ export const endpoints = {
     onboarding: {
       kpis: 'audit/onboarding/kpis',
     },
+    tags: {
+      scorecard: 'audit/tags/scorecard',
+      trend: 'audit/tags/trend',
+    },
   },
 };

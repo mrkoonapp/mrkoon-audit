@@ -36,8 +36,7 @@ export const queryKeys = {
       topTags: (filters: any) => [...queryKeys.audit.all, 'home', 'topTags', filters] as const,
       successRate: (filters: any) =>
         [...queryKeys.audit.all, 'home', 'successRate', filters] as const,
-      compare: (filters: any) =>
-        [...queryKeys.audit.all, 'home', 'compare', filters] as const,
+      compare: (filters: any) => [...queryKeys.audit.all, 'home', 'compare', filters] as const,
     },
     auctions: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'auctions', 'kpis', filters] as const,
@@ -73,6 +72,10 @@ export const queryKeys = {
     },
     onboarding: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'onboarding', 'kpis', filters] as const,
+    },
+    tags: {
+      scorecard: (params: any) => [...queryKeys.audit.all, 'tags', 'scorecard', params] as const,
+      trend: (params: any) => [...queryKeys.audit.all, 'tags', 'trend', params] as const,
     },
   },
 } as const;
