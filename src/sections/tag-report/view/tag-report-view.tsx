@@ -22,6 +22,8 @@ import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboa
 
 import { ReportTile } from '../components/report-tile';
 import { ReportError } from '../components/report-error';
+import { RevenueBars } from '../components/revenue-bars';
+import { InvestmentMap } from '../components/investment-map';
 import { formatMetric, pickLocalized } from '../utils/format';
 import { ScorecardTable } from '../components/scorecard-table';
 import { useTagReport, REPORT_PERIODS } from '../hooks/use-tag-report';
@@ -117,8 +119,12 @@ export function TagReportView() {
       ) : isEmpty ? (
         <EmptyContent filled title={tr('states.empty', { type: tr(`tagType.${tagTypeKey}`) })} />
       ) : (
-        <Box sx={{ opacity: topScorecard.isPlaceholderData ? 0.5 : 1, transition: 'opacity .2s' }}>
-          <Grid container spacing={3}>
+        <Box>
+          <Grid
+            container
+            spacing={3}
+            sx={{ opacity: topScorecard.isPlaceholderData ? 0.5 : 1, transition: 'opacity .2s' }}
+          >
             {(tiles.length ? tiles : [null, null, null]).map((tile, index) => (
               <Grid key={tile?.key ?? index} size={{ xs: 12, sm: 4 }}>
                 <ReportTile
@@ -152,6 +158,28 @@ export function TagReportView() {
               locale={numberLocale}
             />
           </Box>
+
+          <Grid container spacing={3} sx={{ mt: 3 }}>
+            {/* The map is for Top Tags only. */}
+            {!state.parentId && (
+              <Grid size={{ xs: 12, md: 6 }}>
+                <InvestmentMap
+                  map={report.quadrants}
+                  loading={topScorecard.isLoading}
+                  lang={lang}
+                  locale={numberLocale}
+                />
+              </Grid>
+            )}
+            <Grid size={{ xs: 12, md: state.parentId ? 12 : 6 }}>
+              <RevenueBars
+                rows={report.rows}
+                loading={scorecard.isLoading}
+                currency={currency}
+                lang={lang}
+              />
+            </Grid>
+          </Grid>
         </Box>
       )}
 

@@ -262,12 +262,14 @@
         "subheader": "Top Tags by buyers per active listing and sell-through",
         "needsSellers": "Needs sellers",
         "needsBuyers": "Needs buyers",
-        "median": "Median",
-        "tooltip": "{{buyers}} buyers ÷ {{active}} active = {{ratio}} · Sell-through {{sellThrough}}"
+        "tooltip": "{{buyers}} buyers · {{ratio}} per active listing · Sell-through {{sellThrough}}",
+        "other": "Other",
+        "empty": "No Top Tag has both values in this period"
       },
       "bars": {
         "title": "Where the money is",
-        "subheader": "Mrkoon revenue per tag"
+        "subheader": "Mrkoon revenue per tag",
+        "empty": "No revenue in this period"
       },
       "trend": {
         "title": "Trend",
