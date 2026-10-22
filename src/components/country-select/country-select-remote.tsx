@@ -83,7 +83,9 @@ export function CountrySelectRemote({
       disableClearable
       loading={isLoading}
       options={options}
-      value={selected ?? undefined}
+      // Keep it controlled while the list loads (`null`, not `undefined`); with
+      // `hideAll` there is no option until the list arrives.
+      value={selected as CountryOption}
       isOptionEqualToValue={(option, val) => option.value === val.value}
       getOptionLabel={(option) => option.label}
       onChange={(_event, newValue) => onChange(newValue?.value ?? ALL_COUNTRIES_VALUE)}
