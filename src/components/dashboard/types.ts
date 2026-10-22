@@ -431,6 +431,14 @@ export type DashboardFiltersDrawerProps = {
   filters: DashboardFilters;
   onApply: (filters: DashboardFilters) => void;
   onReset: () => void;
+  /**
+   * Period choices, in display order. Defaults to weekly, monthly, quarterly,
+   * yearly and custom (with the `period*` labels). Leave out `custom` to hide
+   * the date pickers.
+   */
+  periodOptions?: { value: DatePeriod; label?: string }[];
+  /** Hide the "All countries" option, so a country is always selected. */
+  hideAllCountries?: boolean;
   /** i18n labels — supplied by the page so the drawer stays translation-free. */
   labels?: {
     title?: string;

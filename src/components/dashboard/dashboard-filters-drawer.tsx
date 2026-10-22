@@ -40,6 +40,8 @@ export function DashboardFiltersDrawer({
   filters,
   onApply,
   onReset,
+  periodOptions: periodOptionsProp,
+  hideAllCountries,
   labels,
 }: DashboardFiltersDrawerProps) {
   const [local, setLocal] = useState<DashboardFilters>(filters);
@@ -57,7 +59,7 @@ export function DashboardFiltersDrawer({
   const dateError = isCustomPeriod && fIsAfter(local.startDate, local.endDate);
 
   // Period options paired with their translated labels (order = display order).
-  const periodOptions: { value: DatePeriod; label?: string }[] = [
+  const periodOptions: { value: DatePeriod; label?: string }[] = periodOptionsProp ?? [
     { value: DATE_PERIODS.WEEKLY, label: labels?.periodWeekly },
     { value: DATE_PERIODS.MONTHLY, label: labels?.periodMonthly },
     { value: DATE_PERIODS.QUARTERLY, label: labels?.periodQuarterly },
@@ -167,6 +169,7 @@ export function DashboardFiltersDrawer({
               fullWidth
               placeholder={labels?.countryPlaceholder}
               allLabel={labels?.allCountries}
+              hideAll={hideAllCountries}
               value={local.country}
               onChange={(newValue) => setLocal((prev) => ({ ...prev, country: newValue }))}
             />

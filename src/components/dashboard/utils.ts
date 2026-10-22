@@ -44,6 +44,8 @@ export function getPeriodRange(period: DatePeriod): {
   const now = dayjs();
 
   switch (period) {
+    case DATE_PERIODS.DAILY:
+      return { startDate: now.startOf('day'), endDate: now.endOf('day') };
     case DATE_PERIODS.WEEKLY:
       return { startDate: now.startOf('week'), endDate: now.endOf('week') };
     case DATE_PERIODS.MONTHLY:
