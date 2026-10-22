@@ -12,7 +12,8 @@
  * Used to filter and display products based on their current status
  */
 export const PRODUCT_STATUS = {
-  SOLD: '68',
+  SOLD: '20',
+  ACCEPTED: '68',
   NEW_WAITING_FOR_ACTIVATION: '1',
   ACTIVE: '2',
   NOT_ACTIVATED: '3',

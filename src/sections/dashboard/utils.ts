@@ -116,10 +116,11 @@ export function buildDashboardOverview(
     ? outcomes.filter((o) => getRowCountry(o) === targetCountry)
     : outcomes;
 
-  const { SOLD, ENDED, PENDING_ACTIVATION } = AUCTION_OUTCOME_STATUS;
+  const { SOLD, ENDED, PREVIEW, ACCEPTED } = AUCTION_OUTCOME_STATUS;
   const sold = sumOutcomes(relevantOutcomes, SOLD);
   const ended = sumOutcomes(relevantOutcomes, ENDED);
-  const pendingActivation = sumOutcomes(relevantOutcomes, PENDING_ACTIVATION);
+  const pendingActivation =
+    sumOutcomes(relevantOutcomes, PREVIEW) + sumOutcomes(relevantOutcomes, ACCEPTED);
 
   const gmvTotal =
     targetCountry && splitGmv[targetCountry] > 0
@@ -255,7 +256,8 @@ export function buildDashboardOverview(
                 ? sumSplits(
                     splitOutcomes(outcomes, SOLD),
                     splitOutcomes(outcomes, ENDED),
-                    splitOutcomes(outcomes, PENDING_ACTIVATION)
+                    splitOutcomes(outcomes, PREVIEW),
+                    splitOutcomes(outcomes, ACCEPTED)
                   ).EG
                 : 0,
             SA:
@@ -263,14 +265,16 @@ export function buildDashboardOverview(
                 ? sumSplits(
                     splitOutcomes(outcomes, SOLD),
                     splitOutcomes(outcomes, ENDED),
-                    splitOutcomes(outcomes, PENDING_ACTIVATION)
+                    splitOutcomes(outcomes, PREVIEW),
+                    splitOutcomes(outcomes, ACCEPTED)
                   ).SA
                 : 0,
           }
         : sumSplits(
             splitOutcomes(outcomes, SOLD),
             splitOutcomes(outcomes, ENDED),
-            splitOutcomes(outcomes, PENDING_ACTIVATION)
+            splitOutcomes(outcomes, PREVIEW),
+            splitOutcomes(outcomes, ACCEPTED)
           ),
     },
     topCategories: (kpis.top_tags_gmv ?? []).slice(0, 3).map((tag) => ({
