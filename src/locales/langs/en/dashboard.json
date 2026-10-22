@@ -255,7 +255,11 @@
         "tag": "Tag",
         "allTopTags": "All Top Tags",
         "direct": "{{name}} (direct)",
-        "withCurrency": "{{label}} ({{currency}})"
+        "withCurrency": "{{label}} ({{currency}})",
+        "moreColumns": "More columns",
+        "fewerColumns": "Fewer columns",
+        "showInactive": "Show {{count}} inactive tags",
+        "hideInactive": "Hide inactive tags"
       },
       "quadrant": {
         "title": "Investment map",
@@ -264,11 +268,12 @@
         "needsBuyers": "Needs buyers",
         "tooltip": "{{buyers}} buyers · {{ratio}} per active listing · Sell-through {{sellThrough}}",
         "other": "Other",
-        "empty": "No Top Tag has both values in this period"
+        "empty": "No Top Tag has both values in this period",
+        "plotted": "{{count}} of {{total}} Top Tags have enough data to plot"
       },
       "bars": {
         "title": "Where the money is",
-        "subheader": "Mrkoon revenue per tag",
+        "subheader": "Top 10 tags by Mrkoon revenue ({{currency}})",
         "empty": "No revenue in this period"
       },
       "trend": {
@@ -290,7 +295,20 @@
         "empty": "No {{type}} tags yet",
         "error": "Couldn't load the report. Try again.",
         "retry": "Retry"
-      }
+      },
+      "definitions": {
+        "listingsCreated": "New listings created in the period. Each listing counts once, under its main tag.",
+        "activeSellers": "Sellers who created at least one listing under this tag in the period.",
+        "interestedBuyers": "Buyers who follow this tag on the last day of the period. Tracked on Top Tags only.",
+        "buyersPerActive": "Interested buyers ÷ listings still open at the end of the period. High means buyers are waiting for stock.",
+        "biddersPerListing": "Average number of bidders on the auctions and price offers that ended in the period.",
+        "sellThroughPct": "Share of the auctions and price offers that ended in the period with an accepted bid.",
+        "gmv": "Total value of completed deals in the period (price × quantity), by deal date.",
+        "mrkoonRevenue": "Mrkoon's commission on the completed deals in the period, by deal date.",
+        "targetReachedPct": "For ended listings with a target price: how close the final price came to that target, on average."
+      },
+      "changeHint": "Change vs {{range}}",
+      "previousValue": "{{range}}: {{value}}"
     }
   }
 }

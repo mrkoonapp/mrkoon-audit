@@ -1,15 +1,14 @@
-import type { DashboardFilters } from 'src/components/dashboard';
 import type { MetricKey, ReportPeriod } from 'src/api/tag-report';
 
-import { useMemo, useState, useReducer } from 'react';
+import { useMemo, useReducer } from 'react';
 
 import { useTranslate } from 'src/locales';
 import { useGetTagTrend, useGetTagScorecard } from 'src/api/tag-report';
 
 import { classifyQuadrants } from '../utils/quadrant';
 import { sumTile, TILE_METRICS } from '../utils/tiles';
+import { reportReducer, initialReportState } from '../utils/flow';
 import { buildTrendParams, buildScorecardParams } from '../utils/params';
-import { reportReducer, initialReportState, DEFAULT_COUNTRY_ID } from '../utils/flow';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +21,6 @@ export const REPORT_PERIODS: ReportPeriod[] = ['daily', 'weekly', 'monthly', 'qu
 export function useTagReport() {
   const { currentLang } = useTranslate();
   const [state, dispatch] = useReducer(reportReducer, initialReportState);
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const { filters, parentId, sort, trend } = state;
 
@@ -66,29 +64,6 @@ export function useTagReport() {
     [topRows]
   );
 
-  // The shared drawer works with `DashboardFilters`; dates are never sent.
-  const drawerFilters: DashboardFilters = {
-    period: filters.period,
-    startDate: null,
-    endDate: null,
-    country: String(filters.countryId),
-  };
-
-  const applyDrawer = (next: DashboardFilters) => {
-    if (next.period && next.period !== 'custom')
-      dispatch({ type: 'setPeriod', period: next.period });
-    if (next.country) dispatch({ type: 'setCountry', countryId: Number(next.country) });
-  };
-
-  const resetDrawer = () => {
-    dispatch({ type: 'setPeriod', period: initialReportState.filters.period });
-    dispatch({ type: 'setCountry', countryId: DEFAULT_COUNTRY_ID });
-  };
-
-  const activeFilterCount =
-    Number(filters.period !== initialReportState.filters.period) +
-    Number(filters.countryId !== DEFAULT_COUNTRY_ID);
-
   return {
     state,
     dispatch,
@@ -103,11 +78,5 @@ export function useTagReport() {
     tiles,
     trendTagId,
     trendQuery,
-    filtersOpen,
-    setFiltersOpen,
-    drawerFilters,
-    applyDrawer,
-    resetDrawer,
-    activeFilterCount,
   };
 }

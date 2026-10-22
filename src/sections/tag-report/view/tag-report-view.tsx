@@ -1,6 +1,7 @@
 import type { TagType } from 'src/api/tag-report';
 
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
@@ -17,8 +18,8 @@ import { useTranslate } from 'src/locales';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { EmptyContent } from 'src/components/empty-content';
+import { CountrySelectRemote } from 'src/components/country-select';
 import { CircleArrowButton } from 'src/components/circle-arrow-button';
-import { DashboardToolbar, DashboardFiltersDrawer } from 'src/components/dashboard';
 
 import { TrendCard } from '../components/trend-card';
 import { ReportTile } from '../components/report-tile';
@@ -49,9 +50,10 @@ export function TagReportView() {
 
   const meta = topScorecard.data?.meta;
   const currency = meta?.country ? pickLocalized(meta.country.currency, lang) : undefined;
-  const comparison = meta
-    ? tr('vs', { range: fDateRangeShortLabel(meta.previousPeriod.from, meta.previousPeriod.to) })
+  const previousRange = meta
+    ? fDateRangeShortLabel(meta.previousPeriod.from, meta.previousPeriod.to)
     : undefined;
+  const comparison = previousRange ? tr('vs', { range: previousRange }) : undefined;
 
   const isError = topScorecard.isError || scorecard.isError;
   const isEmpty = topScorecard.isSuccess && !topScorecard.data.data.length;
@@ -84,7 +86,8 @@ export function TagReportView() {
         direction={{ xs: 'column', md: 'row' }}
         alignItems={{ md: 'center' }}
         spacing={2}
-        sx={{ mb: 3 }}
+        useFlexGap
+        flexWrap="wrap"
       >
         <ToggleButtonGroup
           size="small"
@@ -101,19 +104,46 @@ export function TagReportView() {
           ))}
         </ToggleButtonGroup>
 
-        <DashboardToolbar
-          title={
-            meta
-              ? fDateRangeShortLabel(meta.period.from, meta.period.to)
-              : tr(`periods.${state.filters.period}`)
-          }
-          subtitle={tr('updatedHourly')}
-          onOpenFilters={() => report.setFiltersOpen(true)}
-          filterLabel={t('dashboard.shared.filter')}
-          activeFilterCount={report.activeFilterCount}
-          sx={{ flexGrow: 1 }}
-        />
+        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ flexGrow: 1 }}>
+          {REPORT_PERIODS.map((period) => {
+            const selected = state.filters.period === period;
+            return (
+              <Chip
+                key={period}
+                label={tr(`periods.${period}`)}
+                color={selected ? 'primary' : 'default'}
+                variant={selected ? 'filled' : 'outlined'}
+                onClick={() => dispatch({ type: 'setPeriod', period })}
+              />
+            );
+          })}
+        </Stack>
+
+        <Box sx={{ width: { xs: 1, md: 220 } }}>
+          <CountrySelectRemote
+            id="tag-report-country"
+            fullWidth
+            hideAll
+            placeholder={t('dashboard.shared.filters.countryPlaceholder')}
+            value={String(state.filters.countryId)}
+            onChange={(value) => {
+              if (value) dispatch({ type: 'setCountry', countryId: Number(value) });
+            }}
+          />
+        </Box>
       </Stack>
+
+      <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1.5, mb: 3 }}>
+        {meta ? (
+          <>
+            <Box component="b" sx={{ color: 'text.primary' }}>
+              {fDateRangeShortLabel(meta.period.from, meta.period.to)}
+            </Box>
+            {` · ${comparison} · `}
+          </>
+        ) : null}
+        {tr('updatedHourly')}
+      </Typography>
 
       {isError ? (
         <ReportError onRetry={retry} />
@@ -129,36 +159,27 @@ export function TagReportView() {
             {(tiles.length ? tiles : [null, null, null]).map((tile, index) => (
               <Grid key={tile?.key ?? index} size={{ xs: 12, sm: 4 }}>
                 <ReportTile
+                  metricKey={tile?.key ?? null}
                   label={tile ? tr(`metrics.${tile.key}`) : ''}
                   value={tile ? formatMetric(tile.key, tile.value.current, numberLocale) : null}
                   currency={tile && tile.key !== 'listingsCreated' ? currency : undefined}
                   metric={tile?.value}
                   caption={comparison}
+                  previous={
+                    tile && previousRange
+                      ? tr('previousValue', {
+                          range: previousRange,
+                          value: `${formatMetric(tile.key, tile.value.previous, numberLocale)}${
+                            tile.key !== 'listingsCreated' && currency ? ` ${currency}` : ''
+                          }`,
+                        })
+                      : undefined
+                  }
                   locale={numberLocale}
                 />
               </Grid>
             ))}
           </Grid>
-
-          <Box sx={{ mt: 3 }}>
-            <ScorecardTable
-              rows={report.rows}
-              loading={scorecard.isLoading}
-              stale={scorecard.isPlaceholderData}
-              sort={state.sort}
-              onSort={(sort) => dispatch({ type: 'setSort', sort })}
-              parent={report.parentRow}
-              onBack={() => dispatch({ type: 'backToTopTags' })}
-              onOpenTopTag={(tagId) => dispatch({ type: 'openTopTag', tagId })}
-              onSelectChild={(tagId) => dispatch({ type: 'selectChild', tagId })}
-              onSelectDirect={() => dispatch({ type: 'selectDirect' })}
-              selectedTagId={report.trendTagId}
-              quadrantOf={report.quadrants.quadrantOf}
-              currency={currency}
-              lang={lang}
-              locale={numberLocale}
-            />
-          </Box>
 
           <Grid container spacing={3} sx={{ mt: 3 }}>
             {/* The map is for Top Tags only. */}
@@ -166,6 +187,7 @@ export function TagReportView() {
               <Grid size={{ xs: 12, md: 6 }}>
                 <InvestmentMap
                   map={report.quadrants}
+                  total={report.topRows.length}
                   loading={topScorecard.isLoading}
                   lang={lang}
                   locale={numberLocale}
@@ -178,6 +200,7 @@ export function TagReportView() {
                 loading={scorecard.isLoading}
                 currency={currency}
                 lang={lang}
+                locale={numberLocale}
               />
             </Grid>
           </Grid>
@@ -201,30 +224,28 @@ export function TagReportView() {
               locale={numberLocale}
             />
           </Box>
+          <Box sx={{ mt: 3 }}>
+            <ScorecardTable
+              rows={report.rows}
+              loading={scorecard.isLoading}
+              stale={scorecard.isPlaceholderData}
+              sort={state.sort}
+              onSort={(sort) => dispatch({ type: 'setSort', sort })}
+              parent={report.parentRow}
+              onBack={() => dispatch({ type: 'backToTopTags' })}
+              onOpenTopTag={(tagId) => dispatch({ type: 'openTopTag', tagId })}
+              onSelectChild={(tagId) => dispatch({ type: 'selectChild', tagId })}
+              onSelectDirect={() => dispatch({ type: 'selectDirect' })}
+              selectedTagId={report.trendTagId}
+              quadrantOf={report.quadrants.quadrantOf}
+              previousRange={previousRange}
+              currency={currency}
+              lang={lang}
+              locale={numberLocale}
+            />
+          </Box>
         </Box>
       )}
-
-      <DashboardFiltersDrawer
-        open={report.filtersOpen}
-        onClose={() => report.setFiltersOpen(false)}
-        filters={report.drawerFilters}
-        onApply={report.applyDrawer}
-        onReset={report.resetDrawer}
-        hideAllCountries
-        periodOptions={REPORT_PERIODS.map((period) => ({
-          value: period,
-          label: tr(`periods.${period}`),
-        }))}
-        labels={{
-          title: t('dashboard.shared.filters.title'),
-          date: t('dashboard.shared.filters.date'),
-          period: t('dashboard.shared.filters.period'),
-          country: t('dashboard.shared.filters.country'),
-          countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
-          apply: t('dashboard.shared.filters.apply'),
-          reset: t('dashboard.shared.filters.reset'),
-        }}
-      />
     </DashboardContent>
   );
 }

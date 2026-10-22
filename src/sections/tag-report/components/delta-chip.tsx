@@ -28,6 +28,9 @@ export function DeltaChip({ value, locale, variant = 'pill' }: Props) {
   const { t } = useTranslate('dashboard');
   const d = delta(value, locale);
 
+  // Under a table value, a change that cannot be measured is just left out.
+  if (variant === 'text' && d.kind === 'none') return null;
+
   const text = d.kind === 'new' ? t('dashboard.tagReport.delta.new') : 'text' in d ? d.text : '—';
   const color = d.kind in PALETTE ? PALETTE[d.kind as keyof typeof PALETTE] : null;
 
