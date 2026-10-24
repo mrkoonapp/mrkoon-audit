@@ -46,12 +46,22 @@ export interface IHomeKpiUsers {
 export interface IHomeKpiEntityWithTransactions {
   total?: number;
   in_period?: number;
-  country_breakdown?: Array<{
-    country_id?: number | string | null;
-    country_code?: number | string | null;
-    country_name?: { en: string; ar: string } | string;
-    in_period_count?: number;
-  }>;
+  active?: number;
+  total_active?: number;
+  registered_in_period?: number;
+  active_new_in_period?: number;
+  with_transactions?: number;
+  total_with_transactions?: number;
+  country_breakdown?: Array<
+    IHomeKpiCountryRow & {
+      country_name?: { en: string; ar: string } | string;
+      in_period_count?: number;
+      registered_in_period?: number;
+      active_new_in_period?: number;
+      with_transactions_count?: number;
+      total_with_transactions_count?: number;
+    }
+  >;
 }
 
 export interface IHomeKpiTopTag {
