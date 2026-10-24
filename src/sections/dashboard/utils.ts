@@ -106,10 +106,28 @@ export function buildDashboardOverview(
   const splitSellers = splitBy(kpis.advanced_sellers?.country_breakdown, (row) => row.total_count);
   const splitActiveBuyers = splitBy(kpis.advanced_buyers?.country_breakdown, (row) => row.active_count);
   const splitActiveSellers = splitBy(kpis.advanced_sellers?.country_breakdown, (row) => row.active_count);
-  const splitRegisteredBuyers = splitBy(kpis.advanced_buyers?.country_breakdown, (row) => row.new_count);
-  const splitRegisteredSellers = splitBy(kpis.advanced_sellers?.country_breakdown, (row) => row.new_count);
-  const splitActiveNewBuyers = splitBy(kpis.advanced_buyers?.country_breakdown, (row) => row.active_new_count);
-  const splitActiveNewSellers = splitBy(kpis.advanced_sellers?.country_breakdown, (row) => row.active_new_count);
+
+  const buyersPeriodBreakdown = kpis.buyers_with_transactions?.country_breakdown;
+  const sellersPeriodBreakdown = kpis.companies_with_transactions?.country_breakdown;
+
+  const splitPeriodActiveBuyers = splitBy(buyersPeriodBreakdown, (row) => row.active_count);
+  const splitPeriodActiveSellers = splitBy(sellersPeriodBreakdown, (row) => row.active_count);
+  const splitRegisteredBuyers = splitBy(
+    buyersPeriodBreakdown,
+    (row: any) => row.registered_in_period ?? row.new_count
+  );
+  const splitRegisteredSellers = splitBy(
+    sellersPeriodBreakdown,
+    (row: any) => row.registered_in_period ?? row.new_count
+  );
+  const splitActiveNewBuyers = splitBy(
+    buyersPeriodBreakdown,
+    (row: any) => row.active_new_in_period ?? row.active_new_count
+  );
+  const splitActiveNewSellers = splitBy(
+    sellersPeriodBreakdown,
+    (row: any) => row.active_new_in_period ?? row.active_new_count
+  );
 
   const outcomes = kpis.advanced_auctions?.outcomes ?? [];
   const relevantOutcomes = targetCountry
@@ -159,49 +177,47 @@ export function buildDashboardOverview(
     ? kpis.buyers_with_transactions?.country_breakdown?.find((r) => getRowCountry(r as any) === targetCountry)
     : null;
 
-  const txSellersTotal =
-    companyRow?.in_period_count ??
-    kpis.companies_with_transactions?.in_period ??
-    kpis.companies_with_transactions?.total ??
-    kpis.advanced_sellers?.total_with_transactions ??
-    DUMMY_TRANSACTION_REQUESTS.sellers.total;
+  const txSellersTotal = targetCountry
+    ? (companyRow?.in_period_count ?? companyRow?.with_transactions_count ?? 0)
+    : (kpis.companies_with_transactions?.in_period ??
+      kpis.companies_with_transactions?.with_transactions ??
+      0);
 
-  const txBuyersTotal =
-    buyerRow?.in_period_count ??
-    kpis.buyers_with_transactions?.in_period ??
-    kpis.buyers_with_transactions?.total ??
-    kpis.advanced_buyers?.total_with_transactions ??
-    DUMMY_TRANSACTION_REQUESTS.buyers.total;
+  const txBuyersTotal = targetCountry
+    ? (buyerRow?.in_period_count ?? buyerRow?.with_transactions_count ?? 0)
+    : (kpis.buyers_with_transactions?.in_period ??
+      kpis.buyers_with_transactions?.with_transactions ??
+      0);
 
   const buyersVm = {
-    active:
-      targetCountry && splitActiveBuyers[targetCountry] !== undefined && splitActiveBuyers[targetCountry] > 0
-        ? splitActiveBuyers[targetCountry]
-        : (kpis.advanced_buyers?.active ?? 0),
-    registered:
-      targetCountry && splitRegisteredBuyers[targetCountry] !== undefined && splitRegisteredBuyers[targetCountry] > 0
-        ? splitRegisteredBuyers[targetCountry]
-        : (kpis.advanced_buyers?.registered_in_period ?? 0),
-    activeNew:
-      targetCountry && splitActiveNewBuyers[targetCountry] !== undefined && splitActiveNewBuyers[targetCountry] > 0
-        ? splitActiveNewBuyers[targetCountry]
-        : (kpis.advanced_buyers?.active_new_in_period ?? 0),
+    active: targetCountry
+      ? (buyerRow?.active_count ?? splitPeriodActiveBuyers[targetCountry] ?? splitActiveBuyers[targetCountry] ?? 0)
+      : (kpis.buyers_with_transactions?.active ??
+        kpis.buyers_with_transactions?.total_active ??
+        kpis.advanced_buyers?.active ??
+        0),
+    registered: targetCountry
+      ? (buyerRow?.registered_in_period ?? buyerRow?.new_count ?? splitRegisteredBuyers[targetCountry] ?? 0)
+      : (kpis.buyers_with_transactions?.registered_in_period ?? 0),
+    activeNew: targetCountry
+      ? (buyerRow?.active_new_in_period ?? buyerRow?.active_new_count ?? splitActiveNewBuyers[targetCountry] ?? 0)
+      : (kpis.buyers_with_transactions?.active_new_in_period ?? 0),
     madeTransactions: txBuyersTotal,
   };
 
   const sellersVm = {
-    active:
-      targetCountry && splitActiveSellers[targetCountry] !== undefined && splitActiveSellers[targetCountry] > 0
-        ? splitActiveSellers[targetCountry]
-        : (kpis.advanced_sellers?.active ?? 0),
-    registered:
-      targetCountry && splitRegisteredSellers[targetCountry] !== undefined && splitRegisteredSellers[targetCountry] > 0
-        ? splitRegisteredSellers[targetCountry]
-        : (kpis.advanced_sellers?.registered_in_period ?? 0),
-    activeNew:
-      targetCountry && splitActiveNewSellers[targetCountry] !== undefined && splitActiveNewSellers[targetCountry] > 0
-        ? splitActiveNewSellers[targetCountry]
-        : (kpis.advanced_sellers?.active_new_in_period ?? 0),
+    active: targetCountry
+      ? (companyRow?.active_count ?? splitPeriodActiveSellers[targetCountry] ?? splitActiveSellers[targetCountry] ?? 0)
+      : (kpis.companies_with_transactions?.active ??
+        kpis.companies_with_transactions?.total_active ??
+        kpis.advanced_sellers?.active ??
+        0),
+    registered: targetCountry
+      ? (companyRow?.registered_in_period ?? companyRow?.new_count ?? splitRegisteredSellers[targetCountry] ?? 0)
+      : (kpis.companies_with_transactions?.registered_in_period ?? 0),
+    activeNew: targetCountry
+      ? (companyRow?.active_new_in_period ?? companyRow?.active_new_count ?? splitActiveNewSellers[targetCountry] ?? 0)
+      : (kpis.companies_with_transactions?.active_new_in_period ?? 0),
     madeTransactions: txSellersTotal,
   };
 

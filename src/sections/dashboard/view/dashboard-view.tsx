@@ -161,7 +161,7 @@ export function DashboardView() {
           accent={OVERVIEW_ACCENTS.buyers}
           icon={<BuyersRadialIcon />}
           users={overview?.buyers}
-          loading={queries.buyers.isLoading || queries.buyersWithTransactions.isLoading}
+          loading={queries.buyersWithTransactions.isLoading}
           type="buyers"
         />
       ),
@@ -176,7 +176,7 @@ export function DashboardView() {
           accent={OVERVIEW_ACCENTS.sellers}
           icon={<SellersBarsIcon />}
           users={overview?.sellers}
-          loading={queries.sellers.isLoading || queries.companiesWithTransactions.isLoading}
+          loading={queries.companiesWithTransactions.isLoading}
           type="sellers"
         />
       ),
