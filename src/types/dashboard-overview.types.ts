@@ -156,11 +156,14 @@ export interface IOverviewUsers {
 }
 
 export interface IOverviewAuctions {
-  /** Sold + ended + pending activation (same definition as the old KPI table). */
-  done: number;
-  sold: number;
+  /** Sum of every status below. */
+  total: number;
+  active: number;
+  inspection: number;
   ended: number;
-  pendingActivation: number;
+  sold: number;
+  newWaitingActivation: number;
+  notActive: number;
 }
 
 export interface IOverviewCategory {
@@ -197,9 +200,11 @@ export interface IDashboardOverview {
   };
   productsChart: {
     totalProducts?: CountrySplit;
-    newProducts: CountrySplit;
-    auctionsCreated: CountrySplit;
-    auctionsCompleted: CountrySplit;
+    products: CountrySplit;
+    /** Ended (18) + sold (68). */
+    auctionsDone: CountrySplit;
+    /** Sold (68). */
+    auctionsSucceeded: CountrySplit;
   };
   topCategories: IOverviewCategory[];
   buyers: IOverviewUsers;
