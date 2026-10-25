@@ -25,7 +25,7 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
   const { t } = useTranslate('dashboard');
 
   const groups = data
-    ? [data.newProducts, data.auctionsCreated, data.auctionsCompleted]
+    ? [data.products, data.auctionsDone, data.auctionsSucceeded]
     : [];
 
   // "No data" only when the response is missing — all-zero bars are real data.
@@ -63,9 +63,9 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
     xaxis: {
       labels: { rotate: 0, trim: true, hideOverlappingLabels: false },
       categories: [
-        t('dashboard.dashboard.overview.productsKpis.newProducts'),
-        t('dashboard.dashboard.overview.productsKpis.auctionsCreated'),
-        t('dashboard.dashboard.overview.productsKpis.auctionsCompleted'),
+        t('dashboard.dashboard.overview.productsKpis.products'),
+        t('dashboard.dashboard.overview.productsKpis.auctionsDone'),
+        t('dashboard.dashboard.overview.productsKpis.auctionsSucceeded'),
       ],
     },
     yaxis: {
