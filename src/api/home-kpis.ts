@@ -225,7 +225,7 @@ export function useGetHomeKpis(
   const generalQuery = useGetHomeKpisGeneral(filters, { enabled: !!options?.includeGeneral });
   const sellersQuery = useGetHomeKpisSellers(filters, { countryOnly: true });
   const buyersQuery = useGetHomeKpisBuyers(filters, { countryOnly: true });
-  const productsQuery = useGetHomeKpisProducts(filters, { countryOnly: true });
+  const productsQuery = useGetHomeKpisProducts(filters);
   const auctionsQuery = useGetHomeKpisAuctions(filters);
   const totalMoneyQuery = useGetHomeKpisTotalMoney(filters, { countryOnly: true });
   const topTagsQuery = useGetHomeKpisTopTags(filters);
