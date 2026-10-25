@@ -196,7 +196,7 @@ export interface IDashboardOverview {
     sellers: IOverviewSummaryStat;
   };
   productsChart: {
-    totalProducts: CountrySplit;
+    totalProducts?: CountrySplit;
     newProducts: CountrySplit;
     auctionsCreated: CountrySplit;
     auctionsCompleted: CountrySplit;
