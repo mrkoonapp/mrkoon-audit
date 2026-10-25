@@ -28,18 +28,18 @@ export const OVERVIEW_COUNTRY_TABS = [
 // Auction outcomes (`advanced_auctions.outcomes[].status_id`)
 // ----------------------------------------------------------------------
 
-export const AUCTION_OUTCOME_STATUS = {
-  SOLD: Number(PRODUCT_STATUS.SOLD),
-  ENDED: Number(PRODUCT_STATUS.AUCTION_DATE_ENDED),
-  PENDING_ACTIVATION: Number(PRODUCT_STATUS.PREVIEW),
-} as const;
-
 /**
- * The design draws "Done" as its own pie slice, but Done = sold + ended +
- * pending activation, so a Done slice would always fill half the pie and halve
- * every other slice. `false` keeps Done as the legend's total row only.
+ * The statuses the auctions breakdown returns. 1, 2, 3 and 22 are counted by
+ * `created_at`, 18 and 68 by `end_date`. 68 is "sold" here.
  */
-export const AUCTIONS_PIE_SHOW_DONE_SLICE = false;
+export const AUCTION_OUTCOME_STATUS = {
+  NEW_WAITING_ACTIVATION: Number(PRODUCT_STATUS.NEW_WAITING_FOR_ACTIVATION),
+  ACTIVE: Number(PRODUCT_STATUS.ACTIVE),
+  NOT_ACTIVE: Number(PRODUCT_STATUS.NOT_ACTIVATED),
+  ENDED: Number(PRODUCT_STATUS.AUCTION_DATE_ENDED),
+  INSPECTION: Number(PRODUCT_STATUS.PREVIEW),
+  SOLD: 68,
+} as const;
 
 // ----------------------------------------------------------------------
 // Colors (from the Figma "Dashboard" frame)
@@ -55,10 +55,12 @@ export const OVERVIEW_COLORS = {
     SA: { from: '#B2DF8A', to: '#BFDCA5', legend: '#B2DF8A' },
   },
   auctions: {
-    done: '#B2DF8A',
-    sold: '#A6CEE3',
+    active: '#B2DF8A',
+    inspection: '#D7D494',
     ended: '#FB9A99',
-    pendingActivation: '#D7D494',
+    sold: '#A6CEE3',
+    newWaitingActivation: '#CAB2D6',
+    notActive: '#FDBF6F',
   },
   payRequests: {
     byBuyers: '#FDBF6F',
