@@ -21,6 +21,7 @@ const ICONS = {
   operations: icon('ic-settings'),
   dataRoom: icon('ic-lock'),
   tagReport: icon('ic-label'),
+  tagAnalytics: icon('ic-label'),
   blank: icon('ic-blank'),
 };
 

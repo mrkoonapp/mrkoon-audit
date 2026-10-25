@@ -14,10 +14,11 @@
         "title": "الفلاتر",
         "date": "التاريخ",
         "period": "الفترة",
-        "periodWeekly": "الأسبوع الحالي",
-        "periodMonthly": "الشهر الحالي",
-        "periodQuarterly": "الربع الحالي",
-        "periodYearly": "العام الحالي",
+        "periodAllTime": "كل الأوقات",
+        "periodWeekly": "هذا الأسبوع",
+        "periodMonthly": "هذا الشهر",
+        "periodQuarterly": "هذا الربع",
+        "periodYearly": "هذه السنة",
         "periodCustom": "مخصص",
         "startDate": "تاريخ البداية",
         "endDate": "تاريخ النهاية",
@@ -41,7 +42,9 @@
         "offline": "حضوري",
         "online": "إلكتروني",
         "totalProducts": "إجمالي المنتجات",
-        "auctions": "المزادات"
+        "auctions": "المزادات",
+        "totalBids": "إجمالي المزايدات",
+        "totalBidders": "إجمالي المزايدين"
       },
       "successRate": {
         "title": "معدل النجاح",
@@ -62,6 +65,110 @@
       },
       "topCategories": {
         "title": "أفضل 5 فئات"
+      },
+      "overview": {
+        "title": "لوحة التحكم",
+        "subtitle": "نظرة عامة",
+        "currency": "ج.م",
+        "currencyKsa": "ر.س",
+        "egypt": "مصر",
+        "saudiArabia": "المملكة العربية السعودية",
+        "countryCodes": {
+          "EG": "مصر",
+          "SA": "السعودية"
+        },
+        "countries": {
+          "all": "الكل",
+          "egypt": "مصر",
+          "ksa": "السعودية"
+        },
+        "period": {
+          "week": "أسبوع",
+          "month": "شهر",
+          "quarter": "ربع سنوي",
+          "year": "سنة",
+          "select": "اختر الفترة"
+        },
+        "summary": {
+          "gmv": "إجمالي المبيعات",
+          "totalProducts": "إجمالي المنتجات",
+          "totalBuyers": "إجمالي المشترين",
+          "totalSellers": "إجمالي البائعين",
+          "active": "(النشطون: {{value}})"
+        },
+        "productsKpis": {
+          "title": "مؤشرات أداء المنتجات",
+          "totalProducts": "إجمالي المنتجات",
+          "newProducts": "المنتجات الجديدة",
+          "auctionsCreated": "المزادات المنشأة",
+          "auctionsCompleted": "المزادات المكتملة"
+        },
+        "topCategories": {
+          "title": "أعلى 3 فئات"
+        },
+        "buyers": {
+          "title": "المشترون"
+        },
+        "sellers": {
+          "title": "البائعون"
+        },
+        "users": {
+          "active": "إجمالي النشطين",
+          "registered": "مسجل",
+          "new": "مسجل جديد ونشط",
+          "madeTransactions": "قاموا بمعاملات"
+        },
+        "tooltips": {
+          "gmv": "إجمالي الأموال المحققة من مركون ومركون بلس",
+          "totalProducts": "إجمالي عدد المنتجات الموجودة حالياً في النظام",
+          "newProducts": "عدد المنتجات الجديدة المضافة خلال الفترة المحددة",
+          "totalBuyers": "إجمالي المشترين المسجلين في النظام",
+          "activeBuyers": "إجمالي المشترين النشطين الذين قاموا بطلبات دفع (غير مقيد بالفترة)",
+          "registeredBuyers": "المشترون المسجلون الذين أنشأوا حساباً خلال هذه الفترة",
+          "activeNewBuyers": "المشترون الجدد النشطون الذين سجلوا وقاموا بطلب دفع خلال هذه الفترة",
+          "buyersMadeTransactions": "المشترون الذين قاموا بمعاملات خلال هذه الفترة",
+          "totalSellers": "إجمالي البائعين المسجلين في النظام",
+          "activeSellers": "إجمالي البائعين النشطين الذين أضافوا منتجات (غير مقيد بالفترة)",
+          "registeredSellers": "البائعون المسجلون الذين أنشأوا حساباً خلال هذه الفترة",
+          "activeNewSellers": "البائعون الجدد النشطون الذين سجلوا وأضافوا منتجاً خلال هذه الفترة",
+          "sellersMadeTransactions": "البائعون الذين قاموا بمعاملات خلال هذه الفترة",
+          "auctions": "جميع المزادات",
+          "auctionsDone": "إجمالي المزادات المنجزة خلال هذه الفترة (مجموع المباعة + التي انتهت + بانتظار التفعيل)",
+          "auctionsSold": "مزادات منتهية وتم بيعها بنجاح مع إنشاء معاملات",
+          "auctionsEnded": "مزادات انتهت مدتها الزمنية دون أن تُباع",
+          "auctionsPendingActivation": "مزادات مقبولة من البائع بانتظار إتمام الدفع أو في مرحلة المعاينة",
+          "topCategories": "أعلى 3 تصنيفات تحقيقاً للقيمة الإجمالية للبضائع",
+          "payRequests": "طلبات الدفع التي تم إنشاؤها خلال الفترة المحددة",
+          "payRequestsCreatedByBuyers": "طلبات الدفع التي أنشأها المشترون",
+          "payRequestsCreatedByAdmins": "طلبات الدفع التي أنشأها المسؤولون"
+        },
+        "auctions": {
+          "title": "المزادات",
+          "done": "المنتهية",
+          "ended": "انتهى موعدها",
+          "sold": "مباعة",
+          "pendingActivation": "بانتظار التفعيل"
+        },
+        "payRequests": {
+          "title": "طلبات الدفع",
+          "createdByBuyers": "أنشأها المشترون",
+          "createdByAdmins": "أنشأها المسؤولون"
+        },
+        "transactions": {
+          "title": "المعاملات",
+          "sellers": "البائعون",
+          "buyers": "المشترون",
+          "requests": "طلب"
+        },
+        "noResults": {
+          "title": "لا توجد عناصر مطابقة",
+          "description": "جرّب كلمة بحث مختلفة."
+        },
+        "error": {
+          "title": "تعذر تحميل لوحة التحكم",
+          "description": "حدث خطأ أثناء جلب المؤشرات.",
+          "retry": "إعادة المحاولة"
+        }
       }
     },
     "auctions": {
@@ -86,7 +193,8 @@
       "stats": {
         "totalInspections": "إجمالي المعاينات",
         "categoriesCovered": "الفئات المشمولة",
-        "clientServed": "العملاء الذين تم خدمتهم"
+        "clientServed": "العملاء الذين تم خدمتهم",
+        "clientsServed": "العملاء الذين تم خدمتهم"
       },
       "table": {
         "product": "المنتج",
@@ -106,17 +214,26 @@
       "stats": {
         "noOfCalls": "عدد المكالمات",
         "noOfProducts": "عدد المنتجات",
-        "noOfAuctions": "عدد المزادات"
+        "noOfAuctions": "عدد المزادات",
+        "salesCalls": "عدد المكالمات",
+        "productsReceived": "عدد المنتجات",
+        "salesAuctions": "عدد المزادات"
       },
       "units": {
         "call": "مكالمة",
         "product": "منتج",
-        "auction": "مزاد"
+        "auction": "مزاد",
+        "calls": "مكالمة",
+        "products": "منتج",
+        "auctions": "مزاد"
       },
       "updates": {
         "reactivated": "أعيد تفعيلهم",
         "paidInsurance": "دفعوا التأمين",
-        "avgMerchantsPerAuction": "متوسط الشركات لكل مزاد"
+        "avgMerchantsPerAuction": "متوسط الشركات لكل مزاد",
+        "reactivatedMerchants": "أعيد تفعيلهم",
+        "paidInsuranceDeposit": "دفعوا التأمين",
+        "averagePerAuction": "متوسط الشركات لكل مزاد"
       }
     },
     "operations": {
@@ -125,17 +242,24 @@
         "transactionCompletionRate": "معدل إتمام المعاملات",
         "slaCompliance": "الالتزام باتفاقية مستوى الخدمة",
         "totalInspections": "إجمالي المعاينات",
-        "inspectionsPerAuction": "المعاينات لكل مزاد"
+        "inspectionsPerAuction": "المعاينات لكل مزاد",
+        "completionRate": "معدل إتمام المعاملات",
+        "inspectionsCompleted": "إجمالي المعاينات",
+        "avgPerAuction": "المعاينات لكل مزاد"
       },
       "subtitles": {
         "completionRatio": "11/90 مزاد",
         "daysAfterAcceptance": "3 أيام بعد القبول",
         "paidInspection": "فحص مدفوع",
-        "average": "المتوسط"
+        "average": "المتوسط",
+        "fromPreviousPeriod": "مقارنة بالفترة السابقة"
       },
       "sla": {
         "successfulAuctions": "المزادات الناجحة",
-        "completedTransactions": "المعاملات المكتملة"
+        "completedTransactions": "الماملات المكتملة",
+        "inspectionOnTime": "معاينات في الوقت المحدد",
+        "delayedInspections": "معاينات متأخرة",
+        "failedInspections": "معاينات غير مكتملة"
       }
     },
     "table": {

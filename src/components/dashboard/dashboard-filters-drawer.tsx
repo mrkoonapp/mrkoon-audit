@@ -58,6 +58,7 @@ export function DashboardFiltersDrawer({
 
   // Period options paired with their translated labels (order = display order).
   const periodOptions: { value: DatePeriod; label?: string }[] = [
+    { value: DATE_PERIODS.ALL_TIME, label: labels?.periodAllTime },
     { value: DATE_PERIODS.WEEKLY, label: labels?.periodWeekly },
     { value: DATE_PERIODS.MONTHLY, label: labels?.periodMonthly },
     { value: DATE_PERIODS.QUARTERLY, label: labels?.periodQuarterly },

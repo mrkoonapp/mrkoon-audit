@@ -26,6 +26,8 @@ export function DashboardToolbar({
   searchPlaceholder,
   filterLabel,
   activeFilterCount = 0,
+  hideFilterButton,
+  children,
   sx,
 }: DashboardToolbarProps) {
   const renderLeft = () => {
@@ -81,18 +83,23 @@ export function DashboardToolbar({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {renderLeft()}
+      <Box sx={{ display: 'flex', gap: 2, flex: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+        {renderLeft()}
+        {children}
+      </Box>
 
-      <Badge color="error" badgeContent={activeFilterCount} sx={{ flexShrink: 0 }}>
-        <Button
-          variant="outlined"
-          color="inherit"
-          onClick={onOpenFilters}
-          startIcon={<Iconify icon="ic:round-filter-list" />}
-        >
-          {filterLabel}
-        </Button>
-      </Badge>
+      {!hideFilterButton && onOpenFilters && (
+        <Badge color="error" badgeContent={activeFilterCount} sx={{ flexShrink: 0 }}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={onOpenFilters}
+            startIcon={<Iconify icon="ic:round-filter-list" />}
+          >
+            {filterLabel}
+          </Button>
+        </Badge>
+      )}
     </Box>
   );
 }

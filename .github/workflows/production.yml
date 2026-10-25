@@ -56,6 +56,33 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright E2E Tests
+        id: playwright-tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-production-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Send WhatsApp Report Notification
+        if: always()
+        env:
+          CALLMEBOT_API_KEY: ${{ secrets.CALLMEBOT_API_KEY }}
+          WHATSAPP_PHONE: "201023239809"
+          WHATSAPP_WEBHOOK_URL: ${{ secrets.WHATSAPP_WEBHOOK_URL }}
+          TEST_STATUS: ${{ steps.playwright-tests.outcome }}
+          BRANCH: "main"
+          REPORT_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMIT_MSG: ${{ github.event.pull_request.title || github.event.head_commit.message }}
+        run: node scripts/send-whatsapp-report.js
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 

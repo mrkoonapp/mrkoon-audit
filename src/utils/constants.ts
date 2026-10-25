@@ -12,7 +12,8 @@
  * Used to filter and display products based on their current status
  */
 export const PRODUCT_STATUS = {
-  SOLD: '68',
+  SOLD: '20',
+  ACCEPTED: '68',
   NEW_WAITING_FOR_ACTIVATION: '1',
   ACTIVE: '2',
   NOT_ACTIVATED: '3',
@@ -139,6 +140,7 @@ export const INSPECTION_STATUS = (t: (key: string) => string) => [
  * concrete date range via `getPeriodRange` (see `src/components/dashboard/utils.ts`).
  */
 export const DATE_PERIODS = {
+  ALL_TIME: 'all_time',
   WEEKLY: 'weekly',
   MONTHLY: 'monthly',
   QUARTERLY: 'quarterly',
@@ -148,3 +150,23 @@ export const DATE_PERIODS = {
 
 /** A selected date period, or `''` for "no date filter". */
 export type DatePeriod = (typeof DATE_PERIODS)[keyof typeof DATE_PERIODS] | '';
+
+// ----------------------------------------------------------------------
+// Country Constants (dashboard overview)
+// ----------------------------------------------------------------------
+
+/** Backend country ids (`home/get_countries`) used by the country filter. */
+export const COUNTRY_IDS = {
+  EGYPT: '6',
+  SAUDI_ARABIA: '26',
+} as const;
+
+/**
+ * `audit/home/kpis` filters by a separate static `country_code` instead of the
+ * country id, and reports breakdown rows by either one of them.
+ */
+export const HOME_KPI_COUNTRY_CODES: Record<string, number> = {
+  [COUNTRY_IDS.EGYPT]: 3,
+  [COUNTRY_IDS.SAUDI_ARABIA]: 4,
+  '24': 4,
+};

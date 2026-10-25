@@ -30,6 +30,7 @@ export const paths = {
     blank: `${ROOTS.DASHBOARD}/blank`,
     dataRoom: `${ROOTS.DASHBOARD}/data-room`,
     tagReport: `${ROOTS.DASHBOARD}/tag-report`,
+    tagAnalytics: `${ROOTS.DASHBOARD}/tag-analytics`,
     auctions: `${ROOTS.DASHBOARD}/auctions`,
     auctionsList: `${ROOTS.DASHBOARD}/auctions/list`,
     products: `${ROOTS.DASHBOARD}/products`,

@@ -17,12 +17,14 @@ interface Props {
   total: string;
   trend: string;
   trendDirection: 'up' | 'down';
-  series: {
-    name: string;
-    data: number[];
-  }[];
+  series:
+    | {
+        name: string;
+        data: number[];
+      }[]
+    | number[];
   options: any;
-  type?: 'area' | 'bar';
+  type?: 'area' | 'bar' | 'donut' | 'pie';
   onViewAll: () => void;
 }
 

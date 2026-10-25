@@ -47,7 +47,7 @@ export function OtpVerifyDialog({
     code: zod
       .string()
       .min(1, { message: t('auth.codeRequired') })
-      .min(4, { message: t('auth.codeMin') }),
+      .min(6, { message: t('auth.codeMin') }),
   });
 
   type OtpSchemaType = zod.infer<typeof OtpSchema>;

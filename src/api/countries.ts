@@ -31,9 +31,16 @@ export interface CountriesResponse {
  * Get countries list from the website API (public endpoint)
  * Uses websiteAxiosInstance to call /apiWebsite (not /apiAdmin)
  */
-async function getCountries() {
-  const response = await websiteAxiosInstance.get<CountriesResponse>(endpoints.countries.list);
-  return response.data.data.data;
+async function getCountries(params?: { limit?: number }) {
+  const queryParams = params?.limit !== undefined ? params : { limit: 270 };
+  const response = await websiteAxiosInstance.get<any>(endpoints.countries.list, {
+    params: queryParams,
+  });
+  const raw = response.data?.data;
+  if (Array.isArray(raw)) return raw as ICountry[];
+  if (Array.isArray(raw?.data)) return raw.data as ICountry[];
+  if (Array.isArray(response.data)) return response.data as ICountry[];
+  return [];
 }
 
 // ----------------------------------------------------------------------
@@ -46,7 +53,7 @@ async function getCountries() {
 export function useGetCountries(params?: { limit?: number }) {
   return useQuery({
     queryKey: queryKeys.general.countries,
-    queryFn: getCountries,
+    queryFn: () => getCountries(params),
     staleTime: 30 * 60 * 1000, // 30 minutes - countries don't change often
   });
 }

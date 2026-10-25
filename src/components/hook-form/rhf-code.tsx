@@ -30,6 +30,7 @@ export function RHFCode({
   helperText,
   maxSize = 56,
   placeholder = '-',
+  length = 6,
   ...other
 }: RHFCodesProps) {
   const { control } = useFormContext();
@@ -59,7 +60,7 @@ export function RHFCode({
             {...field}
             autoFocus
             gap={1.5}
-            length={4}
+            length={length}
             TextFieldsProps={{
               placeholder,
               error: !!error,

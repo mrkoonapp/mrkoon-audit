@@ -31,6 +31,18 @@ export const endpoints = {
   audit: {
     home: {
       kpis: 'audit/home/kpis',
+      kpisParts: {
+        general: 'audit/home/kpis/general',
+        sellers: 'audit/home/kpis/sellers',
+        buyers: 'audit/home/kpis/buyers',
+        products: 'audit/home/kpis/products',
+        auctions: 'audit/home/kpis/auctions',
+        totalMoney: 'audit/home/kpis/total-money',
+        topTags: 'audit/home/kpis/top-tags',
+        payRequests: 'audit/home/kpis/pay-requests',
+        companiesWithTransactions: 'audit/home/kpis/companies-with-transactions',
+        buyersWithTransactions: 'audit/home/kpis/buyers-with-transactions',
+      },
       transactionsChart: 'audit/home/transactions-chart',
       transactionTotals: 'audit/home/transaction-totals',
       topSellers: 'audit/home/top-sellers',
@@ -44,6 +56,8 @@ export const endpoints = {
       byCategory: 'audit/auctions/by-category',
       participatedClients: 'audit/auctions/participated-clients',
       list: 'audit/auctions/list',
+      reportByTag: 'audit/auctions/report-by-tag',
+      tagsSuccessRate: 'audit/auctions/tags-success-rate',
     },
     inspections: {
       kpis: 'audit/inspections/kpis',
@@ -69,5 +83,7 @@ export const endpoints = {
       scorecard: 'audit/tags/scorecard',
       trend: 'audit/tags/trend',
     },
+    tags: 'audit/tags',
+    tagGroups: 'audit/tag-groups',
   },
 };

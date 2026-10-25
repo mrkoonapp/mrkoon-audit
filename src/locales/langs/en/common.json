@@ -305,7 +305,7 @@
     "verifyError": "Verification failed. Please try again.",
     "resendError": "Failed to resend OTP. Please try again.",
     "codeRequired": "Code is required!",
-    "codeMin": "Code must be at least 4 characters!",
+    "codeMin": "Code must be at least 6 characters!",
     "phoneRequired": "Phone number is required!",
     "countryRequired": "Country is required!",
     "noCode": "Don’t have a code? ",

@@ -1,42 +1,43 @@
 import type { DashboardFilters } from 'src/components/dashboard';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
-import { paths } from 'src/routes/paths';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useCustomFilter } from 'src/hooks/use-custom-filters';
 
+import { COUNTRY_IDS } from 'src/utils/constants';
+import { fNumber } from 'src/utils/format-number';
 import { getLocalizedText } from 'src/utils/format-string';
-import { fNumber, fShortenNumber } from 'src/utils/format-number';
 
 import { useTranslate } from 'src/locales';
-import { useGetHomeDashboardData } from 'src/api/audit';
+import { useGetHomeKpis } from 'src/api/home-kpis';
+import { useGetCountries } from 'src/api/countries';
 import { DashboardContent } from 'src/layouts/dashboard';
-import usdPattern from 'src/assets/pattern/usd-pattern.svg';
-import { highlightCardColors } from 'src/theme/theme-config';
-import transactionPattern from 'src/assets/pattern/transaction-pattern.svg';
 
-import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+import { EmptyContent } from 'src/components/empty-content';
+
+import { DUMMY_SUMMARY_TRENDS } from '../data';
+import { OVERVIEW_ACCENTS } from '../constants';
+import { matchesSearch, buildDashboardOverview, getOverviewDefaultFilters } from '../utils';
 import {
-  StatCard,
-  DonutCard,
-  ViewAllLink,
-  formatAmount,
-  AreaChartCard,
-  MetricListCard,
-  ListWidgetCard,
-  formatJoinedAt,
-  DashboardToolbar,
-  ProgressListCard,
-  HighlightStatCard,
-  countActiveFilters,
-  DashboardFiltersDrawer,
-  defaultDashboardFilters,
-} from 'src/components/dashboard';
+  SellersBarsIcon,
+  BuyersRadialIcon,
+  OverviewUsersCard,
+  OverviewCountryTabs,
+  OverviewSummaryCard,
+  OverviewPeriodFilter,
+  OverviewAuctionsCard,
+  OverviewTopCategories,
+  OverviewProductsChart,
+  OverviewPayRequestsCard,
+} from '../components';
 
 // ----------------------------------------------------------------------
 
@@ -44,261 +45,290 @@ export function DashboardView() {
   const { t, currentLang } = useTranslate('dashboard');
 
   const [search, setSearch] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { filters, setFiltersHandler, clearFilters } =
-    useCustomFilter<DashboardFilters>(defaultDashboardFilters);
-
-  const { data, isLoading } = useGetHomeDashboardData(filters);
-
-  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
-
-  // Section labels — resolved here so widgets stay translation-free.
-  const emptyTitle = t('dashboard.shared.empty.title');
-  const emptyDescription = t('dashboard.shared.empty.description');
-
-  const statsList = data?.stats || [
-    // { id: 'gmv', labelKey: 'gmv', value: 0 },
-    { id: 'products', labelKey: 'totalProducts', value: 0, auctionsValue: 0 },
-    { id: 'sellers', labelKey: 'totalSellers', value: 0, activeValue: 0 },
-    { id: 'inspections', labelKey: 'totalInspections', value: 0, offlineValue: 0, onlineValue: 0 },
-    { id: 'buyers', labelKey: 'totalBuyers', value: 0, activeValue: 0 },
-  ];
-
-  const newClientsItems = (data?.newClients?.items || []).map((client) => ({
-    id: client.id,
-    avatarUrl: client.avatarUrl,
-    primary: client.name,
-    secondary: client.phone || '',
-    trailingSecondary: `${t('dashboard.shared.joinedAt')} ${formatJoinedAt(client.joinedAt)}`,
-  }));
-
-  const topSellersItems = (data?.topSellers || []).map((seller) => ({
-    id: seller.id,
-    avatarUrl: seller.avatarUrl,
-    primary: seller.name,
-    secondary: getLocalizedText(seller.category, currentLang.value),
-    metrics: [
-      { value: formatAmount(seller.amount, seller.currency) },
-      {
-        icon: <Iconify icon="solar:round-transfer-horizontal-bold" />,
-        value: fNumber(seller.quantity),
-      },
-    ],
-  }));
-
-  const viewAllAction = (
-    <ViewAllLink
-      href={`${paths.dashboard.clients}?tab=company`}
-      label={t('dashboard.shared.viewAll')}
-    />
+  const { filters, setFilterHandler } = useCustomFilter<DashboardFilters>(
+    getOverviewDefaultFilters()
   );
 
-  const topCategoriesItems = (data?.topCategories || []).map((category, index) => ({
-    id: category.id,
-    label: getLocalizedText(category.name, currentLang.value),
-    value: fNumber(category.value),
-    percent: category.percent,
-    color: (['primary', 'success', 'warning', 'info', 'error'] as const)[index % 5],
-  }));
+  const { data: kpis, queries, isError, refetch } = useGetHomeKpis(filters);
+
+  const overview = useMemo(
+    () => (kpis ? buildDashboardOverview(kpis, currentLang.value, filters.country) : undefined),
+    [kpis, currentLang.value, filters.country]
+  );
+
+  const label = useCallback(
+    (key: string) => t(`dashboard.dashboard.overview.${key}`),
+    [t]
+  );
+  const visible = (title: string) => matchesSearch(title, search);
+
+  const summary = overview?.summary;
+
+  const { data: countries } = useGetCountries();
+
+  const selectedCountry = useMemo(
+    () => countries?.find((c) => String(c.id) === String(filters.country)),
+    [countries, filters.country]
+  );
+
+  const currencySuffix = useMemo(() => {
+    if (!filters.country) return label('currency');
+    if (selectedCountry?.currency_name) {
+      const name = getLocalizedText(selectedCountry.currency_name, currentLang.value);
+      if (name) return name;
+    }
+    if (
+      selectedCountry?.global_code === 'SA' ||
+      filters.country === COUNTRY_IDS.SAUDI_ARABIA ||
+      filters.country === '24' ||
+      filters.country === '26' ||
+      filters.country === '4'
+    ) {
+      return label('currencyKsa');
+    }
+    return label('currency');
+  }, [filters.country, selectedCountry, currentLang.value, label]);
+
+  const summaryCards = [
+    {
+      id: 'gmv',
+      label: label('summary.gmv'),
+      stat: summary?.gmv,
+      suffix: currencySuffix,
+      trend: DUMMY_SUMMARY_TRENDS.gmv,
+      tooltip: t('dashboard.dashboard.overview.tooltips.gmv'),
+      loading: queries.totalMoney.isLoading,
+    },
+    {
+      id: 'products',
+      label: label('summary.totalProducts'),
+      stat: summary?.products,
+      trend: DUMMY_SUMMARY_TRENDS.products,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalProducts'),
+      loading: queries.products.isLoading,
+    },
+    {
+      id: 'buyers',
+      label: label('summary.totalBuyers'),
+      stat: summary?.buyers,
+      trend: DUMMY_SUMMARY_TRENDS.buyers,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalBuyers'),
+      activeTooltip: t('dashboard.dashboard.overview.tooltips.activeBuyers'),
+      loading: queries.buyers.isLoading,
+    },
+    {
+      id: 'sellers',
+      label: label('summary.totalSellers'),
+      stat: summary?.sellers,
+      trend: DUMMY_SUMMARY_TRENDS.sellers,
+      tooltip: t('dashboard.dashboard.overview.tooltips.totalSellers'),
+      activeTooltip: t('dashboard.dashboard.overview.tooltips.activeSellers'),
+      loading: queries.sellers.isLoading,
+    },
+  ].filter((card) => visible(card.label));
+
+  const widgets = [
+    {
+      id: 'products',
+      title: label('productsKpis.title'),
+      size: { xs: 12, md: 7, lg: 8 },
+      node: (
+        <OverviewProductsChart
+          data={overview?.productsChart}
+          loading={queries.products.isLoading || queries.auctions.isLoading}
+        />
+      ),
+    },
+    {
+      id: 'categories',
+      title: label('topCategories.title'),
+      size: { xs: 12, md: 5, lg: 4 },
+      node: (
+        <OverviewTopCategories
+          categories={overview?.topCategories ?? []}
+          loading={queries.topTags.isLoading}
+        />
+      ),
+    },
+    {
+      id: 'buyers',
+      title: label('buyers.title'),
+      size: { xs: 12, sm: 6, md: 6 },
+      node: (
+        <OverviewUsersCard
+          title={label('buyers.title')}
+          accent={OVERVIEW_ACCENTS.buyers}
+          icon={<BuyersRadialIcon />}
+          users={overview?.buyers}
+          loading={queries.buyersWithTransactions.isLoading}
+          type="buyers"
+        />
+      ),
+    },
+    {
+      id: 'sellers',
+      title: label('sellers.title'),
+      size: { xs: 12, sm: 6, md: 6 },
+      node: (
+        <OverviewUsersCard
+          title={label('sellers.title')}
+          accent={OVERVIEW_ACCENTS.sellers}
+          icon={<SellersBarsIcon />}
+          users={overview?.sellers}
+          loading={queries.companiesWithTransactions.isLoading}
+          type="sellers"
+        />
+      ),
+    },
+    {
+      id: 'auctions',
+      title: label('auctions.title'),
+      size: { xs: 12, sm: 6, md: 6 },
+      node: (
+        <OverviewAuctionsCard
+          auctions={overview?.auctions}
+          loading={queries.auctions.isLoading}
+        />
+      ),
+    },
+    {
+      id: 'payRequests',
+      title: label('payRequests.title'),
+      size: { xs: 12, sm: 6, md: 6 },
+      node: (
+        <OverviewPayRequestsCard
+          payRequests={overview?.payRequests}
+          loading={queries.payRequests.isLoading}
+        />
+      ),
+    },
+  ].filter((widget) => visible(widget.title));
+
+  const renderContent = () => {
+    if (isError) {
+      return (
+        <EmptyContent
+          filled
+          title={label('error.title')}
+          description={label('error.description')}
+          action={
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={() => refetch()}
+              startIcon={<Iconify icon="solar:restart-bold" />}
+              sx={{ mt: 2 }}
+            >
+              {label('error.retry')}
+            </Button>
+          }
+          sx={{ py: 10 }}
+        />
+      );
+    }
+
+    if (!summaryCards.length && !widgets.length) {
+      return (
+        <EmptyContent
+          filled
+          title={label('noResults.title')}
+          description={label('noResults.description')}
+          sx={{ py: 10 }}
+        />
+      );
+    }
+
+    return (
+      <Grid container spacing={3}>
+        {summaryCards.map((card) => (
+          <Grid key={card.id} size={{ xs: 12, sm: 6, md: 3 }}>
+            <OverviewSummaryCard
+              label={card.label}
+              total={card.stat?.total ?? 0}
+              suffix={
+                card.suffix ??
+                (card.stat?.active !== undefined
+                  ? t('dashboard.dashboard.overview.summary.active', {
+                      value: fNumber(card.stat.active),
+                    })
+                  : undefined)
+              }
+              split={card.stat?.split ?? { EG: 0, SA: 0 }}
+              trend={card.trend}
+              loading={card.loading}
+              tooltip={card.tooltip}
+              activeTooltip={card.activeTooltip}
+            />
+          </Grid>
+        ))}
+
+        {widgets.map((widget) => (
+          <Grid key={widget.id} size={widget.size}>
+            {widget.node}
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
 
   return (
     <DashboardContent maxWidth="xl">
-      <DashboardToolbar
-        searchValue={search}
-        onSearchChange={setSearch}
-        onOpenFilters={() => setFiltersOpen(true)}
-        searchPlaceholder={t('dashboard.shared.search')}
-        filterLabel={t('dashboard.shared.filter')}
-        activeFilterCount={activeFilterCount}
-      />
-
-      <Grid container spacing={3}>
-        {/* Row 1 — KPI stat cards */}
-        {statsList.map((stat) => {
-          let subMetrics: { label: string; value: React.ReactNode }[] | undefined;
-
-          if (stat.id === 'products' && stat.auctionsValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.auctions'),
-                value: isLoading ? '-' : fNumber(stat.auctionsValue),
-              },
-            ];
-          } else if (stat.id === 'sellers' && stat.activeValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.active'),
-                value: isLoading ? '-' : fNumber(stat.activeValue),
-              },
-            ];
-          } else if (stat.id === 'buyers' && stat.activeValue !== undefined) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.active'),
-                value: isLoading ? '-' : fNumber(stat.activeValue),
-              },
-            ];
-          } else if (
-            stat.id === 'inspections' &&
-            stat.offlineValue !== undefined &&
-            stat.onlineValue !== undefined
-          ) {
-            subMetrics = [
-              {
-                label: t('dashboard.dashboard.stats.offline'),
-                value: isLoading ? '-' : fNumber(stat.offlineValue),
-              },
-              {
-                label: t('dashboard.dashboard.stats.online'),
-                value: isLoading ? '-' : fNumber(stat.onlineValue),
-              },
-            ];
-          }
-
-          return (
-            <Grid key={stat.id} size={{ xs: 12, sm: 6, md: 3 }}>
-              <StatCard
-                label={t(`dashboard.dashboard.stats.${stat.labelKey}`)}
-                value={isLoading ? '-' : fNumber(stat.value)}
-                totalLabel={subMetrics ? t('dashboard.dashboard.stats.total') : undefined}
-                subMetrics={subMetrics}
-              />
-            </Grid>
-          );
-        })}
-
-        {/* Row 2 — success rate donut + new clients list */}
-        <Grid size={{ xs: 12, md: 5 }}>
-          <DonutCard
-            title={t('dashboard.dashboard.successRate.title')}
-            series={data?.successRate ? [data.successRate.successful, data.successRate.failed] : []}
-            labels={[
-              t('dashboard.dashboard.successRate.successful'),
-              t('dashboard.dashboard.successRate.failed'),
-            ]}
-            legendValues={
-              data?.successRate
-                ? [fNumber(data.successRate.successful), fNumber(data.successRate.failed)]
-                : []
-            }
-            total={data?.successRate ? `${data.successRate.rate}%` : ''}
-            totalLabel={t('dashboard.dashboard.successRate.centerLabel')}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 7 }}>
-          <ListWidgetCard
-            title={t('dashboard.dashboard.newClients.title')}
-            countBadge={
-              <Label color="success" variant="soft">
-                {isLoading ? '-' : fNumber(data?.newClients?.total || 0)}
-              </Label>
-            }
-            headerAction={
-              <ViewAllLink href={paths.dashboard.clients} label={t('dashboard.shared.viewAll')} />
-            }
-            items={newClientsItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        {/* Row 3 — transactions area chart + highlight tiles */}
-        <Grid size={{ xs: 12, md: 8 }}>
-          <AreaChartCard
-            title={t('dashboard.dashboard.transactions.title')}
-            categories={data?.transactions?.categories || []}
-            series={[
-              {
-                name: t('dashboard.dashboard.transactions.title'),
-                data: data?.transactions?.series || [],
-              },
-            ]}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: 1 }}>
-            <HighlightStatCard
-              color="warning"
-              bgColor={highlightCardColors.gold.bg}
-              borderColor={highlightCardColors.gold.border}
-              label={t('dashboard.dashboard.totalTransaction', {
-                currency: data?.transactions?.currency || 'EGP',
-              })}
-              value={isLoading ? '-' : fShortenNumber(data?.transactions?.totalAmount || 0)}
-              pattern={usdPattern}
-              sx={{ flex: 1 }}
-            />
-
-            <HighlightStatCard
-              color="success"
-              bgColor={highlightCardColors.green.bg}
-              borderColor={highlightCardColors.green.border}
-              label={t('dashboard.dashboard.transactionsCount')}
-              value={isLoading ? '-' : fNumber(data?.transactions?.totalCount || 0)}
-              pattern={transactionPattern}
-              sx={{ flex: 1 }}
-            />
-          </Box>
-        </Grid>
-
-        {/* Row 4 — top sellers + top categories */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <MetricListCard
-            title={t('dashboard.dashboard.topSellers.title')}
-            action={viewAllAction}
-            items={topSellersItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <ProgressListCard
-            title={t('dashboard.dashboard.topCategories.title')}
-            items={topCategoriesItems}
-            emptyTitle={emptyTitle}
-            emptyDescription={emptyDescription}
-            loading={isLoading}
-          />
-        </Grid>
-      </Grid>
-
-      <DashboardFiltersDrawer
-        open={filtersOpen}
-        onClose={() => setFiltersOpen(false)}
-        filters={filters}
-        onApply={(next) => setFiltersHandler(next)}
-        onReset={clearFilters}
-        labels={{
-          title: t('dashboard.shared.filters.title'),
-          date: t('dashboard.shared.filters.date'),
-          startDate: t('dashboard.shared.filters.startDate'),
-          endDate: t('dashboard.shared.filters.endDate'),
-          country: t('dashboard.shared.filters.country'),
-          countryPlaceholder: t('dashboard.shared.filters.countryPlaceholder'),
-          allCountries: t('dashboard.shared.filters.allCountries'),
-          apply: t('dashboard.shared.filters.apply'),
-          reset: t('dashboard.shared.filters.reset'),
-          dateError: t('dashboard.shared.filters.dateError'),
-          period: t('dashboard.shared.filters.period'),
-          periodWeekly: t('dashboard.shared.filters.periodWeekly'),
-          periodMonthly: t('dashboard.shared.filters.periodMonthly'),
-          periodQuarterly: t('dashboard.shared.filters.periodQuarterly'),
-          periodYearly: t('dashboard.shared.filters.periodYearly'),
-          periodCustom: t('dashboard.shared.filters.periodCustom'),
+      {/* Header — title + country tabs */}
+      <Box
+        sx={{
+          mb: 3,
+          gap: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          justifyContent: 'space-between',
         }}
-      />
+      >
+        <Box>
+          <Typography variant="h5">{label('title')}</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {label('subtitle')}
+          </Typography>
+        </Box>
+
+        <OverviewCountryTabs
+          value={filters.country}
+          onChange={(country) => setFilterHandler({ country })}
+        />
+      </Box>
+
+      {/* Toolbar — search + period */}
+      <Box
+        sx={{
+          mb: 3,
+          gap: 2,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'stretch', sm: 'center' },
+          justifyContent: 'space-between',
+        }}
+      >
+        <TextField
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder={t('dashboard.shared.search')}
+          sx={{ width: { xs: 1, sm: 320 } }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+
+        <OverviewPeriodFilter filters={filters} onChange={setFilterHandler} />
+      </Box>
+
+      {renderContent()}
     </DashboardContent>
   );
 }

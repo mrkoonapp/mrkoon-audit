@@ -36,7 +36,18 @@ export function BarChartCard({
 }: BarChartCardProps) {
   const theme = useTheme();
 
-  const basePalette = colors ?? [
+  const resolveColor = (c: string) => {
+    if (typeof c === 'string' && c.includes('.')) {
+      const [paletteKey, subKey] = c.split('.');
+      const found = (theme.palette as any)?.[paletteKey]?.[subKey];
+      if (found) return found;
+    }
+    return c;
+  };
+
+  const resolvedColors = colors ? colors.map(resolveColor) : null;
+
+  const basePalette = resolvedColors ?? [
     theme.palette.primary.main,
     theme.palette.warning.main,
     theme.palette.info.main,

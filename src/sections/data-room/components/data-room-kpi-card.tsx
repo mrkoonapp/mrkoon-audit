@@ -55,11 +55,16 @@ export function DataRoomKpiCard({ kpi }: Props) {
           }}
         >
           <Iconify
-            icon={isUp ? ('eva:diagonal-arrow-right-up-fill' as any) : ('eva:diagonal-arrow-right-down-fill' as any)}
+            icon={
+              isUp
+                ? ('eva:diagonal-arrow-right-up-fill' as any)
+                : ('eva:diagonal-arrow-right-down-fill' as any)
+            }
             width={12}
           />
           <Box component="span" sx={{ ml: 0.5 }}>
-            {isUp ? '+' : ''}{kpi.trend.value}%
+            {isUp ? '+' : ''}
+            {kpi.trend.value}%
           </Box>
         </Stack>
       </Stack>
