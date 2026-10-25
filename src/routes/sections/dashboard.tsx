@@ -24,6 +24,7 @@ const InspectionsPage = lazyWithRetry(() => import('src/pages/dashboard/inspecti
 const SalesPage = lazyWithRetry(() => import('src/pages/dashboard/sales'));
 const OperationsPage = lazyWithRetry(() => import('src/pages/dashboard/operations'));
 const DataRoomPage = lazyWithRetry(() => import('src/pages/dashboard/data-room'));
+const TagReportPage = lazyWithRetry(() => import('src/pages/dashboard/tag-report'));
 const TagAnalyticsPage = lazyWithRetry(() => import('src/pages/dashboard/tag-analytics'));
 const BlankPage = lazyWithRetry(() => import('src/pages/dashboard/blank'));
 
@@ -58,6 +59,7 @@ export const dashboardRoutes: RouteObject[] = [
       { path: 'sales', element: <SalesPage /> },
       { path: 'operations', element: <OperationsPage /> },
       { path: 'data-room', element: <DataRoomPage /> },
+      { path: 'tag-report', element: <TagReportPage /> },
       { path: 'tag-analytics', element: <TagAnalyticsPage /> },
       { path: 'blank', element: <BlankPage /> },
     ],
