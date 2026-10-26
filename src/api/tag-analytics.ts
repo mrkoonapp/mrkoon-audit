@@ -128,9 +128,9 @@ export function useGetTagsList(search?: string) {
   }
 
   return useQuery({
-    queryKey: queryKeys.audit.tags({ search }),
+    queryKey: queryKeys.audit.tagsList({ search }),
     queryFn: async () => {
-      const response = await axiosInstance.get<any>(endpoints.audit.tags, { params });
+      const response = await axiosInstance.get<any>(endpoints.audit.tagsList, { params });
       const resData = response.data?.data;
       if (Array.isArray(resData)) return resData as TagOption[];
       if (Array.isArray(resData?.data)) return resData.data as TagOption[];

@@ -83,7 +83,7 @@ export const endpoints = {
       scorecard: 'audit/tags/scorecard',
       trend: 'audit/tags/trend',
     },
-    tags: 'audit/tags',
+    tagsList: 'audit/tags',
     tagGroups: 'audit/tag-groups',
   },
 };
