@@ -99,9 +99,13 @@
         "productsKpis": {
           "title": "Products KPIs",
           "totalProducts": "Total products",
-          "newProducts": "New products",
-          "auctionsCreated": "Auctions created",
-          "auctionsCompleted": "Auctions completed"
+          "products": "Products",
+          "auctionsDone": "Auctions done",
+          "auctionsSucceeded": "Auctions succeeded",
+          "descriptions": {
+            "auctionsDone": "Auctions that ended in the selected period, sold or not (ended + sold)",
+            "auctionsSucceeded": "Auctions that ended in the selected period and were sold"
+          }
         },
         "topCategories": {
           "title": "Top 3 Categories"
@@ -133,10 +137,13 @@
           "activeNewSellers": "Active new sellers who listed one product and registered this period",
           "sellersMadeTransactions": "Sellers who made transactions this period",
           "auctions": "All Auctions",
-          "auctionsDone": "all auctions started and finished, whether has action or not",
-          "auctionsSold": "finished and has transactions created on it",
-          "auctionsEnded": "auction date ended without any action",
-          "auctionsPendingActivation": "still in the pipeline",
+          "auctionsTotal": "All auctions in every status this period",
+          "auctionsActive": "Active auctions created this period",
+          "auctionsInspection": "Auctions in inspection created this period",
+          "auctionsEnded": "Auctions whose end date fell in this period without being sold",
+          "auctionsSold": "Auctions sold with an end date in this period",
+          "auctionsNewWaitingActivation": "New auctions waiting for activation created this period",
+          "auctionsNotActive": "Not active auctions created this period",
           "topCategories": "Top 3 tags driving the most GMV",
           "payRequests": "Pay requests created in the selected period",
           "payRequestsCreatedByBuyers": "Pay requests created by buyers",
@@ -144,10 +151,13 @@
         },
         "auctions": {
           "title": "Auctions",
-          "done": "Done",
+          "total": "Total",
+          "active": "Active",
+          "inspection": "Inspection",
           "ended": "Ended",
           "sold": "Sold",
-          "pendingActivation": "Pending activation"
+          "newWaitingActivation": "New, waiting activation",
+          "notActive": "Not active"
         },
         "payRequests": {
           "title": "Pay Requests",

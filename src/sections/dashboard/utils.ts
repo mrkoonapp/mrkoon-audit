@@ -77,9 +77,8 @@ function splitOutcomes(outcomes: IHomeKpiAuctionOutcome[], status?: number) {
 
 /**
  * Maps the raw `audit/home/kpis` response to the overview widgets' view model.
- * Definitions match the previous KPI table (e.g. "Auctions done" = sold +
- * ended + pending activation). When countryFilter is set, metrics reflect the
- * selected country.
+ * "Auctions done" = ended (18) + sold (68), "Auctions succeeded" = sold (68).
+ * When countryFilter is set, metrics reflect the selected country.
  */
 export function buildDashboardOverview(
   kpis: IHomeKpis,
@@ -134,10 +133,22 @@ export function buildDashboardOverview(
     ? outcomes.filter((o) => getRowCountry(o) === targetCountry)
     : outcomes;
 
-  const { SOLD, ENDED, PENDING_ACTIVATION } = AUCTION_OUTCOME_STATUS;
-  const sold = sumOutcomes(relevantOutcomes, SOLD);
-  const ended = sumOutcomes(relevantOutcomes, ENDED);
-  const pendingActivation = sumOutcomes(relevantOutcomes, PENDING_ACTIVATION);
+  const { NEW_WAITING_ACTIVATION, ACTIVE, NOT_ACTIVE, ENDED, INSPECTION, SOLD } =
+    AUCTION_OUTCOME_STATUS;
+  const auctions = {
+    active: sumOutcomes(relevantOutcomes, ACTIVE),
+    inspection: sumOutcomes(relevantOutcomes, INSPECTION),
+    ended: sumOutcomes(relevantOutcomes, ENDED),
+    sold: sumOutcomes(relevantOutcomes, SOLD),
+    newWaitingActivation: sumOutcomes(relevantOutcomes, NEW_WAITING_ACTIVATION),
+    notActive: sumOutcomes(relevantOutcomes, NOT_ACTIVE),
+  };
+
+  // With a country selected, the other country's bars are 0.
+  const onlyTarget = (split: CountrySplit): CountrySplit =>
+    targetCountry
+      ? { EG: targetCountry === 'EG' ? split.EG : 0, SA: targetCountry === 'SA' ? split.SA : 0 }
+      : split;
 
   const gmvTotal =
     targetCountry && splitGmv[targetCountry] > 0
@@ -255,39 +266,12 @@ export function buildDashboardOverview(
       },
     },
     productsChart: {
-      totalProducts: targetCountry
-        ? { EG: targetCountry === 'EG' ? splitProducts.EG : 0, SA: targetCountry === 'SA' ? splitProducts.SA : 0 }
-        : splitProducts,
-      newProducts: targetCountry
-        ? { EG: targetCountry === 'EG' ? splitNewProducts.EG : 0, SA: targetCountry === 'SA' ? splitNewProducts.SA : 0 }
-        : splitNewProducts,
-      auctionsCreated: targetCountry
-        ? { EG: targetCountry === 'EG' ? splitOutcomes(outcomes).EG : 0, SA: targetCountry === 'SA' ? splitOutcomes(outcomes).SA : 0 }
-        : splitOutcomes(outcomes),
-      auctionsCompleted: targetCountry
-        ? {
-            EG:
-              targetCountry === 'EG'
-                ? sumSplits(
-                    splitOutcomes(outcomes, SOLD),
-                    splitOutcomes(outcomes, ENDED),
-                    splitOutcomes(outcomes, PENDING_ACTIVATION)
-                  ).EG
-                : 0,
-            SA:
-              targetCountry === 'SA'
-                ? sumSplits(
-                    splitOutcomes(outcomes, SOLD),
-                    splitOutcomes(outcomes, ENDED),
-                    splitOutcomes(outcomes, PENDING_ACTIVATION)
-                  ).SA
-                : 0,
-          }
-        : sumSplits(
-            splitOutcomes(outcomes, SOLD),
-            splitOutcomes(outcomes, ENDED),
-            splitOutcomes(outcomes, PENDING_ACTIVATION)
-          ),
+      totalProducts: onlyTarget(splitProducts),
+      products: onlyTarget(splitNewProducts),
+      auctionsDone: onlyTarget(
+        sumSplits(splitOutcomes(outcomes, ENDED), splitOutcomes(outcomes, SOLD))
+      ),
+      auctionsSucceeded: onlyTarget(splitOutcomes(outcomes, SOLD)),
     },
     topCategories: (kpis.top_tags_gmv ?? []).slice(0, 3).map((tag) => ({
       id: tag.tag_id,
@@ -296,7 +280,10 @@ export function buildDashboardOverview(
     })),
     buyers: buyersVm,
     sellers: sellersVm,
-    auctions: { done: sold + ended + pendingActivation, sold, ended, pendingActivation },
+    auctions: {
+      total: Object.values(auctions).reduce((acc, value) => acc + value, 0),
+      ...auctions,
+    },
     payRequests: {
       createdByBuyers: payCreatedByBuyers,
       createdByAdmins: payCreatedByAdmins,

@@ -1,6 +1,8 @@
 import type { IDashboardOverview } from 'src/types/dashboard-overview.types';
 
+import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -20,12 +22,15 @@ type OverviewProductsChartProps = {
 
 const { EG, SA } = OVERVIEW_COLORS.productsChart;
 
+/** Bars explained under the chart. */
+const DESCRIPTION_KEYS = ['auctionsDone', 'auctionsSucceeded'] as const;
+
 export function OverviewProductsChart({ data, loading }: OverviewProductsChartProps) {
   const theme = useTheme();
   const { t } = useTranslate('dashboard');
 
   const groups = data
-    ? [data.newProducts, data.auctionsCreated, data.auctionsCompleted]
+    ? [data.products, data.auctionsDone, data.auctionsSucceeded]
     : [];
 
   // "No data" only when the response is missing — all-zero bars are real data.
@@ -63,9 +68,9 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
     xaxis: {
       labels: { rotate: 0, trim: true, hideOverlappingLabels: false },
       categories: [
-        t('dashboard.dashboard.overview.productsKpis.newProducts'),
-        t('dashboard.dashboard.overview.productsKpis.auctionsCreated'),
-        t('dashboard.dashboard.overview.productsKpis.auctionsCompleted'),
+        t('dashboard.dashboard.overview.productsKpis.products'),
+        t('dashboard.dashboard.overview.productsKpis.auctionsDone'),
+        t('dashboard.dashboard.overview.productsKpis.auctionsSucceeded'),
       ],
     },
     yaxis: {
@@ -106,6 +111,17 @@ export function OverviewProductsChart({ data, loading }: OverviewProductsChartPr
         options={chartOptions}
         sx={{ height: 230, color: theme.vars.palette.text.secondary }}
       />
+
+      <Box sx={{ mt: 1, gap: 0.5, display: 'flex', flexDirection: 'column' }}>
+        {DESCRIPTION_KEYS.map((key) => (
+          <Typography key={key} variant="caption" sx={{ color: 'text.secondary' }}>
+            <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
+              {t(`dashboard.dashboard.overview.productsKpis.${key}`)}:
+            </Box>{' '}
+            {t(`dashboard.dashboard.overview.productsKpis.descriptions.${key}`)}
+          </Typography>
+        ))}
+      </Box>
     </OverviewCard>
   );
 }

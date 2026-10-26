@@ -99,9 +99,13 @@
         "productsKpis": {
           "title": "مؤشرات أداء المنتجات",
           "totalProducts": "إجمالي المنتجات",
-          "newProducts": "المنتجات الجديدة",
-          "auctionsCreated": "المزادات المنشأة",
-          "auctionsCompleted": "المزادات المكتملة"
+          "products": "المنتجات",
+          "auctionsDone": "المزادات المنجزة",
+          "auctionsSucceeded": "المزادات الناجحة",
+          "descriptions": {
+            "auctionsDone": "المزادات التي انتهت خلال الفترة المحددة سواء بيعت أم لا (المنتهية + المباعة)",
+            "auctionsSucceeded": "المزادات التي انتهت خلال الفترة المحددة وتم بيعها"
+          }
         },
         "topCategories": {
           "title": "أعلى 3 فئات"
@@ -133,10 +137,13 @@
           "activeNewSellers": "البائعون الجدد النشطون الذين سجلوا وأضافوا منتجاً خلال هذه الفترة",
           "sellersMadeTransactions": "البائعون الذين قاموا بمعاملات خلال هذه الفترة",
           "auctions": "جميع المزادات",
-          "auctionsDone": "جميع المزادات التي بدأت وانتهت، سواء تم اتخاذ إجراء عليها أم لا",
-          "auctionsSold": "مزادات منتهية وتم إنشاء معاملات عليها",
-          "auctionsEnded": "مزادات انتهى تاريخها دون اتخاذ أي إجراء",
-          "auctionsPendingActivation": "لا تزال قيد التفعيل",
+          "auctionsTotal": "إجمالي المزادات في جميع الحالات خلال هذه الفترة",
+          "auctionsActive": "مزادات نشطة تم إنشاؤها خلال هذه الفترة",
+          "auctionsInspection": "مزادات في مرحلة المعاينة تم إنشاؤها خلال هذه الفترة",
+          "auctionsEnded": "مزادات انتهى موعدها خلال هذه الفترة دون أن تُباع",
+          "auctionsSold": "مزادات انتهت وتم بيعها خلال هذه الفترة",
+          "auctionsNewWaitingActivation": "مزادات جديدة بانتظار التفعيل تم إنشاؤها خلال هذه الفترة",
+          "auctionsNotActive": "مزادات غير نشطة تم إنشاؤها خلال هذه الفترة",
           "topCategories": "أعلى 3 تصنيفات تحقيقاً للقيمة الإجمالية للبضائع",
           "payRequests": "طلبات الدفع التي تم إنشاؤها خلال الفترة المحددة",
           "payRequestsCreatedByBuyers": "طلبات الدفع التي أنشأها المشترون",
@@ -144,10 +151,13 @@
         },
         "auctions": {
           "title": "المزادات",
-          "done": "المنتهية",
+          "total": "الإجمالي",
+          "active": "نشطة",
+          "inspection": "معاينة",
           "ended": "انتهى موعدها",
           "sold": "مباعة",
-          "pendingActivation": "بانتظار التفعيل"
+          "newWaitingActivation": "جديدة بانتظار التفعيل",
+          "notActive": "غير نشطة"
         },
         "payRequests": {
           "title": "طلبات الدفع",
