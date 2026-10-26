@@ -101,7 +101,11 @@
           "totalProducts": "إجمالي المنتجات",
           "products": "المنتجات",
           "auctionsDone": "المزادات المنجزة",
-          "auctionsSucceeded": "المزادات الناجحة"
+          "auctionsSucceeded": "المزادات الناجحة",
+          "descriptions": {
+            "auctionsDone": "المزادات التي انتهت خلال الفترة المحددة سواء بيعت أم لا (المنتهية + المباعة)",
+            "auctionsSucceeded": "المزادات التي انتهت خلال الفترة المحددة وتم بيعها"
+          }
         },
         "topCategories": {
           "title": "أعلى 3 فئات"

@@ -101,7 +101,11 @@
           "totalProducts": "Total products",
           "products": "Products",
           "auctionsDone": "Auctions done",
-          "auctionsSucceeded": "Auctions succeeded"
+          "auctionsSucceeded": "Auctions succeeded",
+          "descriptions": {
+            "auctionsDone": "Auctions that ended in the selected period, sold or not (ended + sold)",
+            "auctionsSucceeded": "Auctions that ended in the selected period and were sold"
+          }
         },
         "topCategories": {
           "title": "Top 3 Categories"
