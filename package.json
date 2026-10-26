@@ -27,6 +27,8 @@
     "tsc:dev": "bun dev & bun tsc:watch",
     "tsc:watch": "tsc --noEmit --watch",
     "tsc:print": "npx tsc --showConfig",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "playwright test --project=chromium",
     "test:e2e:all": "playwright test",
     "test:e2e:ui": "playwright test --ui --project=chromium",
@@ -153,6 +155,7 @@
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.28.0",
     "vite": "^6.2.3",
-    "vite-plugin-checker": "^0.9.1"
+    "vite-plugin-checker": "^0.9.1",
+    "vitest": "^3.2.4"
   }
 }

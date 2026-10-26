@@ -97,7 +97,11 @@ export const queryKeys = {
     onboarding: {
       kpis: (filters: any) => [...queryKeys.audit.all, 'onboarding', 'kpis', filters] as const,
     },
-    tags: (filters: any) => [...queryKeys.audit.all, 'tags', filters] as const,
+    tags: {
+      scorecard: (params: any) => [...queryKeys.audit.all, 'tags', 'scorecard', params] as const,
+      trend: (params: any) => [...queryKeys.audit.all, 'tags', 'trend', params] as const,
+    },
+    tagsList: (filters: any) => [...queryKeys.audit.all, 'tagsList', filters] as const,
     tagGroups: (filters: any) => [...queryKeys.audit.all, 'tagGroups', filters] as const,
   },
 } as const;

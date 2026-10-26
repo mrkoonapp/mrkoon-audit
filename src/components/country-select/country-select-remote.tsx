@@ -35,6 +35,8 @@ export type CountrySelectRemoteProps = {
   placeholder?: string;
   /** Label for the leading "All" option. */
   allLabel?: string;
+  /** Leave out the "All" option, so a country is always selected. */
+  hideAll?: boolean;
   fullWidth?: boolean;
   error?: boolean;
   helperText?: ReactNode;
@@ -54,6 +56,7 @@ export function CountrySelectRemote({
   onChange,
   placeholder,
   allLabel,
+  hideAll,
   fullWidth,
   error,
   helperText,
@@ -70,8 +73,10 @@ export function CountrySelectRemote({
       icon: country.icon,
     }));
 
-    return [{ value: ALL_COUNTRIES_VALUE, label: allLabel ?? 'All', icon: '' }, ...list];
-  }, [countries, currentLang.value, allLabel]);
+    return hideAll
+      ? list
+      : [{ value: ALL_COUNTRIES_VALUE, label: allLabel ?? 'All', icon: '' }, ...list];
+  }, [countries, currentLang.value, allLabel, hideAll]);
 
   // The value is always a valid option — fall back to "All" (first option) when unset.
   const selected = options.find((option) => option.value === value) ?? options[0] ?? null;
@@ -83,7 +88,9 @@ export function CountrySelectRemote({
       disableClearable
       loading={isLoading}
       options={options}
-      value={selected ?? undefined}
+      // Keep it controlled while the list loads (`null`, not `undefined`); with
+      // `hideAll` there is no option until the list arrives.
+      value={selected as CountryOption}
       isOptionEqualToValue={(option, val) => option.value === val.value}
       getOptionLabel={(option) => option.label}
       onChange={(_event, newValue) => onChange(newValue?.value ?? ALL_COUNTRIES_VALUE)}

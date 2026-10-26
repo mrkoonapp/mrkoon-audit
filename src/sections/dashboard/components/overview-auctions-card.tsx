@@ -11,7 +11,7 @@ import { useTranslate } from 'src/locales';
 import { Pie3dChart } from 'src/components/dashboard';
 
 import { OverviewCard } from './overview-card';
-import { OVERVIEW_COLORS, OVERVIEW_ACCENTS, AUCTIONS_PIE_SHOW_DONE_SLICE } from '../constants';
+import { OVERVIEW_COLORS, OVERVIEW_ACCENTS } from '../constants';
 
 // ----------------------------------------------------------------------
 
@@ -20,26 +20,35 @@ type OverviewAuctionsCardProps = {
   loading?: boolean;
 };
 
-/** Legend order of the design. `inPie` = drawn as a slice of the 3D pie. */
+/**
+ * Legend order. `inPie` = drawn as a slice of the 3D pie; Total is the sum of
+ * the slices, so it is the legend's total row only.
+ */
 const ROWS = [
-  { key: 'done', color: OVERVIEW_COLORS.auctions.done, inPie: AUCTIONS_PIE_SHOW_DONE_SLICE },
+  { key: 'total', color: 'transparent', inPie: false },
+  { key: 'active', color: OVERVIEW_COLORS.auctions.active, inPie: true },
+  { key: 'inspection', color: OVERVIEW_COLORS.auctions.inspection, inPie: true },
   { key: 'ended', color: OVERVIEW_COLORS.auctions.ended, inPie: true },
   { key: 'sold', color: OVERVIEW_COLORS.auctions.sold, inPie: true },
   {
-    key: 'pendingActivation',
-    color: OVERVIEW_COLORS.auctions.pendingActivation,
+    key: 'newWaitingActivation',
+    color: OVERVIEW_COLORS.auctions.newWaitingActivation,
     inPie: true,
   },
+  { key: 'notActive', color: OVERVIEW_COLORS.auctions.notActive, inPie: true },
 ] as const;
 
 const TOOLTIP_KEYS: Record<(typeof ROWS)[number]['key'], string> = {
-  done: 'auctionsDone',
+  total: 'auctionsTotal',
+  active: 'auctionsActive',
+  inspection: 'auctionsInspection',
   ended: 'auctionsEnded',
   sold: 'auctionsSold',
-  pendingActivation: 'auctionsPendingActivation',
+  newWaitingActivation: 'auctionsNewWaitingActivation',
+  notActive: 'auctionsNotActive',
 };
 
-/** Auction outcomes: 3D pie + legend with counts (see AUCTIONS_PIE_SHOW_DONE_SLICE). */
+/** Auctions breakdown by status: 3D pie + legend with counts. */
 export function OverviewAuctionsCard({ auctions, loading }: OverviewAuctionsCardProps) {
   const { t } = useTranslate('dashboard');
 
@@ -90,7 +99,7 @@ export function OverviewAuctionsCard({ auctions, loading }: OverviewAuctionsCard
                     flexShrink: 0,
                     borderRadius: '50%',
                     bgcolor: row.color,
-                    // Done is a total, not a slice, unless the switch says otherwise.
+                    // Total is not a slice, so it has no dot.
                     visibility: row.inPie ? 'visible' : 'hidden',
                   }}
                 />
