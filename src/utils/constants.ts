@@ -157,8 +157,8 @@ export type DatePeriod = (typeof DATE_PERIODS)[keyof typeof DATE_PERIODS] | '';
 
 /** Backend country ids (`home/get_countries`) used by the country filter. */
 export const COUNTRY_IDS = {
-  EGYPT: '6',
-  SAUDI_ARABIA: '26',
+  EGYPT: '3',
+  SAUDI_ARABIA: '4',
 } as const;
 
 /**
@@ -168,5 +168,7 @@ export const COUNTRY_IDS = {
 export const HOME_KPI_COUNTRY_CODES: Record<string, number> = {
   [COUNTRY_IDS.EGYPT]: 3,
   [COUNTRY_IDS.SAUDI_ARABIA]: 4,
+  '6': 3,
+  '26': 4,
   '24': 4,
 };

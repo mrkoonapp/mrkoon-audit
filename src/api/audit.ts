@@ -170,8 +170,8 @@ export function useGetHomeDashboardData(filters: DashboardFilters) {
   // Map the dynamic country_id to static country_code for Home KPIs only
   const kpiQueryParams = { ...queryParams };
   if (kpiQueryParams.country_id) {
-    if (String(kpiQueryParams.country_id) === '6') kpiQueryParams.country_code = 3;
-    else if (String(kpiQueryParams.country_id) === '26' || String(kpiQueryParams.country_id) === '24') kpiQueryParams.country_code = 4;
+    if (String(kpiQueryParams.country_id) === '6' || String(kpiQueryParams.country_id) === '3') kpiQueryParams.country_code = 3;
+    else if (String(kpiQueryParams.country_id) === '26' || String(kpiQueryParams.country_id) === '24' || String(kpiQueryParams.country_id) === '4') kpiQueryParams.country_code = 4;
     else kpiQueryParams.country_code = kpiQueryParams.country_id;
     
     delete kpiQueryParams.country_id;

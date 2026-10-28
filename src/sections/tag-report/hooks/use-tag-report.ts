@@ -1,8 +1,9 @@
 import type { MetricKey, ReportPeriod } from 'src/api/tag-report';
 
-import { useMemo, useReducer } from 'react';
+import { useMemo, useEffect, useReducer } from 'react';
 
 import { useTranslate } from 'src/locales';
+import { useGetCountries } from 'src/api/countries';
 import { useGetTagTrend, useGetTagScorecard } from 'src/api/tag-report';
 
 import { classifyQuadrants } from '../utils/quadrant';
@@ -23,6 +24,19 @@ export function useTagReport() {
   const [state, dispatch] = useReducer(reportReducer, initialReportState);
 
   const { filters, parentId, sort, trend } = state;
+  const { data: countries } = useGetCountries();
+
+  // Ensure current countryId matches an existing country from the backend once loaded
+  useEffect(() => {
+    if (countries && countries.length > 0) {
+      const match = countries.find((c) => c.id === filters.countryId);
+      if (!match) {
+        const egypt = countries.find((c) => c.country_code === '+2' || c.global_code === 'EG');
+        const nextId = egypt ? egypt.id : countries[0].id;
+        dispatch({ type: 'setCountry', countryId: nextId });
+      }
+    }
+  }, [countries, filters.countryId]);
 
   // The Top Tag rows feed the tiles and the map, also during a drill-down. With
   // no drill-down this is the same query as `scorecard`, so it is fetched once.
