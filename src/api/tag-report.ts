@@ -134,6 +134,7 @@ export function useGetTagScorecard(params: ScorecardParams) {
       );
       return response.data.data;
     },
+    enabled: Boolean(params.country_id),
     staleTime: STALE_TIME,
     placeholderData: keepPreviousData,
   });

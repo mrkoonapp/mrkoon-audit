@@ -4,13 +4,13 @@ import { buildTrendParams, buildScorecardParams } from './params';
 
 // ----------------------------------------------------------------------
 
-const filters = { period: 'monthly', countryId: 6, type: 1 } as const;
+const filters = { period: 'monthly', countryId: 3, type: 1 } as const;
 
 describe('buildScorecardParams', () => {
   it('sends the filters as snake_case params, one full page, and no dates', () => {
     expect(buildScorecardParams(filters)).toEqual({
       period: 'monthly',
-      country_id: 6,
+      country_id: 3,
       type: 1,
       per_page: 100,
     });
@@ -19,7 +19,7 @@ describe('buildScorecardParams', () => {
   it('adds the drill-down parent and the sort when they are set', () => {
     expect(buildScorecardParams(filters, { parentId: 12, sort: 'gmv' })).toEqual({
       period: 'monthly',
-      country_id: 6,
+      country_id: 3,
       type: 1,
       per_page: 100,
       parent_id: 12,
@@ -43,7 +43,7 @@ describe('buildTrendParams', () => {
       tag_id: 12,
       metric: 'mrkoonRevenue',
       period: 'weekly',
-      country_id: 6,
+      country_id: 3,
       type: 1,
     });
   });

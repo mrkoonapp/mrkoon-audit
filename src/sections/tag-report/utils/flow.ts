@@ -1,11 +1,13 @@
 import type { TagType, MetricKey, ReportPeriod } from 'src/api/tag-report';
 
+import { COUNTRY_IDS } from 'src/utils/constants';
+
 import type { ReportFilters } from '../types';
 
 // ----------------------------------------------------------------------
 
 /** Egypt; the country filter is always set. */
-export const DEFAULT_COUNTRY_ID = 6;
+export const DEFAULT_COUNTRY_ID = Number(COUNTRY_IDS.EGYPT);
 
 /** The scorecard's own default sort when a country is set. */
 export const DEFAULT_METRIC: MetricKey = 'mrkoonRevenue';
