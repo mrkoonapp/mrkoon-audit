@@ -24,6 +24,9 @@ export const OVERVIEW_COUNTRY_TABS = [
   { value: COUNTRY_IDS.SAUDI_ARABIA, labelKey: 'ksa', flag: 'SA' },
 ] as const;
 
+/** Fallback conversion rate from Saudi Riyal (SAR) to Egyptian Pound (EGP). */
+export const DEFAULT_SAR_TO_EGP_RATE = 14.95;
+
 // ----------------------------------------------------------------------
 // Auction outcomes (`advanced_auctions.outcomes[].status_id`)
 // ----------------------------------------------------------------------

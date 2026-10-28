@@ -13,7 +13,7 @@ import { COUNTRY_IDS, DATE_PERIODS } from 'src/utils/constants';
 import { getPeriodOptions, defaultDashboardFilters } from 'src/components/dashboard';
 
 import { DUMMY_PAY_REQUESTS, DUMMY_TRANSACTION_REQUESTS } from './data';
-import { AUCTION_OUTCOME_STATUS, OVERVIEW_COUNTRY_MATCHERS } from './constants';
+import { AUCTION_OUTCOME_STATUS, DEFAULT_SAR_TO_EGP_RATE, OVERVIEW_COUNTRY_MATCHERS } from './constants';
 
 // ----------------------------------------------------------------------
 
@@ -83,7 +83,8 @@ function splitOutcomes(outcomes: IHomeKpiAuctionOutcome[], status?: number) {
 export function buildDashboardOverview(
   kpis: IHomeKpis,
   lang: string,
-  countryFilter?: string
+  countryFilter?: string,
+  sarToEgpRate: number = DEFAULT_SAR_TO_EGP_RATE
 ): IDashboardOverview {
   const targetCountry: OverviewCountry | null =
     countryFilter === COUNTRY_IDS.EGYPT || countryFilter === '6' || countryFilter === '3'
@@ -150,10 +151,17 @@ export function buildDashboardOverview(
       ? { EG: targetCountry === 'EG' ? split.EG : 0, SA: targetCountry === 'SA' ? split.SA : 0 }
       : split;
 
+  const saGmvInEgp = splitGmv.SA * sarToEgpRate;
+  const combinedGmvTotal = splitGmv.EG + saGmvInEgp;
+
   const gmvTotal =
-    targetCountry && splitGmv[targetCountry] > 0
-      ? splitGmv[targetCountry]
-      : (kpis.advanced_total_money?.total ?? kpis.gmv ?? kpis.total_money ?? 0);
+    targetCountry === 'EG'
+      ? (splitGmv.EG > 0 ? splitGmv.EG : (kpis.advanced_total_money?.total ?? kpis.gmv ?? kpis.total_money ?? 0))
+      : targetCountry === 'SA'
+        ? (splitGmv.SA > 0 ? splitGmv.SA : (kpis.advanced_total_money?.total ?? kpis.gmv ?? kpis.total_money ?? 0))
+        : (splitGmv.EG > 0 || splitGmv.SA > 0
+            ? combinedGmvTotal
+            : (kpis.advanced_total_money?.total ?? kpis.gmv ?? kpis.total_money ?? 0));
 
   const productsTotal =
     targetCountry && splitProducts[targetCountry] > 0

@@ -18,6 +18,7 @@ export const queryKeys = {
   // General
   general: {
     countries: ['general', 'countries'] as const,
+    exchangeRate: (from: string, to: string) => ['general', 'exchangeRate', from, to] as const,
   },
 
   // Audit

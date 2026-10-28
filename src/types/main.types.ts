@@ -385,6 +385,8 @@ export interface ICountry {
   global_code: string;
   currency_name: ILanguage;
   currency_icon: string;
+  exchange_rate?: number;
+  currency_rate?: number;
 }
 
 export interface ISession {

@@ -17,14 +17,14 @@ import { getLocalizedText } from 'src/utils/format-string';
 
 import { useTranslate } from 'src/locales';
 import { useGetHomeKpis } from 'src/api/home-kpis';
-import { useGetCountries } from 'src/api/countries';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetCountries, useGetExchangeRate } from 'src/api/countries';
 
 import { Iconify } from 'src/components/iconify';
 import { EmptyContent } from 'src/components/empty-content';
 
 import { DUMMY_SUMMARY_TRENDS } from '../data';
-import { OVERVIEW_ACCENTS } from '../constants';
+import { OVERVIEW_ACCENTS, DEFAULT_SAR_TO_EGP_RATE } from '../constants';
 import { matchesSearch, buildDashboardOverview, getOverviewDefaultFilters } from '../utils';
 import {
   SellersBarsIcon,
@@ -52,9 +52,40 @@ export function DashboardView() {
 
   const { data: kpis, queries, isError, refetch } = useGetHomeKpis(filters);
 
+  const { data: countries } = useGetCountries();
+  const { data: exchangeRateData } = useGetExchangeRate('SAR', 'EGP');
+
+  const saudiCountry = useMemo(
+    () =>
+      countries?.find(
+        (c) =>
+          c.global_code === 'SA' ||
+          String(c.id) === COUNTRY_IDS.SAUDI_ARABIA ||
+          String(c.id) === '26' ||
+          String(c.id) === '24' ||
+          String(c.id) === '4'
+      ),
+    [countries]
+  );
+
+  const sarToEgpRate = useMemo(() => {
+    const backendCountryRate =
+      Number((saudiCountry as any)?.exchange_rate) ||
+      Number((saudiCountry as any)?.currency_rate) ||
+      Number((saudiCountry as any)?.rate);
+
+    if (backendCountryRate && backendCountryRate > 0) {
+      return backendCountryRate;
+    }
+    return exchangeRateData ?? DEFAULT_SAR_TO_EGP_RATE;
+  }, [saudiCountry, exchangeRateData]);
+
   const overview = useMemo(
-    () => (kpis ? buildDashboardOverview(kpis, currentLang.value, filters.country) : undefined),
-    [kpis, currentLang.value, filters.country]
+    () =>
+      kpis
+        ? buildDashboardOverview(kpis, currentLang.value, filters.country, sarToEgpRate)
+        : undefined,
+    [kpis, currentLang.value, filters.country, sarToEgpRate]
   );
 
   const label = useCallback(
@@ -64,8 +95,6 @@ export function DashboardView() {
   const visible = (title: string) => matchesSearch(title, search);
 
   const summary = overview?.summary;
-
-  const { data: countries } = useGetCountries();
 
   const selectedCountry = useMemo(
     () => countries?.find((c) => String(c.id) === String(filters.country)),

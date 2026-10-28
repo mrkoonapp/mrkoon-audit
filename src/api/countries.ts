@@ -7,6 +7,8 @@ import { queryKeys } from 'src/utils/query-keys';
 
 import { websiteAxiosInstance } from 'src/lib/axios';
 
+import { DEFAULT_SAR_TO_EGP_RATE } from 'src/sections/dashboard/constants';
+
 // ----------------------------------------------------------------------
 // Types
 // ----------------------------------------------------------------------
@@ -57,3 +59,36 @@ export function useGetCountries(params?: { limit?: number }) {
     staleTime: 30 * 60 * 1000, // 30 minutes - countries don't change often
   });
 }
+
+/**
+ * Get exchange rate for currency conversion (e.g. SAR -> EGP).
+ * Checks the open exchange rate API with a 1-hour cache.
+ * Falls back to DEFAULT_SAR_TO_EGP_RATE on failure.
+ */
+export async function getExchangeRate(
+  fromCurrency: string = 'SAR',
+  toCurrency: string = 'EGP'
+): Promise<number> {
+  try {
+    const response = await fetch(`https://open.er-api.com/v6/latest/${fromCurrency}`);
+    if (!response.ok) return DEFAULT_SAR_TO_EGP_RATE;
+    const json = await response.json();
+    const rate = json?.rates?.[toCurrency];
+    if (typeof rate === 'number' && rate > 0) {
+      return rate;
+    }
+  } catch {
+    // Graceful fallback to default constant
+  }
+  return DEFAULT_SAR_TO_EGP_RATE;
+}
+
+export function useGetExchangeRate(fromCurrency: string = 'SAR', toCurrency: string = 'EGP') {
+  return useQuery({
+    queryKey: queryKeys.general.exchangeRate(fromCurrency, toCurrency),
+    queryFn: () => getExchangeRate(fromCurrency, toCurrency),
+    staleTime: 60 * 60 * 1000, // 1 hour
+    gcTime: 24 * 60 * 60 * 1000,
+  });
+}
+
