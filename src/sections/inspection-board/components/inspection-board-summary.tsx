@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CardActionArea from '@mui/material/CardActionArea';
-import { useTheme, type Theme } from '@mui/material/styles';
+import { useTheme, type Theme, type SxProps } from '@mui/material/styles';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -26,8 +26,9 @@ import { inspectionAccentTint, INSPECTION_STAT_ACCENTS } from './inspection-acce
 // ----------------------------------------------------------------------
 
 /**
- * The three cards in one row from xl; below that the overview spans a row over the two
- * spotlights side by side; everything stacked on phones. The skeleton uses it too.
+ * The four cards in one row from xl; below that the overview spans a row over the three
+ * figures side by side. On small tablets the figures go two to a row and the total target takes
+ * the row under them; everything stacked on phones. The skeleton uses it too.
  */
 export const INSPECTION_SUMMARY_GRID = {
   display: 'grid',
@@ -35,9 +36,13 @@ export const INSPECTION_SUMMARY_GRID = {
   gridTemplateColumns: {
     xs: 'minmax(0, 1fr)',
     sm: 'repeat(2, minmax(0, 1fr))',
-    xl: 'repeat(3, minmax(0, 1fr))',
+    md: 'repeat(3, minmax(0, 1fr))',
+    xl: 'repeat(4, minmax(0, 1fr))',
   },
 } as const;
+
+/** Where the total target sits: a row of its own on small tablets, so no card stands alone. */
+export const INSPECTION_SUMMARY_TOTAL_SX = { gridColumn: { sm: '1 / -1', md: 'auto' } } as const;
 
 /**
  * Whether the overview has its row to itself (sm to lg): then its counts sit side by side.
@@ -151,8 +156,8 @@ const ListCount = ({ title, value, icon, accent }: CountProps) => (
 );
 
 /**
- * A figure that belongs to one product. While there is one, the whole card is a button that
- * opens the product's tag and highlights it, and says so beside the icon.
+ * A figure on a card of its own. When it belongs to one product and there is one, the whole card
+ * is a button that opens the product's tag and highlights it, and says so beside the icon.
  */
 const Spotlight = ({
   title,
@@ -161,13 +166,15 @@ const Spotlight = ({
   accent,
   showLabel,
   onShow,
+  sx,
 }: {
   title: string;
   value: string | null;
   icon: IconifyName;
   accent: Accent;
-  showLabel: string;
+  showLabel?: string;
   onShow?: VoidFunction;
+  sx?: SxProps<Theme>;
 }) => {
   const { t } = useTranslate('dashboard');
   const theme = useTheme();
@@ -211,7 +218,12 @@ const Spotlight = ({
   );
 
   return (
-    <Card sx={{ backgroundImage: inspectionAccentTint(theme, color) }}>
+    <Card
+      sx={[
+        { backgroundImage: inspectionAccentTint(theme, color) },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
       {onShow ? (
         <CardActionArea onClick={onShow} aria-label={showLabel} sx={{ height: 1 }}>
           {body}
@@ -235,9 +247,10 @@ interface InspectionBoardSummaryProps {
 }
 
 /**
- * The board at a glance: the three counts in one overview card, then the two figures that
- * belong to a single product, each of which takes you to it. The figures are the server's
- * totals as of the last fetch: the cards only hold the pages loaded so far.
+ * The board at a glance: the three counts in one overview card, the two figures that belong to
+ * a single product, each of which takes you to it, then the total target of every product. The
+ * figures are the server's totals as of the last fetch: the cards only hold the pages loaded so
+ * far.
  */
 export const InspectionBoardSummary = ({
   summary,
@@ -292,6 +305,14 @@ export const InspectionBoardSummary = ({
         accent="highest"
         showLabel={tr('showHighest')}
         onShow={onShowHighest}
+      />
+
+      <Spotlight
+        title={tr('totalTarget')}
+        value={fInspectionPrice(summary.total_target_value, currency ?? '')}
+        icon="solar:wallet-money-bold-duotone"
+        accent="total"
+        sx={INSPECTION_SUMMARY_TOTAL_SX}
       />
     </Box>
   );

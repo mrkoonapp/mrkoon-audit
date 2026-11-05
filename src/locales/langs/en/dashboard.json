@@ -467,7 +467,8 @@
         "showLongest": "Show the longest-waiting product",
         "highestTarget": "Highest total target",
         "showHighest": "Show the product with the highest total target",
-        "showProduct": "Show the product"
+        "showProduct": "Show the product",
+        "totalTarget": "Total target"
       },
       "tag": {
         "products": "{{count}} in inspection",

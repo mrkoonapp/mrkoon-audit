@@ -30,6 +30,7 @@ export const INSPECTION_STAT_ACCENTS = {
   overdue: 'error',
   longest: 'primary',
   highest: 'secondary',
+  total: 'success',
 } as const satisfies Record<string, PaletteColorKey>;
 
 /** A faint accent wash over the card's own surface, fading out by 60%. */

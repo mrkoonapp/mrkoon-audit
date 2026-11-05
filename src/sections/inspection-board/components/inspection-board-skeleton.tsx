@@ -8,12 +8,13 @@ import {
   INSPECTION_SUMMARY_GRID,
   InspectionSummaryOverview,
   useInspectionSummaryStrip,
+  INSPECTION_SUMMARY_TOTAL_SX,
 } from './inspection-board-summary';
 
 // ----------------------------------------------------------------------
 
 /*
- * Mirrors the board as it loads: the overview card and the two spotlights, then Top Tag cards
+ * Mirrors the board as it loads: the overview card and the three figures, then Top Tag cards
  * collapsed to their header (the tag and its audience), the way every card starts.
  */
 
@@ -101,8 +102,8 @@ export const InspectionBoardSkeleton = () => {
             <CountSkeleton key={stat} strip={strip} />
           ))}
         </InspectionSummaryOverview>
-        {[0, 1].map((spotlight) => (
-          <Card key={spotlight} sx={{ py: 3 }}>
+        {[0, 1, 2].map((spotlight) => (
+          <Card key={spotlight} sx={{ py: 3, ...(spotlight === 2 && INSPECTION_SUMMARY_TOTAL_SX) }}>
             <StatSkeleton />
           </Card>
         ))}
