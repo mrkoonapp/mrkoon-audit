@@ -467,7 +467,8 @@
         "showLongest": "اعرض المنتج الأطول في المعاينة",
         "highestTarget": "أعلى إجمالي سعر مطلوب",
         "showHighest": "اعرض المنتج صاحب أعلى إجمالي سعر مطلوب",
-        "showProduct": "اعرض المنتج"
+        "showProduct": "اعرض المنتج",
+        "totalTarget": "إجمالي السعر المطلوب"
       },
       "tag": {
         "products": "{{count}} قيد المعاينة",

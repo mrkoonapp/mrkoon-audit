@@ -59,6 +59,11 @@ export interface InspectionBoardSummary {
   overdue_count: number;
   /** The highest `target_price × quantity` over every matching product. */
   highest_target_value: number | null;
+  /**
+   * The sum of `target_price × quantity` over every matching product, each once however many
+   * Top Tags it is under. Null when none has both.
+   */
+  total_target_value: number | null;
 }
 
 export interface InspectionBoard {
