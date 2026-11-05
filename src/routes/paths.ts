@@ -31,6 +31,7 @@ export const paths = {
     dataRoom: `${ROOTS.DASHBOARD}/data-room`,
     tagReport: `${ROOTS.DASHBOARD}/tag-report`,
     tagAnalytics: `${ROOTS.DASHBOARD}/tag-analytics`,
+    inspectionBoard: `${ROOTS.DASHBOARD}/inspection-board`,
     auctions: `${ROOTS.DASHBOARD}/auctions`,
     auctionsList: `${ROOTS.DASHBOARD}/auctions/list`,
     products: `${ROOTS.DASHBOARD}/products`,

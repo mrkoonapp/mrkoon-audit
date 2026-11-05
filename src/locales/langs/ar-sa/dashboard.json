@@ -443,6 +443,69 @@
       },
       "changeHint": "Change vs {{range}}",
       "previousValue": "{{range}}: {{value}}"
+    },
+    "inspectionBoard": {
+      "title": "منتجات المعاينة",
+      "subtitle": "نظرة عامة • المنتجات قيد المعاينة، حسب الفئة",
+      "type": {
+        "scraps": "خردة",
+        "stagnant": "رواكد"
+      },
+      "search": "ابحث عن منتج أو فئة",
+      "refresh": "تحديث",
+      "error": "تعذّر تحميل منتجات المعاينة.",
+      "sort": {
+        "label": "ترتيب حسب",
+        "longestWait": "الأطول في المعاينة",
+        "highestTarget": "أعلى إجمالي سعر مطلوب"
+      },
+      "summary": {
+        "products": "منتجات قيد المعاينة",
+        "tags": "الفئات",
+        "longestWait": "أطول مدة معاينة",
+        "overdue": "بانتظار 5 أيام فأكثر",
+        "showLongest": "اعرض المنتج الأطول في المعاينة",
+        "highestTarget": "أعلى إجمالي سعر مطلوب",
+        "showHighest": "اعرض المنتج صاحب أعلى إجمالي سعر مطلوب",
+        "showProduct": "اعرض المنتج"
+      },
+      "tag": {
+        "products": "{{count}} قيد المعاينة",
+        "interestedUsers": "المستخدمون المهتمون",
+        "loadMore": "عرض المزيد · {{shown}} من {{total}}",
+        "vipCount": "{{vip}} VIP",
+        "vipTooltip": "{{vip}} من أصل {{total}} مستخدم مهتم هم عملاء VIP"
+      },
+      "product": {
+        "unknownWait": "وقت البداية غير معروف",
+        "status": "معاينة",
+        "target": "السعر المطلوب",
+        "perUnit": "للوحدة",
+        "total": "الإجمالي",
+        "noTarget": "لا يوجد سعر مطلوب",
+        "inspections": "المعاينات",
+        "insurances": "التأمينات",
+        "inspectionsInfo": "جميع طلبات الدفع التي قدّمها المشترون على هذا المنتج.",
+        "insurancesInfo": "طلبات الدفع على هذا المنتج التي تم دفع تأمينها."
+      },
+      "empty": {
+        "title": "لا توجد منتجات قيد المعاينة",
+        "description": "ستظهر هنا المنتجات التي تنتقل إلى المعاينة، مجمّعة حسب فئاتها."
+      },
+      "wait": {
+        "days_one": "يوم واحد",
+        "days_two": "يومان",
+        "days_few": "{{count}} أيام",
+        "days_many": "{{count}} يومًا",
+        "days_other": "{{count}} يوم",
+        "hours_one": "ساعة واحدة",
+        "hours_two": "ساعتان",
+        "hours_few": "{{count}} ساعات",
+        "hours_many": "{{count}} ساعة",
+        "hours_other": "{{count}} ساعة",
+        "both": "{{days}} و{{hours}}",
+        "lessThanHour": "أقل من ساعة"
+      }
     }
   }
 }

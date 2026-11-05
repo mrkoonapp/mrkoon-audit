@@ -102,6 +102,12 @@ export const queryKeys = {
       scorecard: (params: any) => [...queryKeys.audit.all, 'tags', 'scorecard', params] as const,
       trend: (params: any) => [...queryKeys.audit.all, 'tags', 'trend', params] as const,
     },
+    inspectionBoard: {
+      all: () => [...queryKeys.audit.all, 'inspectionBoard'] as const,
+      board: (params: any) => [...queryKeys.audit.inspectionBoard.all(), 'board', params] as const,
+      products: (params: any) =>
+        [...queryKeys.audit.inspectionBoard.all(), 'products', params] as const,
+    },
     tagsList: (filters: any) => [...queryKeys.audit.all, 'tagsList', filters] as const,
     tagGroups: (filters: any) => [...queryKeys.audit.all, 'tagGroups', filters] as const,
   },

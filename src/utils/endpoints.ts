@@ -83,6 +83,10 @@ export const endpoints = {
       scorecard: 'audit/tags/scorecard',
       trend: 'audit/tags/trend',
     },
+    inspectionBoard: {
+      board: 'audit/inspection-board',
+      products: 'audit/inspection-board/products',
+    },
     tagsList: 'audit/tags',
     tagGroups: 'audit/tag-groups',
   },

@@ -443,6 +443,63 @@
       },
       "changeHint": "Change vs {{range}}",
       "previousValue": "{{range}}: {{value}}"
+    },
+    "inspectionBoard": {
+      "title": "Inspection products",
+      "subtitle": "Overview • Products waiting in inspection, by tag",
+      "type": {
+        "scraps": "Scrap",
+        "stagnant": "Stagnant"
+      },
+      "search": "Search products or tags",
+      "refresh": "Refresh",
+      "error": "Couldn't load the inspection products.",
+      "sort": {
+        "label": "Sort by",
+        "longestWait": "Longest in inspection",
+        "highestTarget": "Highest total target"
+      },
+      "summary": {
+        "products": "Products in inspection",
+        "tags": "Tags",
+        "longestWait": "Longest inspection period",
+        "overdue": "Waiting 5+ days",
+        "showLongest": "Show the longest-waiting product",
+        "highestTarget": "Highest total target",
+        "showHighest": "Show the product with the highest total target",
+        "showProduct": "Show the product"
+      },
+      "tag": {
+        "products": "{{count}} in inspection",
+        "interestedUsers": "Interested users",
+        "loadMore": "Load more · {{shown}} of {{total}}",
+        "vipCount": "{{vip}} VIP",
+        "vipTooltip": "{{vip}} of the {{total}} interested users are VIP"
+      },
+      "product": {
+        "unknownWait": "Start time unknown",
+        "status": "Inspection",
+        "target": "Target",
+        "perUnit": "/ unit",
+        "total": "Total",
+        "noTarget": "No target price",
+        "inspections": "Inspections",
+        "insurances": "Insurances",
+        "inspectionsInfo": "Every pay request buyers made on this product.",
+        "insurancesInfo": "Pay requests on this product whose insurance has been paid."
+      },
+      "empty": {
+        "title": "No products in inspection",
+        "description": "Products moved to inspection appear here, grouped by their tags."
+      },
+      "wait": {
+        "days_one": "{{count}} day",
+        "days_other": "{{count}} days",
+        "hours_one": "{{count}} hour",
+        "hours_other": "{{count}} hours",
+        "both": "{{days}} and {{hours}}",
+        "lessThanHour": "Less than an hour"
+      }
     }
   }
 }
